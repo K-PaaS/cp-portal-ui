@@ -2,379 +2,172 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
-
 <div layout:fragment="content">
     <div id="content" class="sub-page">
         <article class="location">
             <ul>
                 <li><a onclick="movePage(URI_CP_SERVICES_SERVICES)">Services</a></li>
-                <li><a onclick="movePage(URI_CP_SERVICES_INGRESSES)">Ingresses</a></li>
+                <li><a onclick="movePage(URI_CP_SERVICES_SERVICES)">Services</a></li>
             </ul>
+            <!-- Click event class="on" -->
+            <fieldset>
+                <input type="text" name="keyword" id="searchText" autocomplete="off" th:placeholder="#{M0017}" />
+                <button type="submit" id="search" th:text="#{M0031}"></button>
+            </fieldset>
         </article>
         <article class="base">
-            <div class="creat creat-type2">
-                <div>
-                    <h3 th:text="|Ingresses #{M0024}|"></h3>
-                    <dl>
-                        <dt><label for="targetNamespace">Namespace</label></dt>
-                        <dd>
-                            <input disabled="disabled" id="targetNamespace" type="text" />
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="metadataName">Name</label></dt>
-                        <dd>
-                            <input id="metadataName" type="text" th:placeholder="Name">
-                        </dd>
-                    </dl>
+            <div class="notice">
+                <h3>List</h3>
+                <!-- User -->
+                <div class="table_style01">
+                    <!-- board -->
+                    <table>
+                        <caption>Services List</caption>
+                        <colgroup >
+                            <col width="24%" />
+                            <col width="24%" />
+                            <col width="10%" />
+                            <col width="16%" />
+                            <col width="10%" />
+                            <col width="16%" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Namespaces</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Clusters IP</th>
+                            <th scope="col">Port</th>
+                            <th scope="col">Created Time</th>
+                        </tr>
+                        </thead>
+                        <tbody class="seviceList">
+                        </tbody>
+                    </table>
+                    <!-- more btn -->
+                    <a class="more" href="javascript:;">more</a>
                 </div>
-
-                <!-- Rule -->
-                <h4 class="tit">Rule</h4>
-                <div class="con-section">
-                    <dl>
-                        <dt><label>Host</label></dt>
-                        <dd>
-                            <input name="host" class="rules" type="text" placeholder="e.g. example.com" />
-                        </dd>
-                    </dl>
-
-                    <!-- path -->
-                    <dl class="content-path">
-                        <dt><label>Path</label></dt>
-                        <dd class="g-select-wrap">
-                            <div class="g-select">
-                                <select name="pathType" class="rules">
-                                    <option value="Prefix">Prefix</option>
-                                    <option value="ImplementationSpecific">ImplementationSpecific</option>
-                                    <option value="Exact">Exact</option>
-                                </select>
-                            </div>
-                            <input class="rules" name="path" type="text" placeholder="e.g. /example" />
-                        </dd>
-                    </dl>
-                    <dl class="content-target">
-                        <dt><label>Target</label></dt>
-                        <dd class="g-select-wrap">
-                            <div class="g-select">
-                                <select name="target" id="target_0" class="rules target">
-                                </select>
-                            </div>
-                            <div class="con-txt">
-                                <p><label>Port</label></p>
-                                <input name="port" id="port_0" class="rules port" type="text" placeholder="e.g. 80" />
-                            </div>
-                        </dd>
-                    </dl>
-                    <button type="button" name="pathCreate" id="pathCreate_0" class="add-btn pathCreate" onclick="pathCreate()" th:text="#{M0817}"></button>
-                </div>
-                <!-- // Rule -->
-                <div class="flex-e rule-add-btn">
-                    <button type="button" id="ruleCreate" class="add-btn" onclick="ruleCreate()" th:text="#{M0818}"></button>
-                </div>
-            </div>
-            <!-- btn -->
-            <div class="btn02">
-                <div>
-                    <button type="submit" id="save" th:text="#{M0030}"></button>
-                    <button onclick="movePage(URI_CP_SERVICES_INGRESSES)" th:text="#{M0029}"></button>
-                </div>
+                <!-- btn -->
+                <a href="javascript:;" class="create" th:text="#{M0024}"></a>
             </div>
         </article>
     </div>
 </div>
-
 <th:block layout:fragment="script">
     <script type="text/javascript">
-        var content_path_index = 0;
         window.onload = () => {
 
-            func.init(ASIDE_DP1.SERVICES, ASIDE_DP2.INGRESSES);
-            var targetNamespace = sessionStorage.getItem('nameSpace');
-            var order = "";
-            const createIngresses = {
+            func.init(ASIDE_DP1.SERVICES, ASIDE_DP2.SERVICES);
+            callbackFuncNameLoad();
+
+            const services = {
+                offset : 0, // 로드 페이지 넘버
+                limit : 10, // 로드 게시물 개수
+                allItemCount : 0, //게시물 총 개수
+                searchName : '',
 
                 init(){
-                    if(sessionStorage.getItem('nameSpace').toLowerCase() == "all") {
-                        func.alertPopup('ALERT', MSG_SELECTED_NAMESPACE_ALL, true, MSG_CLOSE, createIngresses.alertListBack);
-                        return false;
-                    }
+                    func.nameLoad = services.reset;
 
-                    document.getElementById("targetNamespace").value = targetNamespace;
-                    //service 정보 조회
-                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/services`, 'application/json', createIngresses.drawServ);
+                    services.load();
 
-                    createIngresses.reset;
-
-                    createIngresses.event();
+                    services.event();
                 },
 
-                alertListBack() {
-                    movePage(URI_CP_SERVICES_INGRESSES);
-                },
                 reset(){
-                    func.removeHtml(document.getElementById('target'));
+                    func.removeHtml(document.querySelector('.seviceList'));
 
-                    createIngresses.init();
+                    services.offset = 0;
+
+                    services.load();
                 },
 
-                drawServ(data) {
-                    if (sessionStorage.getItem('nameSpace') ==='ALL') {
-                        var target = document.getElementsByName('target');
-                        for (var i = 0; i <= target.length-1; i++) {
-                            func.removeHtml(document.getElementById('target_'+`${i}`));
-                        }
-                        var port = document.getElementsByName('port');
-                        for (var i = 0; i <= port.length-1; i++) {
-                            (document.getElementById('port_'+`${i}`)).value ='';
-                        }
-                        func.alertPopup(ALERT, MSG_NO_NAMESPACE, true, MSG_CLOSE, 'closed');
-                    } else {
-                        if (data.items.length == 0) {
-                            var target = document.getElementsByName('target');
-                            //target.length=1
-                            for (var i = 0; i <= target.length-1; i++) {
-                                func.removeHtml(document.getElementById('target_'+`${i}`));
-                            }
-                            var port = document.getElementsByName('port');
-                            for (var i = 0; i <= port.length-1; i++) {
-                                if ((document.getElementById('port_'+`${i}`)).value != null) {
-                                    (document.getElementById('port_'+`${i}`)).value = '';
-                                }
-                            }
-                        } else {
-                            if (data.items.length > 0) {
-                                var target = document.getElementsByName('target');
-                                for (var i = 0; i <= target.length-1; i++) {
-                                    func.removeHtml(document.getElementById('target_'+`${i}`));
-                                }
-                                for (var i = 0; i <= target.length-1; i++) {
-                                    for (var j = 0; j <= data.items.length-1; j++) {
-                                        var services = data.items[j];
-                                        var html = `<option value="${services.name}">${services.name}</option>`;
-                                        func.appendHtml(document.getElementById(`${target[i].getAttribute('id')}`),html,'select');
+                load(){
+                    func.loading();
+
+                    // nameSpace 정보 조회
+                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/services?searchName=${document.getElementById('searchText').value}&limit=${services.limit}&offset=${services.offset}`, 'application/json', services.draw);
+                },
+
+                draw(data){
+
+                    if(services.offset == 0) services.allItemCount = data.itemMetaData.allItemCount;
+
+                    if(data.httpStatusCode == 200){
+                        if(data.items.length > 0){
+                            for(var i=0; i<=data.items.length-1; i++){
+                                var ports = '';
+                                for(var j = 0 ; j <= data.items[i].ports.length - 1 ; j++) {
+                                    if (data.items[i].type == 'ClusterIP') {
+                                        ports += `${data.items[i].ports[j].port}`;
+                                    } else {
+                                        ports += `${data.items[i].ports[j].port}:${data.items[i].ports[j].nodePort}`;
                                     }
-                                };
-                            } else {
-                                for (var i = 0; i <= target.length-1; i++) {
-                                    func.removeHtml(document.getElementById(`${target[i].getAttribute('id')}`));
+                                    if (i != data.items.length - 1) {
+                                        ports += '<br>'
+                                    }
                                 }
-                                var port = document.getElementsByName('port');
-                                for (var i = 0; i <= port.length-1; i++) {
-                                    (document.getElementById('port_'+`${i}`)).value='';
-                                }
-                            }
-                        }
-                    }
-                },
+                                var html = `<tr><td class="left"><a href="javascript:;" data-name="${data.items[i].name}" data-id="${data.items[i].namespace}">${data.items[i].name}</a></td><td class="left">${data.items[i].namespace}</td><td>${data.items[i].type}</td><td>${data.items[i].clusterIP}</td><td>${ports}</td><td>${data.items[i].creationTimestamp}</td></tr>`;
 
-                drawPort(data) {
-                    if (`${sessionStorage.getItem('nameSpace')}` !== 'ALL') {
-                        document.getElementById('port_'+`${order}`).value = `${data.port[0].port}`;
-                    }
-                },
+                                func.appendHtml(document.querySelector('.seviceList'), html, 'tbody');
+                            };
+                        } else {
+                            var html = `<tr><td colspan="5">No Data.</td></tr>`;
 
-                checkTarget(data){
+                            func.appendHtml(document.querySelector('.seviceList'), html, 'tbody');
+                        };
+                    } else {
+                        var html = `<tr><td colspan="5">No Data.</td></tr>`;
 
-                    if (Array.isArray(data.items) && data.items.length != 0) {
+                        func.appendHtml(document.querySelector('.seviceList'), html, 'tbody');
+                    };
 
-                        sessionStorage.setItem('commonName', document.getElementById('target_'+`${order}`).value);
-                        func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/services/${sessionStorage.getItem('commonName')}`, 'application/json', createIngresses.drawPort);
-                    }
+                    // more 버튼 활성, 비활성
+                    if(document.querySelector('.seviceList').querySelectorAll('tr').length < services.allItemCount){
+                        document.querySelector('.more').classList.toggle('on', true);
+                    } else {
+                        document.querySelector('.more').classList.toggle('on', false);
+                    };
+
+                    if(document.getElementById('loading')){
+                        document.getElementById('wrap').removeChild(document.getElementById('loading'));
+                    };
+
+                    services.listEvent();
                 },
 
                 event(){
-                    document.getElementById('nameSpaceTitleDiv').addEventListener('click', (e) => {
-                        func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/services`, 'application/json', createIngresses.drawServ);
-                }, false);
+                    // more 버튼 event
+                    document.querySelector('.more').addEventListener('click', (e) => {
+                        if(document.querySelector('.seviceList').querySelectorAll('tr').length < services.allItemCount){
+                            services.offset++;
 
-                    document.getElementById('save').addEventListener('click', (e) => {
-                        func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, createIngresses.save);
-                }, false);
+                            services.load();
+                        };
+                    }, false);
 
-                    document.getElementById('ruleCreate').addEventListener('click', (e) => {
-                        func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/services`, 'application/json', createIngresses.drawServ);
-                }, false);
+                    document.querySelector('.create').addEventListener('click', (e) => {
+                        sessionStorage.setItem('commonName', '');
 
-                    var pathCreate = document.getElementsByClassName('pathCreate');
-                    document.addEventListener('click', (e) => {
-                        for (var i = 0; i <= pathCreate.length-1; i++) {
-                        if (e.target && e.target.id == 'pathCreate_' + `${i}`) {
-                            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/services`, 'application/json', createIngresses.drawServ);
-                        }
-                    }
-                });
-
-                    var target = document.getElementsByClassName('target');
-                    document.addEventListener('change', (e) =>{
-                        for (var i = 0; i <= target.length-1; i++) {
-                        if (e.target && e.target.id == 'target_' + `${i}`) {
-                            order =`${i}`;
-                            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/services`, 'application/json', createIngresses.checkTarget);
-                        }
-                    }
-                });
-
+                        func.create('Create', 'services', MSG_SAVE);
+                    }, false);
                 },
 
-                save() {
+                listEvent(){
+                    var listAll = document.querySelector('.seviceList').querySelectorAll('a');
 
-                    var rulesList = new Array;
-                    var rules = document.querySelectorAll('.rules');
-                    for (var i = 0; i < rules.length; i++) {
-                        rulesList.push(`${rules[i].getAttribute('name')}` + ":" + `${rules[i].value}`)
-                    }
+                    for(var i=services.offset*10; i<=listAll.length-1; i++){
+                        listAll[i].addEventListener('click', (e) => {
+                            sessionStorage.setItem('nameSpace', e.target.getAttribute('data-id'));
+                            sessionStorage.setItem('commonName', e.target.getAttribute('data-name'));
 
-                    var createIngresses = {
-
-                        "cluster": sessionStorage.getItem('cluster'),
-                        "namespace": sessionStorage.getItem('nameSpace'),
-                        "resourceName": "ingresses",
-                        "metadataName": document.getElementById('metadataName').value,
-                        "rules": rulesList
-
+                            document.location.href = URI_CP_SERVICES_SERVICES + URI_CP_DETAILS;
+                        }, true);
                     };
-
-                    func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/ingresses`, JSON.stringify(createIngresses), true, 'application/json', func.historyBack);
-                }
-            };
-
-            createIngresses.init();
-        };
-        /* path,target 추가 */
-        function pathCreate () {
-
-            let newPath = document.createElement('dl');
-            let newTarget = document.createElement('dl');
-
-            let currentPath = event.currentTarget.parentNode.querySelector('.content-target');
-            let currentTarget = event.currentTarget.parentNode.querySelector('.content-target');
-
-            newPath.classList.add('content-path');
-            newTarget.classList.add('content-target');
-
-
-            let content_idx = "content_idx_" + content_path_index;
-            content_path_index ++;
-            newPath.setAttribute("path-data", content_idx);
-            newTarget.setAttribute("path-data", content_idx);
-
-
-            newPath.innerHTML = `
-            <dt><label">Path</label></dt>
-            <dd class="g-select-wrap">
-                <div class="g-select">
-                    <select name="pathType" class="rules">
-                        <option value="Prefix">Prefix</option>
-                        <option value="ImplementationSpecific">ImplementationSpecific</option>
-                        <option value="Exact">Exact</option>
-                    </select>
-                </div>
-                <input name="path" type="text" class="rules" placeholder="e.g. /example" />
-                <button class="delete-btn" onclick="deletePathBtn()">` + MSG_DELETE + `</button>
-            </dd>`;
-
-            newTarget.innerHTML = `
-            <dt><label>Target</label></dt>
-            <dd class="g-select-wrap">
-                <div class="g-select">
-                    <select name="target" id="target" class="rules target">
-                    </select>
-                </div>
-                <div class="con-txt">
-                    <p><label>Port</label></p>
-                    <input name="port" class="rules port" type="text" placeholder="e.g. 80"/>
-                </div>
-            </dd>`;
-
-            currentPath.insertAdjacentElement('afterend', newTarget);
-            currentTarget.insertAdjacentElement('afterend', newPath);
-
-            btnSynch();
-        }
-
-        /* Rule 추가 */
-        let conSection = document.querySelector('.rule-add-btn');
-        function ruleCreate() {
-            let newRule = document.createElement('div');
-            newRule.classList.add('con-section');
-            newRule.innerHTML = `
-                <div class="flex-e">
-                    <button onclick="deleteBtn()">&#10006;</button>
-                    <span class="blind">` + DELETE_RULE + `</span>
-                </div>
-                <dl>
-                    <dt><label">Host</label></dt>
-                    <dd>
-                        <input name="host" class="rules" type="text" placeholder="e.g. example.com" />
-                    </dd>
-                </dl>
-                <!-- path -->
-                <dl class="content-path">
-                <dt><label">Path</label></dt>
-                <dd class="g-select-wrap">
-                <div class="g-select">
-                <select name="pathType" class="rules">
-                <option value="Prefix">Prefix</option>
-                <option value="ImplementationSpecific">ImplementationSpecific</option>
-                <option value="Exact">Exact</option>
-                </select>
-                </div>
-                <input class="rules" name="path" type="text" placeholder="e.g. /example" />
-                </dd>
-                </dl>
-                <dl class="content-target">
-                <dt><label">Target</label></dt>
-                <dd class="g-select-wrap">
-                <div class="g-select">
-                <select name="target" id="target" class="rules target">
-                </select>
-                </div>
-                <div class="con-txt">
-                <p><label>Port</label></p>
-                <input name="port" class="rules port" type="text" placeholder="e.g. 80"/>
-                </div>
-                </dd>
-                </dl>
-                <button type="button" name="pathCreate" id="pathCreate" class="add-btn pathCreate" onclick="pathCreate()">`+ ADD_PATH +`</button>`;
-            conSection.insertAdjacentElement('beforebegin', newRule);
-
-            btnSynch();
-            };
-
-        /* Rule 삭제 */
-        function deleteBtn() {
-            let currentPath = event.currentTarget.parentNode.parentNode;
-            currentPath.remove();
-            btnSynch();
-        }
-
-        /* Path 삭제 */
-        function deletePathBtn() {
-            let parentNode = event.currentTarget.parentNode.parentNode;
-            let deletePath = parentNode.getAttribute("path-data");
-            let selector = '[path-data="'+ deletePath + '"]';
-            document.querySelectorAll(selector).forEach(e => e.remove());
-            btnSynch();
-        }
-
-
-        function btnSynch() {
-            let target = document.getElementsByName('target');
-            let pathCreate = document.getElementsByName('pathCreate');
-            let port = document.getElementsByName('port');
-
-            for (var i = 0 ; i < target.length; i++) {
-                target[i].setAttribute('id', 'target_'+`${i}`);
+                },
             }
 
-            for (var i = 0 ; i < pathCreate.length; i++) {
-                pathCreate[i].setAttribute('id', 'pathCreate_'+`${i}`);
-            }
-
-            for (var i = 0 ; i < port.length; i++) {
-                port[i].setAttribute('id', 'port_'+`${i}`);
-            }
+            services.init();
         }
     </script>
 </th:block>
