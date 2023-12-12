@@ -56,15 +56,6 @@ server:
 
 cpApi:
   url: http://localhost:3333
-  authorization:
-    id: admin
-    password: PaaS-TA
-
-commonApi:
-  url: http://localhost:3334
-  authorization:
-    id: admin
-    password: PaaS-TA
 
 ---
 spring:
@@ -89,12 +80,3 @@ server:
 
 cpApi:
   url: ${CP_PORTAL_API_URI}
-  authorization:
-    id: admin
-    password: PaaS-TA
-
-commonApi:
-  url: ${CP_PORTAL_COMMON_API_URI}
-  authorization:
-    id: admin
-    password: PaaS-TA
