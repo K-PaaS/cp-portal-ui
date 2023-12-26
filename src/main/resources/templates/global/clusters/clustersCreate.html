@@ -49,6 +49,15 @@
                         </dd>
                     </dl>
                     <dl>
+                        <dt><label>SSH Keys</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select id="createSshKeys">
+                                </select>
+                            </fieldset>
+                        </dd>
+                    </dl>
+                    <dl>
                         <dt><label>Template</label></dt>
                         <dd>
                             <fieldset>
@@ -148,7 +157,7 @@
                     let registerProviderHtml = ``;
 
                     for (let key of info.keys()) {
-                        if( key != 'KT') {
+                        if( key != 'KT' ) {
                         createProviderHtml += `<option value="${key}">${key}</option>`; }
                     }
 
@@ -182,6 +191,7 @@
                                 "cluster" : document.getElementById('createName').value,
                                 "resourceName": document.getElementById('createName').value,
                                 "providerType": document.getElementById('createProvider').value,
+                                "sshKey": document.getElementById('createSshKeys').value,
                                 "cloudAccountId": createClusters.getCloudAccount(),
                                 "hclScript": document.getElementById('createTemplatesDetail').value,
                                 "description": document.getElementById('createDescription').value,
@@ -222,7 +232,7 @@
                             func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE,  createClusters.validReset);
                             IS_VCHK = true;
                             return false;
-                            }
+                        }
                     }
                     else if(type == 'register') {
                         if(isEmpty(document.getElementById('registerName').value) || isEmpty(document.getElementById('registerIP').value) ||
@@ -244,6 +254,7 @@
 
         function changeProviderSelect() {
             func.removeHtml(document.getElementById('createCloudAccount'));
+            func.removeHtml(document.getElementById('createSshKeys'));
             func.removeHtml(document.getElementById('createTemplates'));
 
             let html = ``;
@@ -267,6 +278,22 @@
 
                     func.appendHtml(document.getElementById('createTemplates'), html, 'dl');
                     changeTemplateSelect();
+                });
+
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/keys/provider/${provider}`, 'application/json', (e) => {
+                    html = ``;
+                    for (let item of e.items) {
+                        html += `<option value="${item.name}" data-id="${item.id}"`;
+                        html += `>${item.name}</option>`;
+                    }
+
+                    if (provider != 'NAVER'){
+                        document.getElementById('createSshKeys').removeAttribute("disabled")
+                        func.appendHtml(document.getElementById('createSshKeys'), html, 'dl');
+                    } else {
+                        document.getElementById('createSshKeys').setAttribute('disabled',true);
+                    }
+
                 });
             }
 
