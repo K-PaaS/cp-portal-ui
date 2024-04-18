@@ -45,6 +45,16 @@
      var URI_CP_UPDATE = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_UPDATE}]];
      var URI_CP_LOGS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_LOGS}]];
      var URI_CP_POPUP = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_POPUP}]];
+     var URI_CP_ADD = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_ADD}]];
+     var URI_CP_UPGRADE = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_UPGRADE}]];
+
+     //catalog
+     var URI_CP_CATALOG_CHARTS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CATALOG_CHARTS}]];
+     var URI_CP_CATALOG_INSTALL = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CATALOG_INSTALL}]];
+
+     var URI_CP_CATALOG_REPOSITORIES = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CATALOG_REPOSITORIES}]];
+     var URI_CP_CATALOG_RELEASES = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CATALOG_RELEASES}]];
+
 
      var URI_REQUEST_CP_API = [[${@environment.getProperty('cpApi.url')}]] + '/';
      //사용자 로그인 데이터 조회
@@ -77,7 +87,7 @@
 
 
      var AUTH_ADMIN_LST =[AUTH_SUPER_ADMIN, AUTH_CLUSTER_ADMIN];
-
+     var DEFAULT_ICON_PATH ="/img/helm-gray.svg";
 
 
 
@@ -97,6 +107,8 @@
      var MSG_ENTER_SEARCH_WORD = [[#{M0017}]];
      var MSG_CHECK_TO_DELETE =  [[#{M0018}]];
      var MSG_CHECK_TO_SAVE =  [[#{M0020}]];
+     var MSG_CHECK_TO_ROLLBACK =  [[#{M0863}]];
+     var MSG_CHECK_TO_INSTALL_CHART =  [[#{M0864}]];
 
      //INGRESS PROPERTIES
      var MSG_NO_NAMESPACE = [[#{M0816}]];
@@ -123,8 +135,13 @@
      var MSG_INVALID_FORMAT = "형식이 올바르지 않습니다.";
      var MSG_SELECTED_NAMESPACE_ALL = [[#{M0843}]];
      var MSG_REQUEST_VALUE_IS_MISSING = [[#{M0844}]];
+     var MSG_REQUIRED_RELEASE_NAME = [[#{M0859}]];
 
      var MSG_SIGN_OUT = [[#{M0809}]];
+
+     // catalog
+     var MSG_REPO_CHART_UPDATE = [[#{M0856}]];
+     var MSG_REPO_CHART_ROLLBACK = [[#{M0862}]];
 
      var CURRENT_LOCALE_LANGUAGE = '';
 
@@ -165,6 +182,7 @@
      var ASIDE_DP1 = {
          GLOBAL : 'global',
          CLUSTERS: 'clusters',
+         CATALOGS: 'catalogs',
          WORKLOADS: 'workloads',
          SERVICES: 'services',
          STORAGES: 'storages',
@@ -182,6 +200,8 @@
          NODES: 'nodes',
          NAMESPACES: 'namespaces',
          SSH_KEYS : 'ssh_keys',
+         CATALOG_REPOSITORIES : 'catalog_repositories',
+         CATALOG_RELEASES : 'catalog_releases',
          DEPLOYMENTS: 'deployments',
          PODS: 'pods',
          REPLICASETS: 'replicasets',
@@ -260,6 +280,19 @@
 
  function chunkString(str, length) {
      return str.match(new RegExp('.{1,' + length + '}', 'g'));
+ }
+
+ function resizeMergeView(mergeView,height) {
+     if (mergeView.leftOriginal()) {
+         mergeView.leftOriginal().setSize(null, height);
+     }
+     if (mergeView.rightOriginal()) {
+         mergeView.rightOriginal().setSize(null, height);
+     }
+
+     mergeView.editor().setSize(null, height);
+     mergeView.wrap.style.height = height + "px";
+
  }
 </script>
 </span>

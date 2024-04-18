@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+    <div id="content" class="sub-page clusters">
+        <article class="location">
+            <ul>
+                <li><a onclick="movePage(URI_CP_CATALOG_REPOSITORIES)">Catalogs</a></li>
+                <li><a onclick="movePage(URI_CP_CATALOG_RELEASES)">Releases</a></li>
+            </ul>
+        </article>
+        <article class="base">
+            <div class="creat">
+                <h3 th:text="|Release #{M0861}|"></h3>
+                <div>
+                    <dl>
+                         <div id="chartInfoDiv" style="width:100%;height:80px;display:flex;">
+                             <div id="chartIconDiv" style="width:6%; height:80%; line-height: 63px;"></div>
+                             <div id="chartNameDiv" style="width:44%; font-size:20px; line-height: 65px;"></div>
+                             <div style="width:50%; margin-top:-30px;">
+                                 <dt><label for="chart_versions_sel">Chart Versions</label></dt>
+                                 <dd>
+                                     <fieldset>
+                                         <select id="chart_versions_sel" style="border:none !important; border-bottom: 1px solid #d1d1d1 !important; font-size: 17px;">
+                                         </select>
+                                     </fieldset>
+                                 </dd>
+                             </div>
+                            </div>
+                    </dl>
+                    <dl>
+                        <dd>
+                            <div id="modal-pane-wrap">
+                               <div class="modal-pane">Original Chart Values</div>
+                                <div style="width:6%;"></div>
+                                <div class="modal-pane">User-Supplied Values<span id="collapse" class="clicky">collapse</span></div>
+                            </div>
+                            <div id="upgrade_values_view"></div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dd>
+                            <div id="upgrade_manifest_view"></div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <!-- btn -->
+            <div class="btn02">
+                <button onclick="historyBack()" th:text="#{M0028}"></button>
+                <div>
+                    <button type="submit" id="install" th:text="#{M0861}"></button>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        window.onload = () => {
+            func.init(ASIDE_DP1.CATALOGS, ASIDE_DP2.CATALOG_REPOSITORIES);
+            callbackFuncNameLoad();
+            let valuesMgView, manifestMgView;
+            let collapse = false;
+            let relObj = JSON.parse(sessionStorage.getItem('releaseItem'));
+            const releases = {
+                name : relObj.name,
+                info : {},
+                origValues : "",
+                definedValues : "",
+                origManifest : "",
+                definedManifest : "",
+                upgradeVersion : "",
+                init() {
+                    func.nameLoad = releases.reset;
+                    releases.initValuesView();
+                    releases.load();
+                    releases.event();
+                },
+                initValuesView(){
+                    let target = document.getElementById("upgrade_values_view");
+                    target.innerHTML = ""
+                    valuesMgView =  CodeMirror.MergeView(target, {
+                        origLeft : releases.origValues, //orig
+                        value: releases.definedValues,  //defined
+                        revertButtons : false,
+                        scrollbarStyle: "simple",
+                        theme: "default",
+                        mode: "text/x-yaml",
+                        allowEditingOriginals: false,
+                        highlightDifferences: true,
+                        collapseIdentical: collapse,
+                        lineNumbers: true,
+                        lineWrapping: true,
+                    });
+
+                    resizeMergeView(valuesMgView, 500);
+                },
+
+                initManifestView(){
+                    let target = document.getElementById("upgrade_manifest_view");
+                    target.innerHTML = ""
+                    manifestMgView =  CodeMirror.MergeView(target, {
+                        origLeft : releases.origManifest, //orig
+                        value: releases.definedManifest,  //defined
+                        revertButtons : false,
+                        scrollbarStyle: "simple",
+                        theme: "default",
+                        mode: "text/x-yaml",
+                        allowEditingOriginals: false,
+                        highlightDifferences: true,
+                        collapseIdentical: collapse,
+                        lineNumbers: true,
+                        lineWrapping: true,
+                    });
+
+                    resizeMergeView(manifestMgView, 500);
+                },
+
+                load() {
+                  func.loading();
+                  func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${relObj.name}?userDefined=false`, 'application/json', releases.draw);
+                  func.loadData('GET', `${func.url}catalog/charts/${relObj.chart}/versions`,'application/json', releases.versions);
+                  },
+
+                draw(data){
+                    let items = data.items;
+                    releases.info = data.items;
+                    let icon = (items.icon.length < 1) ? DEFAULT_ICON_PATH : items.icon;
+                    document.getElementById("chartNameDiv").innerText = items.name;
+                    document.getElementById("chartIconDiv").innerHTML = `<img class="chart-logo02" src="${icon}" onerror="this.src='${DEFAULT_ICON_PATH}';"/>`;
+                },
+                versions(data) {
+                    let versions = data.items;
+                    let html = ``;
+                    for (let v of versions) {
+                        if(releases.info.chart_version === v.version) {
+                            html += `<option data-item="${v.name}" value="${v.version}">${v.name}@${v.version}&nbsp;&nbsp;(App Version ${v.app_version}) (current)</option>`;
+                        }
+                        else {
+                        html += `<option data-item="${v.name}" value="${v.version}">${v.name}@${v.version}&nbsp;&nbsp;(App Version ${v.app_version})</option>`;
+                        }
+                    }
+                    func.appendHtml(document.getElementById('chart_versions_sel'), html, 'select');
+                    document.getElementById('chart_versions_sel').selectedIndex = "0";
+                    releases.initValues();
+                },
+
+                initValues() {
+                    releases.origValues = releases.info.values;
+                    releases.definedValues = releases.info.values;
+                    releases.origManifest = releases.info.manifest;
+                    releases.definedManifest = releases.info.manifest;
+
+                    releases.initValuesView();
+                    releases.initManifestView();
+                    if(document.getElementById('loading')){
+                        document.getElementById('wrap').removeChild(document.getElementById('loading'));
+                    };
+                },
+
+                event() {
+                    document.getElementById('chart_versions_sel').addEventListener('change', (e) => {
+                        func.loading();
+                        releases.upgradeVersion =e.target.value;
+                        let chart_data = e.target.getAttribute('data-item').split('/');
+                        let installChart = {
+                            "repo" : chart_data[0],
+                            "chart": chart_data[1],
+                            "chart_version" : releases.upgradeVersion,
+                            "values" : manifestMgView.editor().getValue(),
+                        };
+
+                        func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.name}?preview=true`, JSON.stringify(installChart), true, 'application/json', charts.initManifestView);
+                    }, false);
+
+                    document.getElementById('collapse').addEventListener('click', (e) => {
+                        releases.definedValues = valuesMgView.editor().getValue();
+                        collapse = !collapse;
+                        releases.initValuesView();
+                    }, false);
+
+
+                    document.getElementById('install').addEventListener('click', (e) => {
+                        let releaseName =  document.getElementById('release_name').value;
+                        //check release_name
+                        if(releaseName.length < 1) {
+                            func.alertPopup('ALERT', MSG_REQUIRED_RELEASE_NAME, false, MSG_CLOSE, releases.reset());
+                            return false;
+                        }
+                        //check namespace
+                        if(sessionStorage.getItem('nameSpace').toLowerCase() == "all") {
+                            func.alertPopup('ALERT', MSG_SELECTED_NAMESPACE_ALL, false, MSG_CLOSE, releases.reset());
+                            return false;
+                        }
+
+                        // install
+                        func.alertPopup('INSTALL', MSG_CHECK_TO_INSTALL_CHART, true, MSG_CONFIRM, releases.install);
+
+                    }, false);
+                },
+
+                install(){
+                    let releaseName =  document.getElementById('release_name').value;
+                    let installChart = {
+                        "repo" : releases.repoName,
+                        "chart": releases.chartName,
+                        "chart_version" : releases.chartTargetVersion,
+                        "values" : valuesMgView.editor().getValue(),
+                    };
+                    func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releaseName}`, JSON.stringify(installChart), true, 'application/json', releases.moveReleaseList);
+                },
+
+                reset(){
+                  return false;
+                },
+
+                moveReleaseList() {
+                    movePage(URI_CP_CATALOG_RELEASES);
+                }
+            }
+
+            releases.init();
+        }
+
+    </script>
+</th:block>
+</html>

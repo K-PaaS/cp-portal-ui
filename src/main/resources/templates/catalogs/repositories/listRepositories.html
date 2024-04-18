@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<div layout:fragment="content">
+    <div id="content" class="sub-page">
+        <article class="location">
+            <ul>
+                    <li><a onclick="movePage(URI_CP_CATALOG_REPOSITORIES)">Catalogs</a></li>
+                    <li><a onclick="movePage(URI_CP_CATALOG_REPOSITORIES)">Repositories</a></li>
+                </ul>
+            <!-- Click event class="on" -->
+            <fieldset>
+                    <input type="text" name="keyword" id="searchText" autocomplete="off" th:placeholder="#{M0017}" />
+                    <button type="submit" id="search" th:text="#{M0031}"></button>
+                </fieldset>
+        </article>
+            <article class="base">
+                <div class="notice">
+                    <h3>List</h3>
+                    <!-- User -->
+                    <div class="table_style01">
+                        <!-- board -->
+                        <table>
+                            <caption>Repositories</caption>
+                            <colgroup >
+                                <col width="35%" />
+                                <col width="65%" />
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">URL</th>
+                            </tr>
+                            </thead>
+                            <tbody class="listTable">
+                            </tbody>
+                        </table>
+                        <!-- more btn -->
+                        <a class="more" href="javascript:;">more</a>
+                    </div>
+                    <!-- btn -->
+                    <a href="javascript:;" class="add" th:text="#{M0223}"></a>
+                </div>
+        </article>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+    window.onload = () => {
+
+        func.init(ASIDE_DP1.CATALOGS, ASIDE_DP2.CATALOG_REPOSITORIES);
+        callbackFuncNameLoad();
+
+        const repos = {
+            offset : 0, // 로드 페이지 넘버
+            limit : 10, // 로드 게시물 개수
+            allItemCount : 0, //게시물 총 개수
+            searchName : '',
+
+            init(){
+                func.nameLoad = repos.reset;
+                repos.load();
+                repos.event();
+            },
+
+            reset(){
+                func.removeHtml(document.querySelector('.listTable'));
+                repos.offset = 0;
+                repos.load();
+            },
+
+            load(){
+                func.loading();
+                func.loadData('GET', `${func.url}catalog/repositories?searchName=${document.getElementById('searchText').value}&limit=${repos.limit}&offset=${repos.offset}`, 'application/json', repos.draw);
+            },
+
+            draw(data){
+                if(repos.offset == 0) repos.allItemCount = data.itemMetaData.allItemCount;
+                if(data.httpStatusCode == 200){
+                   if(data.items.length > 0){
+                        for(var i=0; i<data.items.length; i++){
+                            var html = `<tr>` +
+                                `<td class="left"><a href="javascript:;" data-name="${data.items[i].name}" data-url="${data.items[i].url}">${data.items[i].name}</a></td>` +
+                                `<td class="letf box"><dl><dt>${data.items[i].url}</dt></dl></td></tr>`;
+
+                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                        };
+                    } else {
+                        var html = '<tr><td colspan="2">No Data.</td></tr>';
+
+                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                    };
+                } else {
+                    var html = '<tr><td colspan="2">No Data.</td></tr>';
+
+                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                }
+
+                // more 버튼 활성, 비활성
+                if(document.querySelector('.listTable').querySelectorAll('tr').length < repos.allItemCount){
+                    document.querySelector('.more').classList.toggle('on', true);
+                } else {
+                    document.querySelector('.more').classList.toggle('on', false);
+                };
+
+                if(document.getElementById('loading')){
+                    document.getElementById('wrap').removeChild(document.getElementById('loading'));
+                };
+
+                repos.listEvent();
+            },
+
+            event(){
+                // more 버튼 event
+                document.querySelector('.more').addEventListener('click', (e) => {
+                    if(document.querySelector('.listTable').querySelectorAll('tr').length < repos.allItemCount){
+                    repos.offset++;
+
+                    repos.load();
+                };
+            }, false);
+
+                document.querySelector('.add').addEventListener('click', (e) => {
+                    document.location.href = URI_CP_CATALOG_REPOSITORIES + URI_CP_ADD;
+            }, false);
+            },
+
+            listEvent(){
+                var listAll = document.querySelector('.listTable').querySelectorAll('a');
+
+                for(var i=repos.offset*10; i<=listAll.length-1; i++){
+                    listAll[i].addEventListener('click', (e) => {
+                    sessionStorage.setItem('repoName', e.target.getAttribute('data-name'));
+                        sessionStorage.setItem('repoUrl', e.target.getAttribute('data-url'));
+                    document.location.href = URI_CP_CATALOG_REPOSITORIES + URI_CP_CATALOG_CHARTS;
+                }, true);
+                };
+            },
+        }
+
+        repos.init();
+    }
+</script>
+</th:block>
+</html>

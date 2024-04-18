@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<div layout:fragment="content">
+    <div id="content" class="sub-page">
+        <article class="location">
+            <ul>     <li><a onclick="movePage(URI_CP_CATALOG_REPOSITORIES)">Catalogs</a></li>
+                     <li><a onclick="movePage(URI_CP_CATALOG_REPOSITORIES)">Repositories</a></li>
+                     <li><a onclick="movePage(URI_CP_CATALOG_REPOSITORIES+URI_CP_CATALOG_CHARTS)">Charts</a></li>
+                </ul>
+            <!-- Click event class="on" -->
+            <fieldset>
+                    <input type="text" name="keyword" id="searchText" autocomplete="off" th:placeholder="#{M0017}" />
+                    <button type="submit" id="search" th:text="#{M0031}"></button>
+                </fieldset>
+        </article>
+            <article class="base">
+                <div class="notice">
+                        <h2 id="repo-name-header"></h2>
+                        <div class="header-label-wrapper"><span class="header-label" id="repo-url-header"></span></div>
+                    <!-- User -->
+                    <div class="table_style01 table_chart">
+                        <!-- board -->
+                        <table>
+                            <caption>Repositories</caption>
+                            <colgroup >
+                                <col width="5%" />
+                                <col width="16%" />
+                                <col width="64%" />
+                                <col width="15%" />
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th colspan="2" scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Version</th>
+                            </tr>
+                            </thead>
+                            <tbody class="listTable">
+                            </tbody>
+                        </table>
+                        <!-- more btn -->
+                        <a class="more" href="javascript:;">more</a>
+                    </div>
+                    <!-- btn -->
+                    <a href="javascript:;" id="delete" class="aside_btn" th:text="#{M0026}"></a>
+                    <a href="javascript:;" id="update" class="aside_btn" style="right:39px; background-color: #0950bf;" th:text="#{M0032}"></a>
+                </div>
+        </article>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+    window.onload = () => {
+
+        func.init(ASIDE_DP1.CATALOGS, ASIDE_DP2.CATALOG_REPOSITORIES);
+        callbackFuncNameLoad();
+
+        const charts = {
+            offset : 0, // 로드 페이지 넘버
+            limit : 10, // 로드 게시물 개수
+            allItemCount : 0, //게시물 총 개수
+            searchName : '',
+            name : sessionStorage.getItem('repoName'),
+            url : sessionStorage.getItem('repoUrl'),
+
+            init(){
+                func.nameLoad = charts.reset;
+                charts.load();
+                charts.event();
+            },
+
+            reset(){
+                func.removeHtml(document.querySelector('.listTable'));
+                charts.offset = 0;
+                charts.load();
+            },
+
+            load(){
+                func.loading();
+                func.loadData('GET', `${func.url}catalog/repositories/${charts.name}/charts?searchName=${document.getElementById('searchText').value}&limit=${charts.limit}&offset=${charts.offset}`, 'application/json', charts.draw);
+            },
+
+            draw(data){
+                document.getElementById("repo-name-header").innerText  = charts.name;
+                document.getElementById("repo-url-header").innerText  = charts.url;
+
+                if(charts.offset == 0) charts.allItemCount = data.itemMetaData.allItemCount;
+                if(data.httpStatusCode == 200){
+                  if(data.items.length > 0){
+                        var icon = "";
+                        for(var i=0; i<data.items.length; i++) {
+                            var data_item = JSON.stringify(data.items[i]);
+                            icon = (data.items[i].icon.length < 1) ? DEFAULT_ICON_PATH : data.items[i].icon;
+                            var html = `<tr>` +
+                                `<td class="chart-td-first"><div class="chart-logo-wrap"><img class="chart-logo" src="${icon}" onerror="this.src='${DEFAULT_ICON_PATH}';"></div></td>` +
+                                `<td class="left chart-td-sec"><a href="javascript:;" data-item='${data_item}' data-name="${data.items[i].name}">${data.items[i].name}</a></td>` +
+                                `<td class="left">${data.items[i].description}</td>` +
+                                `<td class="center box"><div class="label-center-wrapper"><dl><dt>${data.items[i].version}</dt></dl></div></td>`;
+                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                        }
+                        ;
+                    } else {
+                        var html = '<tr><td colspan="4">No Data.</td></tr>';
+
+                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                    };
+                } else {
+                    var html = '<tr><td colspan="4">No Data.</td></tr>';
+
+                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                }
+
+                // more 버튼 활성, 비활성
+                if(document.querySelector('.listTable').querySelectorAll('tr').length < charts.allItemCount){
+                    document.querySelector('.more').classList.toggle('on', true);
+                } else {
+                    document.querySelector('.more').classList.toggle('on', false);
+                };
+
+                if(document.getElementById('loading')){
+                    document.getElementById('wrap').removeChild(document.getElementById('loading'));
+                };
+
+                charts.listEvent();
+            },
+
+            event(){
+                // more 버튼 event
+                document.querySelector('.more').addEventListener('click', (e) => {
+                    if(document.querySelector('.listTable').querySelectorAll('tr').length < charts.allItemCount){
+                    charts.offset++;
+
+                    charts.load();
+                };
+            }, false);
+
+                // delete 버튼 event
+                document.getElementById('delete').addEventListener('click', (e) => {
+                    func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, charts.delete);
+                }, false);
+                // update 버튼 event
+                document.getElementById('update').addEventListener('click', (e) => {
+                    func.alertPopup('UPDATE', MSG_REPO_CHART_UPDATE, true, MSG_CONFIRM, charts.update);
+                }, false);
+            },
+
+            listEvent(){
+                var listAll = document.querySelector('.listTable').querySelectorAll('a');
+
+                for(var i=charts.offset*10; i<=listAll.length-1; i++){
+                    listAll[i].addEventListener('click', (e) => {
+                    sessionStorage.setItem('chartItem', e.target.getAttribute('data-item'));
+                    document.location.href = URI_CP_CATALOG_REPOSITORIES + URI_CP_CATALOG_CHARTS + URI_CP_CATALOG_INSTALL;
+                }, true);
+                };
+            },
+
+            delete(){
+                func.saveData('DELETE', `${func.url}catalog/repositories/${charts.name}`, '', true, 'application/json', func.historyBack);
+            },
+
+            update(){
+                func.saveData('PUT', `${func.url}catalog/repositories/${charts.name}`, '', true, 'application/json', charts.returnPage);
+            },
+
+            returnPage() {
+                document.location.href = URI_CP_CATALOG_REPOSITORIES+URI_CP_CATALOG_CHARTS;
+            }
+        }
+
+        charts.init();
+    }
+</script>
+</th:block>
+</html>

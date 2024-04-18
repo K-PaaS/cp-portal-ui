@@ -43,6 +43,13 @@ public class ConstantsUrl {
 
     public static final String URI_CP_GLOBAL_ = "/global/templates";
 
+
+    public static final String URI_CP_CATALOG_REPOSITORIES = "/catalog/repositories";
+    public static final String URI_CP_CATALOG_RELEASES = "/catalog/releases";
+    public static final String URI_CP_CATALOG_CHARTS = "/charts";
+
+    public static final String URI_CP_CATALOG_INSTALL = "/install";
+
     public static final String URI_CP_LIST = "/list";
     public static final String URI_CP_DETAILS = "/details";
     public static final String URI_CP_CREATE = "/create";
@@ -50,6 +57,8 @@ public class ConstantsUrl {
     public static final String URI_CP_POPUP = "/popup";
     public static final String URI_CP_LOGS = "/logs";
 
+    public static final String URI_CP_ADD = "/add";
+    public static final String URI_CP_UPGRADE = "/upgrade";
     public static final String URI_CP_GET_USER_LOGIN_DATA = "/container-platform/userLoginData";
     public static final String URI_CP_REFRESH_TOKEN = "/container-platform/refreshToken";
 
