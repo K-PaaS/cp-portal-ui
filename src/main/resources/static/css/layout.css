@@ -604,6 +604,10 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 #localeLangDiv fieldset select {height: 40px; line-height:40px; width:100%; padding-left:18px; font-size:18px; color:#47494d; cursor:pointer;}
 #u_locale_lang{width : 115px;height: 40px;}
 
+.guideButtonDiv{margin: -3px 30px 0 0 !important;}
+.guideButtonDiv button {display:block; width:80px; background-color:#0950bf; color:#fff; line-height:45px; height:40px; font-size:18px; font-weight:300; border-radius:2px; font-family:'Apple SD Gothic Neo L', sans-serif;}
+
+
 /*----------------------------- global -----------------------------*/
 .fc-blue {color: #1c77ff;}
 .flex-c {display: flex; justify-content: center;}

@@ -7,8 +7,10 @@ const func = {
 	clusterData:  new Object(),
 	nameData : new Object(),
 	createIm : '',
+	depth1 : '',
 
 	init(depth1, depth2){
+		func.depth1 = depth1;
 
 		// Locale Language 조회
 		func.getLocaleLang();
@@ -658,5 +660,20 @@ const func = {
 				pattern: ['#0ca583', '#ffc53e', '#f34111', '#844adb', '#d9d9d9']
 			},
 		});
+	},
+
+	moveToGuideLink(){
+		const guideConfig = {
+			global: GUIDE_GLOBAL,
+			clusters: GUIDE_CLUSTERS,
+			workloads: GUIDE_WORKLOADS,
+			services: GUIDE_SERVICES,
+			storages: GUIDE_STORAGES,
+			configmaps: GUIDE_CONFIGMAPS,
+			managements: GUIDE_MANAGEMENTS,
+			info: GUIDE_INFO
+		}
+
+	   window.open('about:blank').location.href = GUIDE_URL + guideConfig[func.depth1];
 	},
 }
