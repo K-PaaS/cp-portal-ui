@@ -80,3 +80,15 @@ server:
 
 cpApi:
   url: ${CP_PORTAL_API_URI}
+
+guide:
+  url: https://github.com/K-PaaS/container-platform/blob/master/use-guide/portal/container-platform-portal-guide.md#
+  list:
+    global: 5-1
+    clusters: 5-2
+    workloads: 5-3
+    services: 5-4
+    storages: 5-5
+    configmaps: 5-6
+    managements: 5-7
+    info: 5-8
