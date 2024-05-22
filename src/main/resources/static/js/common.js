@@ -14,9 +14,6 @@ const func = {
 		func.depth1 = depth1;
 		func.depth2 = depth2;
 
-		console.log("func.depth1 : ", func.depth1);
-		console.log("func.depth2 : ", func.depth2);
-
 		// Locale Language 조회
 		func.getLocaleLang();
 
