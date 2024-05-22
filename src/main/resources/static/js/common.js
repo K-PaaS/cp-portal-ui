@@ -8,9 +8,14 @@ const func = {
 	nameData : new Object(),
 	createIm : '',
 	depth1 : '',
+	depth2 : '',
 
 	init(depth1, depth2){
 		func.depth1 = depth1;
+		func.depth2 = depth2;
+
+		console.log("func.depth1 : ", func.depth1);
+		console.log("func.depth2 : ", func.depth2);
 
 		// Locale Language 조회
 		func.getLocaleLang();
@@ -662,18 +667,16 @@ const func = {
 		});
 	},
 
-	moveToGuideLink(){
-		const guideConfig = {
-			global: GUIDE_GLOBAL,
-			clusters: GUIDE_CLUSTERS,
-			workloads: GUIDE_WORKLOADS,
-			services: GUIDE_SERVICES,
-			storages: GUIDE_STORAGES,
-			configmaps: GUIDE_CONFIGMAPS,
-			managements: GUIDE_MANAGEMENTS,
-			info: GUIDE_INFO
-		}
+	onclickToGuide() {
+		if(func.depth1 === 'global' && func.depth2 === 'g_overview') {
+			console.log("mouseoverToGuide if")
 
-	   window.open('about:blank').location.href = GUIDE_URL + guideConfig[func.depth1];
+		}else {
+			console.log("mouseoverToGuide")
+			func.moveToGuideLink();
+		}
+	},
+	moveToGuideLink(){
+	   window.open('about:blank').location.href = GUIDE_URL + GUIDE_LIST[func.depth1];
 	},
 }

@@ -176,15 +176,18 @@
      // GUIDE LINK
      /*<![CDATA[*/
 
-     var GUIDE_URL = [[${@environment.getProperty('guide.url')}]];
-     var GUIDE_GLOBAL =  [[${@environment.getProperty('guide.list.global')}]];
-     var GUIDE_CLUSTERS =  [[${@environment.getProperty('guide.list.clusters')}]];
-     var GUIDE_WORKLOADS =  [[${@environment.getProperty('guide.list.workloads')}]];
-     var GUIDE_SERVICES =  [[${@environment.getProperty('guide.list.services')}]];
-     var GUIDE_STORAGES =  [[${@environment.getProperty('guide.list.storages')}]];
-     var GUIDE_CONFIGMAPS =  [[${@environment.getProperty('guide.list.configmaps')}]];
-     var GUIDE_MANAGEMENTS =  [[${@environment.getProperty('guide.list.managements')}]];
-     var GUIDE_INFO =  [[${@environment.getProperty('guide.list.info')}]];
+     const GUIDE_URL = [[${@environment.getProperty('guide.url')}]];
+
+     const GUIDE_LIST = {
+         global: [[${@environment.getProperty('guide.list.global')}]],
+         clusters: [[${@environment.getProperty('guide.list.clusters')}]],
+         workloads: [[${@environment.getProperty('guide.list.workloads')}]],
+         services: [[${@environment.getProperty('guide.list.services')}]],
+         storages: [[${@environment.getProperty('guide.list.storages')}]],
+         configmaps: [[${@environment.getProperty('guide.list.configmaps')}]],
+         managements: [[${@environment.getProperty('guide.list.managements')}]],
+         info: [[${@environment.getProperty('guide.list.info')}]]
+     }
 
 
      /*]]>*/
