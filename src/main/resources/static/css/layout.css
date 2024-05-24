@@ -605,8 +605,22 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 #u_locale_lang{width : 115px;height: 40px;}
 
 .guideButtonDiv{margin: -3px 20px 0 0 !important; cursor : pointer;}
-.guideButtonSelect{display: flex; justify-content : center; weight: 25px; height: 40px;}
+.guideButtonSelect{display: flex; justify-content : center; weight: 25px; height: 60px;}
 .guideButtonI {color: #ffffff; font-size: 25px; margin-top: 10px;}
+
+header > div > div > div > div > div {width: 25px; position:relative; padding-bottom:34px; padding-top:3px; color:#ffffff; font-size:27px; line-height:30px;}
+header > div > div > div > div > div > a {color:#ffffff; font-size:27px; display:block; line-height:30px; padding-right:30px; background:url("../img/arrowtop_icon.png") no-repeat 0 0; background-position:right 50%; transition:.3s; white-space: nowrap;  text-overflow: ellipsis; overflow: hidden;}
+header > div > div > div > div > div:hover > a {background:url("../img/arrowbottom_icon.png") no-repeat 0 0; background-position:right 50%;}
+/* title pop-up */
+header > div > div > div > div > div ul {display:none; position:absolute; top:52px; left:0; overflow-y:auto; max-height:400px; background-color:#fff; padding:18px 0; z-index:10; border:1px solid #ebebeb; box-shadow:10px 10px 10px 1px rgba(119, 119, 119, 0.336); width: 210px; !important;}
+header > div > div > div > div > div:hover ul {display:block; animation:submenu linear .3s both;}
+header > div > div > div > div > div ul.hidden {display:none !important;}
+@keyframes submenu {0% {opacity:0;} 100% {opacity:1;}}
+header > div > div > div > div > div ul li {line-height:38px;}
+header > div > div > div > div > div ul li a {color:#818894; display:block; padding:0 20px; white-space:nowrap; font-size:18px; text-overflow:ellipsis; overflow:hidden;}
+header > div > div > div > div > div ul li:hover {background-color:#fff7f2;}
+header > div > div > div > div > div ul li a:focus {background-color:#ff7a0f; color:#ffffff;}
+header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color:#ffffff;}
 
 
 /*----------------------------- global -----------------------------*/

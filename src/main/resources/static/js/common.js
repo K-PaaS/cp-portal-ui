@@ -47,6 +47,7 @@ const func = {
 		};
 
 		func.event();
+		func.onclickToGuide();
 	},
 
 	event(){
@@ -665,15 +666,40 @@ const func = {
 	},
 
 	onclickToGuide() {
-		if(func.depth1 === 'global' && func.depth2 === 'g_overview') {
-			console.log("mouseoverToGuide if")
+		const lang = document.getElementById("u_locale_lang").value;
+		let guideListUl = '';
 
-		}else {
-			console.log("mouseoverToGuide")
-			func.moveToGuideLink();
+		guideListUl += `<li><a href="javascript:;" data-name="userguide">${USER_GUIDE}</a></li>`;
+		if(func.depth1 === 'global' && func.depth2 === 'g_overview') {
+			guideListUl += `<li><a href="javascript:;" data-name="playparkusageguide">${PLAYPARK_USAGE_GUIDE}</a></li>`;
+		}
+		document.getElementById("guideListUl").innerHTML = guideListUl;
+
+		var name = document.querySelector('.guideList').querySelectorAll('a');
+
+		for(let i=0 ; i<name.length; i++) {
+			name[i].addEventListener('click', (e) => {
+				IS_RELOAD = true;
+
+				if(e.target.getAttribute('data-name') === 'userguide' && lang === 'ko') {
+					func.moveToUserGuideLink();
+				}
+				if(e.target.getAttribute('data-name') === 'userguide' && lang === 'en') {
+					func.moveToEngUserGuideLink();
+				}
+				if(e.target.getAttribute('data-name') === 'playparkusageguide') {
+					func.moveToPlayprkUsageGuideLink();
+				}lo
+			}, false);
 		}
 	},
-	moveToGuideLink(){
+	moveToUserGuideLink(){
 	   window.open('about:blank').location.href = GUIDE_URL + GUIDE_LIST[func.depth1];
+	},
+	moveToPlayprkUsageGuideLink() {
+		window.open('about:blank').location.href = GUIDE_URL_PLAYPARK;
+	},
+	moveToEngUserGuideLink(){
+		window.open('about:blank').location.href = GUIDE_URL_ENG + GUIDE_LIST[func.depth1];
 	},
 }

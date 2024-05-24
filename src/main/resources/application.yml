@@ -83,6 +83,8 @@ cpApi:
 
 guide:
   url: https://github.com/K-PaaS/container-platform/blob/master/use-guide/portal/container-platform-portal-guide.md#
+  url-eng: https://github.com/K-PaaS/cp-guide-eng/blob/master/use-guide/portal/container-platform-portal-guide-en.md#
+  url-playpark: https://github.com/K-PaaS/container-platform/blob/playpark/use-guide/portal/container-platform-portal-deploy-guide.md#
   list:
     global: 5-1
     clusters: 5-2
