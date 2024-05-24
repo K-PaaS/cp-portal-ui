@@ -22,9 +22,6 @@
             </h3>
 
             <div id="headerSubDiv">
-                <div class="guideButtonDiv">
-                    <button onclick="func.moveToGuideLink()" th:text="#{M0865}" id="guideLinkId"></button>
-                </div>
                 <div id="localeLangDiv">
                     <fieldset>
                         <select name="u_locale_lang" id="u_locale_lang" onchange="changeLocaleLanguage()">
@@ -35,16 +32,8 @@
                 </div>
                 <div class="guideButtonDiv">
                     <div class="guideButtonSelect">
-                        <i onclick="func.onclickToGuide()" class="fa-solid fa-book guideButtonI"></i>
-                    </div>
-                    <div class="guideListDropdown">
-                        <ul>
-                            <li>
-                                <a class="guideList" title="CPGuide" th:text="#{M0809}">CP Guide</a>
-                            </li>
-                            <li>
-                                <a class="guideList" title="playparkGuide" th:text="#{M0809}">PlayPark Guide</a>
-                            </li>
+                        <i  class="fa-solid fa-book guideButtonI"></i>
+                        <ul class="guideList scroll02" id="guideListUl">
                         </ul>
                     </div>
                 </div>
