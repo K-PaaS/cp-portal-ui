@@ -31,6 +31,10 @@
      var URI_CP_MANAGEMENTS_INACTIVE_USERS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_MANAGEMENTS_INACTIVE_USERS}]];
      var URI_CP_MANAGEMENTS_CONFIGMAPS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_MANAGEMENTS_CONFIGMAPS}]];
 
+     var URI_CP_FAULTINJECTION_EXPERIMENTS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_FAULTINJECTION_EXPERIMENTS}]];
+     var URI_CP_FAULTINJECTION_EVENTS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_FAULTINJECTION_EVENTS}]];
+
+
      var URI_CP_INFO_ACCESS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_INFO_ACCESS}]];
      var URI_CP_INFO_PRIVATE_REPOSITORY = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_INFO_PRIVATE_REPOSITORY}]];
 
@@ -176,6 +180,9 @@
      // GUIDE LINK
      /*<![CDATA[*/
 
+     const CHAOS_URL = [[${@environment.getProperty('chaos.url')}]];
+     const CHAOS_TOKEN = [[${@environment.getProperty('chaos.token')}]];
+
      const USER_GUIDE = [[#{M0866}]];
      const PLAYPARK_USAGE_GUIDE = [[#{M0867}]];
 
@@ -212,6 +219,7 @@
          STORAGES: 'storages',
          CONFIGMAPS: 'configmaps',
          MANAGEMENTS: 'managements',
+         FAULTINJECTION: 'faultinjection',
          INFO: 'info'
      }
 
@@ -239,6 +247,8 @@
          RESOURCE_QUOTAS: 'resource_quotas',
          LIMIT_RANGES: 'limit_ranges',
          CONFIGMAPS: 'configmaps',
+         EXPERIMENTS: 'experiments',
+         EVENTS: 'events',
          ACCESS: 'access',
          PRIVATE_REPOSITORY: 'private_repository'
      }
