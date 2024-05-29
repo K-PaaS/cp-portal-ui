@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+    <div id="content" class="sub-page">
+        <article class="location">
+            <ul>
+                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)">FaultInjection</a></li>
+                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)">Experiments</a></li>
+            </ul>
+        </article>
+        <article class="base detail">
+            <div class="notice">
+                <h4>Details</h4>
+                <div class="table_style01">
+                    <table>
+                        <caption>Details</caption>
+                        <colgroup >
+                            <col width="20%" />
+                            <col width="80%" />
+                        </colgroup>
+                        <tbody class="listTable">
+                        <tr>
+                            <th scope="row" class="left">Name</th>
+                            <td class="left" id="name"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="left">Status</th>
+                            <td class="left" id="status"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="left">UUID</th>
+                            <td class="left" id="uid"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="left">Namespaces</th>
+                            <td class="left" id="namespace"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="left">Created time</th>
+                            <td class="left" id="createdTime"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h4>Scope</h4>
+                <div class="table_style01">
+                    <table>
+                        <caption>Scope</caption>
+                        <colgroup >
+                            <col width="20%" />
+                            <col width="80%" />
+                        </colgroup>
+                        <tbody class="listTable">
+                        <tr>
+                            <th scope="row" class="left">Namespace Selector</th>
+                            <td class="left" id="namespaceSelector"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="left">Label Selectors</th>
+                            <td class="left box" id="labelSelectors"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h4>Experiment</h4>
+                <div class="table_style01">
+                    <table>
+                        <caption>Experiment</caption>
+                        <colgroup >
+                            <col width="20%" />
+                            <col width="80%" />
+                        </colgroup>
+                        <tbody class="listTable">
+                        <tr>
+                            <th scope="row" class="left">Kind</th>
+                            <td class="left" id="kind"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="left">Action</th> <!-- pod, network, stress 마다 표출되는게 다름 -->
+                            <td class="left" id="action"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="left"> Run Duration</th>
+                            <td class="left" id="runDuration"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h4>Events</h4>
+                <div class="table_style01">
+                    <table>
+                        <caption>Events</caption>
+                        <colgroup >
+                            <col width="80%" />
+                            <col width="20%" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">Message</th>
+                            <th scope="col">Event Time</th>
+                        </tr>
+                        </thead>
+                        <tbody class="eventList">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- btn -->
+            <div class="btn02">
+                <button type="submit" id="delete" th:text="#{M0026}"></button>
+                <div>
+                    <a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)" th:text="#{M0028}"></a>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+<div layout:fragment="modal">
+    <div class="modal-wrap" style="display:none;">
+        <div class="modal">
+            <h5 th:text="#{M0034}"></h5>
+            <p th:text="#{M0018}"></p>
+            <button class="confirm" type="submit" th:text="#{M0026}"></button>
+            <a class="close" href="javascript:;" th:text="#{M0023}"></a>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        window.onload = () => {
+
+            func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
+
+            const experimentsDetail = {
+                init(){
+
+                    // experimentsDetail 정보 조회
+
+
+                },
+
+                draw(data){
+
+                    // Details data
+                    document.getElementById('name').innerText = data.name;
+                    document.getElementById('status').innerText = data.status;
+                    document.getElementById('uid').innerText = data.uid;
+                    document.getElementById('namespace').innerHTML = data.namespace;
+                    document.getElementById('createdTime').innerText = data.created_at;
+
+                    // Scope
+                    document.getElementById('namespaceSelector').innerText = data.kube_object.spec.selector.namespaces;
+
+                    const labelSelectors = data.kube_object.spec.selector.labelSelectors;
+
+                    for(let i = 0; i <= Object.getOwnPropertyNames(labelSelectors).length-1; i++){
+                        var html = `<dl><dt>${Object.getOwnPropertyNames(labelSelectors)[i]}</dt><dd>${labelSelectors[Object.keys(labelSelectors)[i]]}</dd></dl>`;
+                        func.appendHtml(document.getElementById('labelSelectors'), html, 'dl');
+                    };
+
+
+                    // Experiment
+                    document.getElementById('kind').innerHTML = data.kind;
+                    document.getElementById('action').innerText = data.kube_object.spec.action;
+                    document.getElementById('runDuration').innerText = data.kube_object.spec.duration;
+
+                    // event 정보 조회
+
+                },
+
+                list(data){
+
+                    func.removeHtml(document.querySelector('.eventList'));
+
+                    if(data.items.length > 0){
+                        for(var i=0; i<=data.items.length-1; i++){
+                            var html = `<tr>
+                                    <td class="left">${data.items[i].message}</td>
+                                    <td>${data.items[i].created_at}</td>
+                                </tr>`;
+
+                            func.appendHtml(document.querySelector('.eventList'), html, 'tbody');
+                        };
+                    } else {
+                        var html = '<tr><td colspan="2">No Data.</td></tr>';
+
+                        func.appendHtml(document.querySelector('.eventList'), html, 'tbody');
+                    };
+
+                    experimentsDetail.event();
+                },
+
+                event(){
+                    document.getElementById('delete').addEventListener('click', (e) => {
+                        func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, experimentsDetail.delete);
+                    }, false);
+
+                    document.getElementById('modify').addEventListener('click', (e) => {
+                        // Resource yaml 정보 조회
+                        func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods/${sessionStorage.getItem('commonName')}/yaml`, 'application/json', func.modify);
+                    }, false);
+
+                    document.querySelector('.nameLink').addEventListener('click', (e) => {
+                        document.location.href = URI_CP_CLUSTERS_NAMESPACES + URI_CP_DETAILS;
+                    }, false);
+
+                    document.querySelector('.nodeLink').addEventListener('click', (e) => {
+                        sessionStorage.setItem('nodeName', e.target.innerText);
+
+                        document.location.href = URI_CP_CLUSTERS_NODES + URI_CP_DETAILS +`?namespace=${sessionStorage.getItem('nameSpace')}` ;
+                    }, false);
+                },
+
+                delete(){
+                    func.saveData('DELETE', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods/${sessionStorage.getItem('commonName')}`, '', true, 'application/json', func.historyBack);
+                },
+            }
+
+            experimentsDetail.init();
+        }
+    </script>
+</th:block>
+</html>
