@@ -289,6 +289,7 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .table_style01 table tr td.active,
 .table_style01 table tr td.running,
 .table_style01 table tr td.deployed,
+.table_style01 table tr td.experiment-completed,
 .table_style01 table tr td.true {color:#0ca583;}
 .table_style01 table tr td.terminating {color:#ffc53e;}
 .table_style01 table tr td.completed,
@@ -296,6 +297,8 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .table_style01 table tr td.failed,
 .table_style01 table tr td.fail {color:#f34111;}
 .table_style01 table tr td.pending {color:#d9d9d9;}
+.table_style01 table tr td.experiment-deleting,
+.table_style01 table tr td.experiment-injecting {color:#376bcd;}
 .table_style01 table tr td input.left {text-align:left; width:80%; height: 100%; white-space:inherit; word-break: normal; word-wrap: break-word;}
 .table_style01 table tr td button.right {float: right;}
 .table_style01_downsize {margin-bottom: -45px;}
@@ -319,6 +322,8 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 
 .table_style01.limitTable tr th:first-child,
 .table_style01.limitTable tr td:first-child {display:none;}
+
+.circleCanvas {width: 20px; height: 20px; background-color: yellow; }
 
 /* more btn */
 .more {position:relative; display:block; width:58px; height:30px; line-height:30px; margin:0 auto; color:#47494d; font-size:17px; padding-right:15px; margin-top:20px; opacity:.3; cursor:default;}
