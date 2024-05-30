@@ -73,18 +73,26 @@
                             <col width="20%" />
                             <col width="80%" />
                         </colgroup>
-                        <tbody class="listTable">
+                        <tbody class="listTable" id="experiment">
                         <tr>
                             <th scope="row" class="left">Kind</th>
                             <td class="left" id="kind"></td>
                         </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h4>Run</h4>
+                <div class="table_style01">
+                    <table>
+                        <caption>Run</caption>
+                        <colgroup >
+                            <col width="20%" />
+                            <col width="80%" />
+                        </colgroup>
+                        <tbody class="listTable" id="run">
                         <tr>
-                            <th scope="row" class="left">Action</th> <!-- pod, network, stress 마다 표출되는게 다름 -->
-                            <td class="left" id="action"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="left"> Run Duration</th>
-                            <td class="left" id="runDuration"></td>
+                            <th scope="row" class="left">Duration</th>
+                            <td class="left" id="duration"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -131,19 +139,15 @@
 <th:block layout:fragment="script">
     <script type="text/javascript">
         window.onload = () => {
-
             func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
-
             const experimentsDetail = {
                 init(){
-
                     // experimentsDetail 정보 조회
 
 
                 },
 
                 draw(data){
-
                     // Details data
                     document.getElementById('name').innerText = data.name;
                     document.getElementById('status').innerText = data.status;
@@ -157,18 +161,50 @@
                     const labelSelectors = data.kube_object.spec.selector.labelSelectors;
 
                     for(let i = 0; i <= Object.getOwnPropertyNames(labelSelectors).length-1; i++){
-                        var html = `<dl><dt>${Object.getOwnPropertyNames(labelSelectors)[i]}</dt><dd>${labelSelectors[Object.keys(labelSelectors)[i]]}</dd></dl>`;
+                        let html = `<dl><dt>${Object.getOwnPropertyNames(labelSelectors)[i]}</dt><dd>${labelSelectors[Object.keys(labelSelectors)[i]]}</dd></dl>`;
                         func.appendHtml(document.getElementById('labelSelectors'), html, 'dl');
-                    };
-
+                    }
 
                     // Experiment
                     document.getElementById('kind').innerHTML = data.kind;
-                    document.getElementById('action').innerText = data.kube_object.spec.action;
-                    document.getElementById('runDuration').innerText = data.kube_object.spec.duration;
+
+                    if(data.kind === 'PodChaos'){
+                        const action = data.kube_object.spec.action;
+                        let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>`;
+                        func.appendHtml(document.getElementById('experiment'), html, 'tbody');
+                    }
+
+                    if(data.kind === 'NetworkChaos'){
+                        const action = data.kube_object.spec.action;
+                        const direction = data.kube_object.spec.direction;
+                        let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>
+                                    <tr><th scope="row" class="left">Direction</th><td class="left" id="direction">${direction}</td></tr>`;
+                        func.appendHtml(document.getElementById('experiment'), html, 'tbody');
+                    }
+
+                    if(data.kind === 'StressChaos'){
+                        const memoryObj = data.kube_object.spec.stressors.memory;
+                        let html = `<tr><th scope="row" class="left">Memory</th><td class="left" id="memory"></td></tr>`;
+                        func.appendHtml(document.getElementById('experiment'), html, 'tbody');
+
+                        let memory = '';
+                        for(let i = 0; i <= Object.getOwnPropertyNames(memoryObj).length-1; i++) {
+                            memory += Object.getOwnPropertyNames(memoryObj)[i] + ": " + memoryObj[Object.keys(memoryObj)[i]] + "\n";
+                        }
+                        document.getElementById('memory').innerText = memory;
+                    }
+
+                    // Run
+                    const duration =  data.kube_object.spec.duration;
+
+                    if(duration == null){
+                        document.getElementById('duration').innerHTML = 'Run continuously';
+                    }
+                    if(duration){
+                        document.getElementById('duration').innerHTML = duration;
+                    }
 
                     // event 정보 조회
-
                 },
 
                 list(data){

@@ -44,7 +44,7 @@
                     <a class="more" href="javascript:;">more</a>
                 </div>
                 <!-- btn -->
-                <a href="javascript:;" class="create" th:text="#{M0024}"></a>
+                <a href="javascript:" class="create" th:text="#{M0024}"></a>
             </div>
         </article>
     </div>
@@ -90,24 +90,58 @@
 
                 if(data.httpStatusCode == 200){
                     if(data.items.length > 0){
-                        for(var i=0; i<=data.items.length-1; i++){
-                            var html = `<tr><td class="status">${data.items[i].status}</td>
+                        for(let i = 0; i <= data.items.length-1; i++){
+                            let status = data.items[i].status;
+                            if(status === 'finished') {
+                                status = 'completed';
+                            }
+
+                            let html = `<tr><td class="experiment-${status}"><canvas class="circleCanvas" id="${data.items[i].uid}_status"></canvas>${status.charAt(0).toUpperCase() + status.slice(1)}</td>
                                             <td><a href="javascript:;" data-name="${data.items[i].name}" data-uid="${data.items[i].uid}">${data.items[i].name}</a></td>
                                             <td>${data.items[i].uid}</td>
                                             <td>${data.items[i].created_at}</td></tr>`;
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                        };
+
+                            var canvas = document.getElementById(data.items[i].uid+'_status');
+                            var ctx = canvas.getContext('2d');
+                            console.log("width: ",canvas.width);
+                            console.log("height: ",canvas.height);
+                            var centerX = canvas.width / 2;
+                            var centerY = canvas.height / 2;
+                            var radius = 5;
+                            var angle = 0;
+                            var speed = 0.05;
+
+                            function drawCircle() {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                ctx.beginPath();
+                                var x = centerX + Math.cos(angle) * (canvas.width / 4);
+                                var y = centerY + Math.sin(angle) * (canvas.height / 4);
+                                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                                ctx.stroke();
+                            }
+
+                            function animateCircle() {
+                                angle += speed;
+                                drawCircle();
+                                requestAnimationFrame(animateCircle);
+                            }
+
+                            animateCircle();
+                        }
+
+
+
                     } else {
-                        var html = '<tr><td colspan="4">No Data.</td></tr>';
+                        let html = '<tr><td colspan="4">No Data.</td></tr>';
 
                         func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                    };
+                    }
                 } else {
-                    var html = '<tr><td colspan="4">No Data.</td></tr>';
-
+                    let html = '<tr><td colspan="4">No Data.</td></tr>';
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                };
+                }
 
 
                 // more 버튼 활성, 비활성
@@ -115,11 +149,11 @@
                     document.querySelector('.more').classList.toggle('on', true);
                 } else {
                     document.querySelector('.more').classList.toggle('on', false);
-                };
+                }
 
                 if(document.getElementById('loading')){
                     document.getElementById('wrap').removeChild(document.getElementById('loading'));
-                };
+                }
 
                 experiments.listEvent();
             },
@@ -131,7 +165,7 @@
                     experiments.offset++;
 
                     experiments.load();
-                };
+                }
             }, false);
 
                 document.querySelector('.create').addEventListener('click', (e) => {
@@ -152,7 +186,7 @@
 
                     document.location.href = URI_CP_FAULTINJECTION_EXPERIMENTS + URI_CP_DETAILS;
                 }, true);
-                };
+                }
             },
         }
 
