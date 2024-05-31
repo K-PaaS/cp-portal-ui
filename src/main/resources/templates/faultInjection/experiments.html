@@ -81,6 +81,7 @@
             load(){
                 func.loading();
 
+                // experimentsList 정보 조회
 
             },
 
@@ -96,42 +97,23 @@
                                 status = 'completed';
                             }
 
-                            let html = `<tr><td class="experiment-${status}"><canvas class="circleCanvas" id="${data.items[i].uid}_status"></canvas>${status.charAt(0).toUpperCase() + status.slice(1)}</td>
-                                            <td><a href="javascript:;" data-name="${data.items[i].name}" data-uid="${data.items[i].uid}">${data.items[i].name}</a></td>
-                                            <td>${data.items[i].uid}</td>
-                                            <td>${data.items[i].created_at}</td></tr>`;
+                            if(status === 'deleting' || status === 'injecting') {
+                                let html = `<tr><td class="experiment-${status}"><span class="left"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                                                <td><a href="javascript:;" data-name="${data.items[i].name}" data-uid="${data.items[i].uid}">${data.items[i].name}</a></td>
+                                                <td>${data.items[i].uid}</td>
+                                                <td>${data.items[i].created_at}</td></tr>`;
 
-                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                            } else {
+                                let html = `<tr><td class="experiment-${status}"><span class="left"><span class="lds-circle"><span></span></span>${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                                                <td><a href="javascript:;" data-name="${data.items[i].name}" data-uid="${data.items[i].uid}">${data.items[i].name}</a></td>
+                                                <td>${data.items[i].uid}</td>
+                                                <td>${data.items[i].created_at}</td></tr>`;
 
-                            var canvas = document.getElementById(data.items[i].uid+'_status');
-                            var ctx = canvas.getContext('2d');
-                            console.log("width: ",canvas.width);
-                            console.log("height: ",canvas.height);
-                            var centerX = canvas.width / 2;
-                            var centerY = canvas.height / 2;
-                            var radius = 5;
-                            var angle = 0;
-                            var speed = 0.05;
-
-                            function drawCircle() {
-                                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                                ctx.beginPath();
-                                var x = centerX + Math.cos(angle) * (canvas.width / 4);
-                                var y = centerY + Math.sin(angle) * (canvas.height / 4);
-                                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                                ctx.stroke();
+                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             }
 
-                            function animateCircle() {
-                                angle += speed;
-                                drawCircle();
-                                requestAnimationFrame(animateCircle);
-                            }
-
-                            animateCircle();
                         }
-
-
 
                     } else {
                         let html = '<tr><td colspan="4">No Data.</td></tr>';
@@ -168,11 +150,9 @@
                 }
             }, false);
 
-                document.querySelector('.create').addEventListener('click', (e) => {
-                    sessionStorage.setItem('commonName', '');
-
-                func.create('Create', 'experiments', MSG_SAVE);
-            }, false);
+                document.querySelector('.create').addEventListener('click', () => {
+                    document.location.href = URI_CP_FAULTINJECTION_EXPERIMENTS + URI_CP_CREATE;
+                }, false);
             },
 
             listEvent(){
