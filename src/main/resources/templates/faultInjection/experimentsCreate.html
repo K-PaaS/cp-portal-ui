@@ -34,7 +34,7 @@
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="namespaceSelector" onchange="changenamespaceSelect()">
+                                <select id="namespaceSelector" onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -44,7 +44,7 @@
                         <dt><label>Label Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="labelSelector">
+                                <select id="labelSelector" onchange="changeLabelSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0870}"></option>
                                 </select>
                             </fieldset>
@@ -57,8 +57,8 @@
                                 <table>
                                     <caption>Pod List</caption>
                                     <colgroup >
-                                        <col width="15%" />
-                                        <col width="35%" />
+                                        <col width="12%" />
+                                        <col width="38%" />
                                         <col width="30%" />
                                         <col width="20%" />
                                     </colgroup>
@@ -70,7 +70,7 @@
                                         <th scope="col">State</th>
                                     </tr>
                                     </thead>
-                                    <tbody class="podList">
+                                    <tbody class="podList" id="podList">
                                     </tbody>
                                 </table>
                             </div>
@@ -96,7 +96,7 @@
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="namespaceSelectorNetwork" onchange="changenamespaceSelect()">
+                                <select id="namespaceSelectorNetwork" onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -174,7 +174,7 @@
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="namespaceSelectorStress" onchange="changenamespaceSelect()">
+                                <select id="namespaceSelectorStress" onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -258,169 +258,71 @@
                         selectorsHtml += `<option value="${data.items[i].cpNamespace}">${data.items[i].cpNamespace}</option>`;
                     }
                     func.appendHtml(document.getElementById('namespaceSelector'), selectorsHtml);
-
-                  /*  let podName = document.getElementById('namespaceSelector')
-
-                   func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', selectors.podList);*/
-                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods/selectors`, 'application/json', selectors.labelSelector);
                 },
-
-                labelSelector(data) {
-                    const labelSelectors = data.labels;
-                    let selectorsHtml = ``;
-                    for(let i = 0; i <= Object.getOwnPropertyNames(labelSelectors).length-1; i++){
-                        selectorsHtml += `<option value="${labelSelectors[i]}">${labelSelectors[i]}</option>`;
-                        func.appendHtml(document.getElementById('labelSelector'), selectorsHtml);
-                    }
-                },
-
-                podList(data){
-                    let html = `<tr>
-                              <td class="user-info-td1">
-                                <input type="checkbox" id="user" checked name="organization_user">
-                                <label for="$user" class="checkbox-label"></label>
-                              </td>
-                              <td class="user-info-td2" id=${data.items.name}>${data.items.name}</td>
-                              <td class="user-info-td3" id=${data.items.namespace}>${data.items.namespace}</td>
-                              <td class="user-info-td3" id=${data.items.podStatus}>${data.items.podStatus}</td>
-                            </tr>`;
-                    func.appendHtml(document.querySelector(".podList"), html, "tbody",);
-
-
-                },
-
-                event() {
-                    document.getElementById('save').addEventListener('click', () => {
-                        func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, selectors.save);
-                    }, false);
-                    document.getElementById('register').addEventListener('click', () => {
-                        func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, selectors.save);
-                    }, false);
-                },
-
-                save() {
-                    let createType = document.querySelector('.tab-btn li.active').getAttribute('type');
-                    let arg;
-
-                    if(selectors.validCheck(createType)){
-
-                        switch(createType) {
-                            case 'create':
-                                arg = {
-                                    "cluster" : document.getElementById('createName').value,
-                                    "resourceName": document.getElementById('createName').value,
-                                    "providerType": document.getElementById('createProvider').value,
-                                    "sshKey": document.getElementById('createSshKeys').value,
-                                    "cloudAccountId": selectors.getCloudAccount(),
-                                    "hclScript": document.getElementById('createTemplatesDetail').value,
-                                    "description": document.getElementById('createDescription').value,
-                                    "isClusterRegister": false
-                                }
-                                break;
-                            case 'register':
-                                arg = {
-                                    "cluster": document.getElementById('registerName').value,
-                                    "resourceName": document.getElementById('registerName').value,
-                                    "clusterApiUrl": document.getElementById('registerIP').value,
-                                    "providerType": document.getElementById('registerProvider').value,
-                                    "clusterToken": document.getElementById('registerCredentials').value,
-                                    "description": document.getElementById('registerDescription').value,
-                                    "isClusterRegister": true
-                                }
-                        }
-                        //check FILE
-                        func.saveData('POST', `${func.url}clusters`, JSON.stringify(arg), true, 'application/json', selectors.saveComp);
-                    }
-                },
-
-                saveComp() {
-                    func.historyBack();
-                },
-
-                getCloudAccount() {
-                    if(document.querySelector('#createCloudAccount > option:checked') == null) {
-                        return "";
-                    } else {
-                        return document.querySelector('#createCloudAccount > option:checked').getAttribute('data-id');
-                    }
-                },
-
-                validCheck(type){
-                    if(type == 'create') {
-                        if(isEmpty(document.getElementById('createProvider').value)) {
-                            func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE,  selectors.validReset);
-                            IS_VCHK = true;
-                            return false;
-                        }
-                    }
-                    else if(type == 'register') {
-                        if(isEmpty(document.getElementById('registerName').value) || isEmpty(document.getElementById('registerIP').value) ||
-                            isEmpty(document.getElementById('registerCredentials').value) || isEmpty(document.getElementById('registerProvider').value)) {
-                            func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE,  selectors.validReset);
-                            IS_VCHK = true;
-                            return false;
-                        }
-                    }
-
-                    return true;
-                },
-                validReset(){
-                    IS_VCHK = false;
-                }
             };
             selectors.init();
         };
 
-        function changeProviderSelect() {
+        function changeNamespaceSelect() {
             func.removeHtml(document.getElementById('labelSelector'));
+            func.removeHtml(document.getElementById('podList'));
 
-            let podName = document.getElementById('namespaceSelector')
+            let podName = document.getElementById('namespaceSelector').value;
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', labelSelector);
+        }
 
-     //       func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', selectors.podList);
-
-            let html = ``;
-            let provider = document.querySelector('#namespaceSelector > option:checked').value;
-            if(provider != '') {
-                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', (e) => {
-                    console.log("hi")
-                    for (let item of e.items) {
-                        html += `<option value="${item.name}" data-id="${item.id}"`;
-                        html += `>${item.name}</option>`;
-                    }
-
-                    func.appendHtml(document.getElementById('createCloudAccount'), html, 'dl');
-                });
-
-                func.loadData('GET', `${func.url}templates/provider/${provider}`, 'application/json', (e) => {
-                    html = ``;
-                    for (let item of e.items) { //FIXME!, 없는 경우
-
-                        html += `<option value="${item.name}" data-id="${item.id}">${item.name}</option>`;
-                    }
-
-                    func.appendHtml(document.getElementById('createTemplates'), html, 'dl');
-                    changeTemplateSelect();
-                });
-
-                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/keys/provider/${provider}`, 'application/json', (e) => {
-                    html = ``;
-                    for (let item of e.items) {
-                        html += `<option value="${item.name}" data-id="${item.id}"`;
-                        html += `>${item.name}</option>`;
-                    }
-
-                    if (provider != 'NAVER'){
-                        document.getElementById('createSshKeys').removeAttribute("disabled")
-                        func.appendHtml(document.getElementById('createSshKeys'), html, 'dl');
-                    } else {
-                        document.getElementById('createSshKeys').setAttribute('disabled',true);
-                    }
-
-                });
+        function labelSelector(data) {
+            let labelSelectors = {};
+            for(let i = 0; i < data.items.length; i++) {
+                const labels = data.items[i].labels
+                for(let key in data.items[i].labels){
+                    labelSelectors[key] = labels[key];
+                }
             }
 
+            let selectorsHtml = `<option selected disabled hidden value='' th:text='#{M0870}'></option>`;
+            for(let key in labelSelectors) {
+                selectorsHtml += `<option value="${key}:${labelSelectors[key]}">${key}:${labelSelectors[key]}</option>`;
+            }
+            func.appendHtml(document.getElementById('labelSelector'), selectorsHtml);
+        }
+
+        function changeLabelSelect() {
+            func.removeHtml(document.getElementById('podList'));
+
+            let podName = document.getElementById('namespaceSelector').value;
+            let selectorsHtml = document.getElementById('labelSelector').value;
+            console.log("selectorsHtml :", selectorsHtml)
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', podList);
 
         }
+
+        function podList(data) {
+            let html = '';
+
+            for (let i = 0; i < data.items.length; i++) {
+                const dataLabels = data.items[i].labels;
+
+                for(let key in labelSelectors) {
+                    if(Object.keys(dataLabels).includes(key)) {
+                        html += `<tr>
+                                      <td>
+                                        <input type="checkbox" id="check_${data.items[i].name}" name="check_${data.items[i].name}" value=${data.items[i].name} />
+                                        <label for="check_${data.items[i].name}"></label>
+                                      </td>
+                                      <td id=${data.items[i].name}>${data.items[i].name}</td>
+                                      <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
+                                      <td id=${data.items[i].phase}>${data.items[i].phase}</td>
+                                    </tr>`;
+                    }
+                }
+            }
+            func.appendHtml(document.querySelector(".podList"), html, "tbody",);
+        };
+
+
+
+
 
         function changeTemplateSelect() {
             func.removeHtml(document.getElementById('createTemplatesDetail'));
