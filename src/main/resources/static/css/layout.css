@@ -372,11 +372,11 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 
 /* modal */
 .modal-wrap {display:flex; position:fixed; top:0; left:0; align-items:center; justify-content:center; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.11); z-index:100;}
-.modal {position:relative; width:360px; background-color:#fff; padding:30px 39px 40px 39px; text-align:center; border:1px solid #d9d9d9;}
+.modal {position:relative;background-color:#fff; padding:30px 39px 40px 39px; text-align:center; border:1px solid #d9d9d9; min-width: 360px; max-width: 1200px;}
 .modal.midium {width:800px;}
 .modal.wide {width:1200px;}
 .modal h5 {font-size:21px; font-weight:400; margin-bottom:15px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; letter-spacing:-0.2px;}
-.modal p {font-size:16px; line-height:25px; letter-spacing:-0.8px;}
+.modal p {font-size:16px; line-height:25px; letter-spacing:-0.8px; overflow: auto;}
 .modal p span {color:#ff7500; line-height:30px;}
 .modal dl {display:flex; width:100%;}
 .modal h5 + dl {margin-bottom:10px;}
@@ -848,15 +848,25 @@ header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color
 	transform: rotate(45deg);
 }
 
-#chart_versions_sel{border:none !important; border-bottom: 1px solid #d1d1d1 !important; font-size: 17px; line-height: 60px; padding-left: 10px;}
+/* tab2 */
+.tab-cont-wrap .tab-btn2 {display: flex; border-bottom: 2px solid #000;}
+.tab-cont-wrap .tab-btn2 li {margin-left: 10px;}
+.tab-cont-wrap .tab-btn2 li:first-child {margin-left :0;}
+.tab-cont-wrap .tab-btn2 a {display: block; font-size: 17px; padding: 14px; background-color: transparent; color: #343a40; min-width: 150px; text-align: center; border: 1px solid #D0D0D0; border-bottom: none;}
+.tab-cont-wrap .tab-btn2 li.active a {color: #0d6efd;}
+
+#chart_versions_sel{font-size: 17px; line-height: 30px; padding-left: 10px;}
+.chart_versions_dl fieldset:after {right:15px !important;}
 #repo-add-auth-dl input[type="text"]{ width: 95% !important;}
-#modal-pane-wrap{width:100%; height: 35px; display: flex;}
+.modal-pane-wrap{width:100%; height: 35px; display: flex;}
 #rollback-manifest-diff{text-align: left;}
-#rollback_revision_sel{width:60px;height:28px;background-color:#fff; border:1px solid #d1d1d1;font-size: 15px;}
+#rollback_revision_sel{width:60px;height:28px; margin-top:2px; background-color:#fff; border:1px solid #d1d1d1;font-size: 15px;}
 .CodeMirror { border: 1px solid #ddd; font-family: unset !important; font-size: 16px;}
 .CodeMirror-merge-left .CodeMirror{background: #F8F8F8;}
 .header-label-wrapper{height:55px; line-height: 43px; width:100%; margin-bottom: 20px;}
 .header-label{padding:4px 8px; background:#eee; border-radius:5px; font-size: 15px;}
+.info-label{padding:3px 8px; background:#F5F5F5; border-radius:5px; font-size: 13px;}
+.title-label{padding:4px 8px; background-color:transparent; border-radius:5px; font-size: 14px; border: 1px solid #dee2e6; color: #343a40;}
 .paths {font-size: 14px; color: #47494d;}
 .chart-logo-wrap {width:50px;height:50px;line-height: 50px;margin:0 auto;white-space: nowrap;text-align: center; margin-left: -11px;}
 .chart-logo{width:50%; height:50%; object-fit:contain; vertical-align: middle;}
@@ -866,5 +876,10 @@ header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color
 .label-center-wrapper{display: inline-block;}
 .aside_btn {height:38px; line-height: 41px; text-align:center; width:70px; position:absolute; top:50px; right:120px; color:#ffffff; background-color:#bdbfc4; border-radius:2px;}
 .modal-pane{width:47%; height:100%; line-height: 33px; text-align: left;}
-span.clicky {cursor: pointer;background: #0ca583;color: white;padding: 0 7px;border-radius: 3px; line-height: 27px; float: right;}
+.modal-pane-nw{height:100%; line-height: 33px; text-align: left;}
+span.clicky {cursor: pointer;background:#0950bf;color: white;padding: 0 6px;border-radius: 3px; height: 25px; float: right;}
+span.clicky3 {cursor: pointer;height: 25px; float: right;}
 .btn_bg_none{background-color: rgb(189, 191, 196) !important; cursor: not-allowed !important;}
+.clicky2 {cursor: pointer;background: #eee; color: #343a40; padding: 2px 10px;border-radius: 3px; line-height: 27px; float: right; font-size: 15px;}
+.clicky2-active {background: #0d6efd;; color: #fff;}
+.monospace {font-family: monospace !important; }
