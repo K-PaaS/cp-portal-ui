@@ -544,6 +544,66 @@ const func = {
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////
+	// 데이터 SAVE - dryRun(method, url, data, bull, callFunc)
+	// (전송타입, url, 데이터, 분기, 콜백함수)
+	/////////////////////////////////////////////////////////////////////////////////////
+	dryRun(method, url, data, bull, header, callFunc){
+		func.loading();
+
+		if(sessionStorage.getItem('token') == null){
+			func.loginCheck();
+		};
+
+		var request = new XMLHttpRequest();
+
+		setTimeout(function() {
+			request.open(method, url, false);
+			request.setRequestHeader('Content-type', header);
+			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+
+			request.onreadystatechange = () => {
+				if (request.readyState === XMLHttpRequest.DONE){
+					if(request.responseText != ''){
+						//토큰 만료 검사
+						if(JSON.parse(request.responseText).resultMessage == 'TOKEN_EXPIRED') {
+							func.refreshToken();
+							return func.saveData(method, url, data, bull, header, callFunc);
+						}
+						else if(JSON.parse(request.responseText).resultMessage == 'TOKEN_FAILED') {
+							func.loginCheck();
+							return func.loadData(method, url, header, callbackFunction, list);
+						}
+						else {
+							document.getElementById('wrap').removeChild(document.getElementById('loading'));
+							var response = JSON.parse(request.responseText);
+							if (response.httpStatusCode == 200) {
+								if(response.resultCode == RESULT_STATUS_SUCCESS) {
+									callFunc(response);
+								}
+								else {
+									if(document.getElementById('loading')){
+										document.getElementById('wrap').removeChild(document.getElementById('loading'));
+									};
+									func.alertPopup('ERROR', response.detailMessage, true, MSG_CONFIRM, 'closed');
+								}
+							}
+							else {
+								if(document.getElementById('loading')){
+									document.getElementById('wrap').removeChild(document.getElementById('loading'));
+								};
+								func.alertPopup('ERROR', response.detailMessage, true, MSG_CONFIRM, 'closed');
+							}
+
+						}
+					}
+				};
+			};
+
+			request.send(data); }, 0);
+	},
+
+	/////////////////////////////////////////////////////////////////////////////////////
 	// 공통 경고 팝업 - alertPopup(title, text, bull, name, fn)
 	// (제목, 문구, 버튼유무, 버튼이름, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////

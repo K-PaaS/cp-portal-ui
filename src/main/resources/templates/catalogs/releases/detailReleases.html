@@ -58,7 +58,7 @@
                     </table>
                 </div>
                     <h4>Histories</h4>
-                    <div class="table_style01">
+                    <div class="table_style01" style="max-height: 350px; overflow: auto; scrollbar-width: thin;">
                         <table>
                             <caption>Histories</caption>
                             <colgroup >
@@ -86,7 +86,7 @@
                     </div>
 
 
-                    <ul class="tab-btn" style="margin-top:30px;">
+                    <ul class="tab-btn2" style="margin-top:30px;">
                         <!-- 활성화시 active 클래스 추가 -->
                         <li data-id="resources-status"><a href="javascript:" >Resources Status</a></li>
                         <li data-id="manifests"><a href="javascript:" >Manifests</a></li>
@@ -173,7 +173,7 @@
                     releases.manifests  = items.manifest;
                     releases.values = items.values;
                     releases.notes = items.notes;
-                    relObj = { name : items.name, chart : items.chart, chart_version : items.chart_version}
+                    relObj = {name: items.name, chart: items.chart, chart_version: items.chart_version, home: items.home}
                     if(releases.current_revision < 2) {
                         document.getElementById('rollback_btn').classList.add('btn_bg_none');
                         document.getElementById('rollback_btn').disabled = true;
@@ -237,7 +237,7 @@
                     func.saveData('PUT', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.name}/versions/${target_revision}`, '', true, 'application/json', releases.returnPage);
                 },
                 setTabList(){
-                    let tabBtns = document.querySelectorAll('.tab-btn li');
+                    let tabBtns = document.querySelectorAll('.tab-btn2 li');
                     tabBtns[0].classList.add('active');
 
                     for (let i = 0; i < tabBtns.length; i ++) {
@@ -297,11 +297,11 @@
                         }
                         revision_target_index = 1;
                         check_rollback_msg = `${MSG_REPO_CHART_ROLLBACK} ( revision #${releases.historiesList[0].revision} &#8594 #${releases.historiesList[revision_target_index].revision} )`;
-                        let html = `<div class='modal-wrap' id='modal'><div class='modal wide'><h5>${MSG_REPO_CHART_ROLLBACK}</h5><div id="modal-pane-wrap">`;
-                        html +=  `<div class="modal-pane">Current Revision: ${releases.historiesList[0].revision}</div>`;
+                        let html = `<div class='modal-wrap' id='modal'><div class='modal wide'><h5>${MSG_REPO_CHART_ROLLBACK}</h5><div class="modal-pane-wrap">`;
+                        html +=  `<div class="modal-pane"><span class="title-label">Current Revision: ${releases.historiesList[0].revision}</span></div>`;
                         html +=  `<div style="width:6%; height:100%;"></div>`;
-                        html +=  `<div class="modal-pane">Rollback Revision: <select id="rollback_revision_sel" class="none">${revision_opts}</select>`;
-                        html += ` <span id="collapse" class="clicky">collapse</span></div></div>`;
+                        html +=  `<div class="modal-pane"><span class="title-label">Rollback Revision:</span> <select id="rollback_revision_sel" class="none">${revision_opts}</select>`;
+                        html += ` <span id="collapse" class="clicky"><i title="collapse" style="line-height: 28px !important;" class="fa-regular fa-square-minus"></i></span></div></div>`;
                         html +=  `<div id="rollback-manifest-diff" style="width:100%;"></div>`;
                         html += `<a id="rollback_confirm" class='confirm' href='javascript:;'>${check_rollback_msg}</a>`;
                         html += `<a class='close' href='javascript:;'>` + MSG_CLOSE + `</a></div></div>`;
