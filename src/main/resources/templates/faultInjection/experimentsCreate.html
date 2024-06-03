@@ -15,9 +15,9 @@
             <!-- tab btn -->
             <ul class="tab-btn">
                 <!-- 활성화시 active 클래스 추가 -->
-                <li><a href="javascript:">Pod Fault</a></li>
-                <li><a href="javascript:">Network Attack</a></li>
-                <li><a href="javascript:">Stress Test</a></li>
+                <li type="podFault"><a href="javascript:">Pod Fault</a></li>
+                <li type="networkAttack"><a href="javascript:">Network Attack</a></li>
+                <li type="stressTest"><a href="javascript:">Stress Test</a></li>
             </ul>
             <!-- // tab btn -->
             <!-- tab content -->
@@ -27,14 +27,14 @@
                     <dl>
                         <dt><label for="namePod">Name</label></dt>
                         <dd>
-                            <input id="namePod" type="text"  th:placeholder="#{M0876}"/>
+                            <input class="name" id="namePod" type="text"  th:placeholder="#{M0876}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="namespaceSelector" onchange="changeNamespaceSelect()">
+                                <select class="namespaceSelect" id="namespaceSelectPod" onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -44,8 +44,8 @@
                         <dt><label>Label Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="labelSelector" onchange="changeLabelSelect()">
-                                    <option selected disabled hidden value='' th:text="#{M0870}"></option>
+                                <select class="labelSelect" id="labelSelectPod" onchange="changeLabelSelect()">
+                                    <option selected value='' th:text="#{M0870}"></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -70,7 +70,7 @@
                                         <th scope="col">State</th>
                                     </tr>
                                     </thead>
-                                    <tbody class="podList" id="podList">
+                                    <tbody class="podList" id="podListPod">
                                     </tbody>
                                 </table>
                             </div>
@@ -79,7 +79,7 @@
                     <!-- btn -->
                     <div class="btn02">
                         <div>
-                            <button type="submit" id="save" th:text="#{M0030}"></button>
+                            <button type="submit" id="savePod" th:text="#{M0030}"></button>
                             <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
                         </div>
                     </div>
@@ -89,27 +89,7 @@
                     <dl>
                         <dt><label for="nameNetwork">Name</label></dt>
                         <dd>
-                            <input id="nameNetwork" type="text"  th:placeholder="#{M0876}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label>Namespace Selector</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="namespaceSelectorNetwork" onchange="changeNamespaceSelect()">
-                                    <option selected disabled hidden value='' th:text="#{M0869}"></option>
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label>Label Selector</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="labelSelectorNetwork">
-                                    <option selected disabled hidden value='' th:text="#{M0870}"></option>
-                                </select>
-                            </fieldset>
+                            <input class="name" id="nameNetwork" type="text"  th:placeholder="#{M0876}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -149,32 +129,10 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label>Preview of Pods to be injected</label></dt>
-                        <dd>
-                            <textarea id="createTemplatesDetailss" rows="30"></textarea>
-                        </dd>
-                    </dl>
-                    <!-- btn -->
-                    <div class="btn02">
-                        <div>
-                            <button type="submit" id="register" th:text="#{M0030}"></button>
-                            <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Stress Test-->
-                <div>
-                    <dl>
-                        <dt><label for="nameStress">Name</label></dt>
-                        <dd>
-                            <input id="nameStress" type="text"  th:placeholder="#{M0876}"/>
-                        </dd>
-                    </dl>
-                    <dl>
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="namespaceSelectorStress" onchange="changeNamespaceSelect()">
+                                <select class="namespaceSelect" id="namespaceSelectNetwork" onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -184,10 +142,52 @@
                         <dt><label>Label Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="labelSelectorStress">
-                                    <option selected disabled hidden value='' th:text="#{M0870}"></option>
+                                <select class="labelSelect" id="labelSelectNetwork" onchange="changeLabelSelect()">
+                                    <option selected value='' th:text="#{M0870}"></option>
                                 </select>
                             </fieldset>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label>Preview of Pods to be injected</label></dt>
+                        <dd>
+                            <div class="table_style01">
+                                <table>
+                                    <caption>Pod List</caption>
+                                    <colgroup >
+                                        <col width="12%" />
+                                        <col width="38%" />
+                                        <col width="30%" />
+                                        <col width="20%" />
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Namespace</th>
+                                        <th scope="col">State</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="podList" id="podListNetwork">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </dd>
+                    </dl>
+                    <!-- btn -->
+                    <div class="btn02">
+                        <div>
+                            <button type="submit" id="saveNetwork" th:text="#{M0030}"></button>
+                            <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Stress Test-->
+                <div>
+                    <dl>
+                        <dt><label for="nameStress">Name</label></dt>
+                        <dd>
+                            <input class="name" id="nameStress" type="text"  th:placeholder="#{M0876}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -221,15 +221,55 @@
                         </dd>
                     </dl>
                     <dl>
+                        <dt><label>Namespace Selector</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select class="namespaceSelect" id="namespaceSelectStress" onchange="changeNamespaceSelect()">
+                                    <option selected disabled hidden value='' th:text="#{M0869}"></option>
+                                </select>
+                            </fieldset>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label>Label Selector</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select class="labelSelect" id="labelSelectStress" onchange="changeLabelSelect()">
+                                    <option selected value='' th:text="#{M0870}"></option>
+                                </select>
+                            </fieldset>
+                        </dd>
+                    </dl>
+                    <dl>
                         <dt><label>Preview of Pods to be injected</label></dt>
                         <dd>
-                            <textarea id="createTemplatesDetail" rows="30"></textarea>
+                            <div class="table_style01">
+                                <table>
+                                    <caption>Pod List</caption>
+                                    <colgroup >
+                                        <col width="12%" />
+                                        <col width="38%" />
+                                        <col width="30%" />
+                                        <col width="20%" />
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Namespace</th>
+                                        <th scope="col">State</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="podList" id="podListStress">
+                                    </tbody>
+                                </table>
+                            </div>
                         </dd>
                     </dl>
                     <!-- btn -->
                     <div class="btn02">
                         <div>
-                            <button type="submit" id="save1" th:text="#{M0030}"></button>
+                            <button type="submit" id="saveStress" th:text="#{M0030}"></button>
                             <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
                         </div>
                     </div>
@@ -242,36 +282,65 @@
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
-        window.onload = () => {
-            let info;
-            func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
+        let tabs = document.querySelector('.tab-btn');
+        let tabBtns = document.querySelectorAll('.tab-btn li');
+        let tabContent = document.querySelectorAll('.tab-content > div');
+        let tabIndex = 0;
 
-            const selectors = {
-                init() {
-                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', selectors.namespaceSelector);
-                },
+        tabBtns[0].classList.add('active');
 
-                namespaceSelector(data) {
-                    let selectorsHtml = ``;
-                    for (let i = 0; i < data.items.length; i++) {
-                        if(data.items[i].cpNamespace === 'ALL') continue;
-                        selectorsHtml += `<option value="${data.items[i].cpNamespace}">${data.items[i].cpNamespace}</option>`;
+        for (let i = 0; i < tabBtns.length; i ++) {
+            (function(idx) {
+                tabBtns[idx].onclick = function() {
+                    tabIndex = idx;
+                    for( let j=0; j<tabBtns.length; j++ ) {
+                        tabBtns[j].classList.remove('active');
+                        tabContent[j].style.display = 'none'
+                        func.removeHtml(document.getElementsByClassName('namespaceSelect')[j]);
+                        func.removeHtml(document.getElementsByClassName('labelSelect')[j]);
+                        func.removeHtml(document.getElementsByClassName('podList')[j]);
                     }
-                    func.appendHtml(document.getElementById('namespaceSelector'), selectorsHtml);
-                },
-            };
-            selectors.init();
-        };
+                    tabBtns[idx].classList.add('active');
+                    tabContent[idx].style.display = '';
+                    init();
+                };
+                tabContent[idx].style.display = 'none';
+                tabContent[0].style.display = ''
+                init();
+            })(i);
+        }
+
+        window.onload = () => {
+            func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
+        }
+
+        function init() {
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', namespaceSelector);
+        }
+
+        function namespaceSelector(data) {
+            let namespaceSelect = `<option selected hidden value='' >${NAMESPACESELECT}</option>`;
+            let labelSelect = `<option selected hidden value='' >${LABELSELECT}</option>`;
+            for (let i = 0; i < data.items.length; i++) {
+                if(data.items[i].cpNamespace === 'ALL') continue;
+                namespaceSelect += `<option value="${data.items[i].cpNamespace}">${data.items[i].cpNamespace}</option>`;
+            }
+
+            func.appendHtml(document.getElementsByClassName('namespaceSelect')[tabIndex], namespaceSelect);
+            func.appendHtml(document.getElementsByClassName('labelSelect')[tabIndex], labelSelect);
+
+        }
 
         function changeNamespaceSelect() {
-            func.removeHtml(document.getElementById('labelSelector'));
-            func.removeHtml(document.getElementById('podList'));
+            func.removeHtml(document.getElementsByClassName('labelSelect')[tabIndex]);
+            func.removeHtml(document.getElementsByClassName('podList')[tabIndex]);
 
-            let podName = document.getElementById('namespaceSelector').value;
-            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', labelSelector);
+            let namespaceSelect = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods`, 'application/json', labelSelector);
         }
 
         function labelSelector(data) {
+
             let labelSelectors = {};
             for(let i = 0; i < data.items.length; i++) {
                 const labels = data.items[i].labels
@@ -280,31 +349,30 @@
                 }
             }
 
-            let selectorsHtml = `<option selected disabled hidden value='' th:text='#{M0870}'></option>`;
+            let labelSelect = `<option selected hidden value='' >${LABELSELECT}</option><option value='all' >All</option>`;
             for(let key in labelSelectors) {
-                selectorsHtml += `<option value="${key}:${labelSelectors[key]}">${key}:${labelSelectors[key]}</option>`;
+                labelSelect += `<option value="${key}:${labelSelectors[key]}">${key}:${labelSelectors[key]}</option>`;
             }
-            func.appendHtml(document.getElementById('labelSelector'), selectorsHtml);
+            func.appendHtml(document.getElementsByClassName('labelSelect')[tabIndex], labelSelect);
+
         }
 
+        let labelSelectValue;
         function changeLabelSelect() {
-            func.removeHtml(document.getElementById('podList'));
+            func.removeHtml(document.getElementsByClassName('podList')[tabIndex]);
 
-            let podName = document.getElementById('namespaceSelector').value;
-            let selectorsHtml = document.getElementById('labelSelector').value;
-            console.log("selectorsHtml :", selectorsHtml)
+            let podName = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
+            labelSelectValue = document.getElementsByClassName('labelSelect')[tabIndex].value;
             func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', podList);
-
         }
 
         function podList(data) {
             let html = '';
+            labelSelectValue = labelSelectValue.split(':')[0]
 
             for (let i = 0; i < data.items.length; i++) {
                 const dataLabels = data.items[i].labels;
-
-                for(let key in labelSelectors) {
-                    if(Object.keys(dataLabels).includes(key)) {
+                    if(Object.keys(dataLabels).includes(labelSelectValue)) {
                         html += `<tr>
                                       <td>
                                         <input type="checkbox" id="check_${data.items[i].name}" name="check_${data.items[i].name}" value=${data.items[i].name} />
@@ -312,44 +380,101 @@
                                       </td>
                                       <td id=${data.items[i].name}>${data.items[i].name}</td>
                                       <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
-                                      <td id=${data.items[i].phase}>${data.items[i].phase}</td>
+                                      <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
                                     </tr>`;
                     }
-                }
+                    if(labelSelectValue === 'all') {
+                        html += `<tr>
+                                      <td>
+                                        <input type="checkbox" id="check_${data.items[i].name}" name="check_${data.items[i].name}" value=${data.items[i].name} />
+                                        <label for="check_${data.items[i].name}"></label>
+                                      </td>
+                                      <td id=${data.items[i].name}>${data.items[i].name}</td>
+                                      <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
+                                      <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
+                                    </tr>`;
+                    }
             }
-            func.appendHtml(document.querySelector(".podList"), html, "tbody",);
-        };
-
-
-
-
-
-        function changeTemplateSelect() {
-            func.removeHtml(document.getElementById('createTemplatesDetail'));
-            func.loadData('GET', `${func.url}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                document.getElementById('createTemplatesDetail').value = e.hclScript;
-            })
+            func.appendHtml(document.getElementsByClassName("podList")[tabIndex], html, "tbody",);
         }
 
-        let tabs = document.querySelector('.tab-btn');
-        let tabBtns = document.querySelectorAll('.tab-btn li');
-        let tabContent = document.querySelectorAll('.tab-content > div');
+        function validCheck(){
+            if(isEmpty(document.getElementsByClassName('name')[tabIndex].value)) {
+                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                IS_VCHK = true;
+                return false;
+            }
 
-        tabBtns[0].classList.add('active');
+            if(isEmpty(document.getElementsByClassName('namespaceSelect')[tabIndex].value)) {
+                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                IS_VCHK = true;
+                return false;
+            }
 
-        for (let i = 0; i < tabBtns.length; i ++) {
-            (function(idx) {
-                tabBtns[idx].onclick = function() {
-                    for( let j=0; j<tabBtns.length; j++ ) {
-                        tabBtns[j].classList.remove('active');
-                        tabContent[j].style.display = 'none'
-                    }
-                    tabBtns[idx].classList.add('active');
-                    tabContent[idx].style.display = '';
-                };
-                tabContent[idx].style.display = 'none';
-                tabContent[0].style.display = ''
-            })(i);
+            if(isEmpty(document.getElementsByClassName('labelSelect')[tabIndex].value)) {
+                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                IS_VCHK = true;
+                return false;
+            }
+
+            if(isEmpty(document.getElementsByClassName('podList')[tabIndex].value)) {
+                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                IS_VCHK = true;
+                return false;
+            }
+
+
+
+            return true;
+        }
+
+        function validReset(){
+            IS_VCHK = false;
+        }
+
+        function save() {
+            let createType = document.querySelector('.tab-btn li.active').getAttribute('type');
+            let arg;
+
+            if(validCheck()){
+
+                switch(createType) {
+                    case 'podFault':
+                        arg = {
+                            "cluster" : document.getElementById('createName').value,
+                            "resourceName": document.getElementById('createName').value,
+                            "providerType": document.getElementById('createProvider').value,
+                            "sshKey": document.getElementById('createSshKeys').value,
+                            "cloudAccountId": createClusters.getCloudAccount(),
+                            "hclScript": document.getElementById('createTemplatesDetail').value,
+                            "description": document.getElementById('createDescription').value,
+                            "isClusterRegister": false
+                        }
+                        break;
+                    case 'networkAttack':
+                        arg = {
+                            "cluster": document.getElementById('registerName').value,
+                            "resourceName": document.getElementById('registerName').value,
+                            "clusterApiUrl": document.getElementById('registerIP').value,
+                            "providerType": document.getElementById('registerProvider').value,
+                            "clusterToken": document.getElementById('registerCredentials').value,
+                            "description": document.getElementById('registerDescription').value,
+                            "isClusterRegister": true
+                        }
+                    case 'stressTest':
+                        arg = {
+                            "cluster": document.getElementById('registerName').value,
+                            "resourceName": document.getElementById('registerName').value,
+                            "clusterApiUrl": document.getElementById('registerIP').value,
+                            "providerType": document.getElementById('registerProvider').value,
+                            "clusterToken": document.getElementById('registerCredentials').value,
+                            "description": document.getElementById('registerDescription').value,
+                            "isClusterRegister": true
+                        }
+                }
+                //check FILE
+                func.saveData('POST', `${func.url}clusters`, JSON.stringify(arg), true, 'application/json', createClusters.saveComp);
+            }
         }
 
     </script>
