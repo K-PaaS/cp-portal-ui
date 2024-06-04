@@ -480,6 +480,66 @@ const func = {
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////
+	// 데이터 로드2 - loadData(method, url, callbackFunction)
+	// (전송타입, url, 콜백함수)
+	// setInterval
+	/////////////////////////////////////////////////////////////////////////////////////
+	loadDataInterval(method, url, header, callbackFunction, list) {
+		if(sessionStorage.getItem('token') == null){
+			func.loginCheck();
+		};
+
+		if(url == null) {
+			callbackFunction();
+			return false;
+		}
+
+		var request = new XMLHttpRequest();
+
+		setTimeout(function getStatus() {
+				request.open(method, url, false);
+				request.setRequestHeader('Content-type', header);
+				request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+				request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+
+				request.onreadystatechange = () => {
+					if (request.readyState === XMLHttpRequest.DONE){
+						if(request.status === 200 && request.responseText != ''){
+							var resultMessage = JSON.parse(request.responseText).resultMessage;
+							var resultCode =  JSON.parse(request.responseText).resultCode;
+							var detailMessage = JSON.parse(request.responseText).detailMessage;
+							//토큰 만료 검사
+							if( resultMessage == 'TOKEN_EXPIRED') {
+								func.refreshToken();
+								return func.loadData(method, url, header, callbackFunction, list);
+							}
+							else if(resultMessage == 'TOKEN_FAILED') {
+								func.loginCheck();
+								return func.loadData(method, url, header, callbackFunction, list);
+							}
+							else if(resultCode != RESULT_STATUS_SUCCESS) {
+								if(document.getElementById('loading')){
+									document.getElementById('wrap').removeChild(document.getElementById('loading'));
+								};
+								func.alertPopup('ERROR', detailMessage, true, MSG_CONFIRM, 'closed');
+							}
+							else {
+								callbackFunction(JSON.parse(request.responseText), list);
+							}
+						} else if(JSON.parse(request.responseText).httpStatusCode === 500){
+							sessionStorage.clear();
+							func.loginCheck();
+						};
+					};
+				};
+
+		request.send();
+		setTimeout(getStatus, 3000)}, 3000);
+
+
+	},
+
+	/////////////////////////////////////////////////////////////////////////////////////
 	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
 	// (전송타입, url, 데이터, 분기, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
