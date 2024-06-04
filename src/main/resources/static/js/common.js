@@ -533,8 +533,8 @@ const func = {
 					};
 				};
 
-		request.send();
-		setTimeout(getStatus, 3000)}, 3000);
+			request.send();
+			setTimeout(getStatus, 3000)}, 3000);
 
 
 	},
