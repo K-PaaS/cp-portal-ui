@@ -148,9 +148,20 @@
                 },
 
                 draw(data){
+                    let status = data.status;
+                    if(status === 'finished') {
+                        status = 'completed';
+                    }
                     // Details data
                     document.getElementById('name').innerText = data.name;
-                    document.getElementById('status').innerText = data.status;
+                 //   document.getElementById('status').innerHTML = data.status;
+                    if(status === 'deleting' || status === 'injecting' || status === 'running') {
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + status + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
+                    } else {
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + status + '"><span class="lds-circle"><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
+                    }
+
+
                     document.getElementById('uid').innerText = data.uid;
                     document.getElementById('namespace').innerHTML = data.namespace;
                     document.getElementById('createdTime').innerText = data.created_at;
@@ -205,6 +216,8 @@
                     }
 
                     // event 정보 조회
+                    func.loadData('GET', `https://run.mocky.io/v3/1d103add-8f81-42ee-8ce9-1cc31e3c7990`, 'application/json', experimentsDetail.list);
+
                 },
 
                 list(data){
@@ -234,20 +247,6 @@
                         func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, experimentsDetail.delete);
                     }, false);
 
-                    document.getElementById('modify').addEventListener('click', (e) => {
-                        // Resource yaml 정보 조회
-                        func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods/${sessionStorage.getItem('commonName')}/yaml`, 'application/json', func.modify);
-                    }, false);
-
-                    document.querySelector('.nameLink').addEventListener('click', (e) => {
-                        document.location.href = URI_CP_CLUSTERS_NAMESPACES + URI_CP_DETAILS;
-                    }, false);
-
-                    document.querySelector('.nodeLink').addEventListener('click', (e) => {
-                        sessionStorage.setItem('nodeName', e.target.innerText);
-
-                        document.location.href = URI_CP_CLUSTERS_NODES + URI_CP_DETAILS +`?namespace=${sessionStorage.getItem('nameSpace')}` ;
-                    }, false);
                 },
 
                 delete(){
