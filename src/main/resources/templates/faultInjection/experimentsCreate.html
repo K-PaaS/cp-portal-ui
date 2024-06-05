@@ -25,16 +25,16 @@
                 <!-- Pod Fault -->
                 <div>
                     <dl>
-                        <dt><label for="gracePeriod">Grace period</label></dt>
+                        <dt><label for="namePod">Name</label></dt>
                         <dd>
-                            <input id="gracePeriod" type="text"  th:placeholder="#{M0868}"/>
+                            <input id="namePod" type="text"  th:placeholder="#{M0876}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="namespaceSelectorPod" onchange="changenamespaceSelect()">
+                                <select id="namespaceSelector" onchange="changenamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -44,22 +44,36 @@
                         <dt><label>Label Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="labelSelectorPod">
+                                <select id="labelSelector">
                                     <option selected disabled hidden value='' th:text="#{M0870}"></option>
                                 </select>
                             </fieldset>
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label for="namePod">Name</label></dt>
-                        <dd>
-                            <input id="namePod" type="text"  th:placeholder="#{M0876}"/>
-                        </dd>
-                    </dl>
-                    <dl>
                         <dt><label>Preview of Pods to be injected</label></dt>
                         <dd>
-                            <textarea id="createTemplatesDetails" rows="30"></textarea>
+                            <div class="table_style01">
+                                <table>
+                                    <caption>Pod List</caption>
+                                    <colgroup >
+                                        <col width="15%" />
+                                        <col width="35%" />
+                                        <col width="30%" />
+                                        <col width="20%" />
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Namespace</th>
+                                        <th scope="col">State</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="podList">
+                                    </tbody>
+                                </table>
+                            </div>
                         </dd>
                     </dl>
                     <!-- btn -->
@@ -72,6 +86,32 @@
                 </div>
                 <!-- Network Attack-->
                 <div>
+                    <dl>
+                        <dt><label for="nameNetwork">Name</label></dt>
+                        <dd>
+                            <input id="nameNetwork" type="text"  th:placeholder="#{M0876}"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label>Namespace Selector</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select id="namespaceSelectorNetwork" onchange="changenamespaceSelect()">
+                                    <option selected disabled hidden value='' th:text="#{M0869}"></option>
+                                </select>
+                            </fieldset>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label>Label Selector</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select id="labelSelectorNetwork">
+                                    <option selected disabled hidden value='' th:text="#{M0870}"></option>
+                                </select>
+                            </fieldset>
+                        </dd>
+                    </dl>
                     <dl>
                         <dt><label for="latency">Latency</label></dt>
                         <dd>
@@ -103,32 +143,6 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label>Namespace Selector</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="namespaceSelectorNetwork" onchange="changenamespaceSelect()">
-                                    <option selected disabled hidden value='' th:text="#{M0869}"></option>
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label>Label Selector</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="labelSelectorNetwork">
-                                    <option selected disabled hidden value='' th:text="#{M0870}"></option>
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="nameNetwork">Name</label></dt>
-                        <dd>
-                            <input id="nameNetwork" type="text"  th:placeholder="#{M0876}"/>
-                        </dd>
-                    </dl>
-                    <dl>
                         <dt><label for="durationNetwork">Duration</label></dt>
                         <dd>
                             <input id="durationNetwork" type="text"  th:placeholder="#{M0877}"/>
@@ -151,39 +165,9 @@
                 <!-- Stress Test-->
                 <div>
                     <dl>
-                        <dt><label for="cpuWorkers">CPU Workers</label></dt>
+                        <dt><label for="nameStress">Name</label></dt>
                         <dd>
-                            <input id="cpuWorkers" type="text"  th:placeholder="#{M0878}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="load">Load</label></dt>
-                        <dd>
-                            <input id="load" type="text"  th:placeholder="#{M0879}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="cpuStressors">Options of CPU stressors</label></dt>
-                        <dd>
-                            <input id="cpuStressors" type="text"  th:placeholder="#{M0880}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="memoryWorkers">Memory Workers</label></dt>
-                        <dd>
-                            <input id="memoryWorkers" type="text"  th:placeholder="#{M0881}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="size">Size</label></dt>
-                        <dd>
-                            <input id="size" type="text"  th:placeholder="#{M0882}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="memoryStressors">Options of Memory stressor</label></dt>
-                        <dd>
-                            <input id="memoryStressors" type="text"  th:placeholder="#{M0883}"/>
+                            <input id="nameStress" type="text"  th:placeholder="#{M0876}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -207,9 +191,27 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label for="nameStress">Name</label></dt>
+                        <dt><label for="cpuWorkers">CPU Workers</label></dt>
                         <dd>
-                            <input id="nameStress" type="text"  th:placeholder="#{M0876}"/>
+                            <input id="cpuWorkers" type="text"  th:placeholder="#{M0878}"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="load">CPU Load</label></dt>
+                        <dd>
+                            <input id="load" type="text"  th:placeholder="#{M0879}"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="memoryWorkers">Memory Workers</label></dt>
+                        <dd>
+                            <input id="memoryWorkers" type="text"  th:placeholder="#{M0881}"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="size">Memory Size</label></dt>
+                        <dd>
+                            <input id="size" type="text"  th:placeholder="#{M0882}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -227,7 +229,7 @@
                     <!-- btn -->
                     <div class="btn02">
                         <div>
-                            <button type="submit" id="save" th:text="#{M0030}"></button>
+                            <button type="submit" id="save1" th:text="#{M0030}"></button>
                             <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
                         </div>
                     </div>
@@ -244,39 +246,55 @@
             let info;
             func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
 
-
-            const createClusters = {
+            const selectors = {
                 init() {
-                    func.loadData('GET', `${func.url}accounts/provider/info`, 'application/json', createClusters.draw);
-
+                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', selectors.namespaceSelector);
                 },
 
-                draw(data) {
-                    info = new Map(Object.entries(data.items));
-                    let html = ``;
-                    let createProviderHtml = ``;
-                    let registerProviderHtml = ``;
-
-                    for (let key of info.keys()) {
-                        if( key != 'KT' ) {
-                            createProviderHtml += `<option value="${key}">${key}</option>`; }
+                namespaceSelector(data) {
+                    let selectorsHtml = ``;
+                    for (let i = 0; i < data.items.length; i++) {
+                        if(data.items[i].cpNamespace === 'ALL') continue;
+                        selectorsHtml += `<option value="${data.items[i].cpNamespace}">${data.items[i].cpNamespace}</option>`;
                     }
+                    func.appendHtml(document.getElementById('namespaceSelector'), selectorsHtml);
 
-                    for (let key of info.keys()) {
-                        registerProviderHtml += `<option value="${key}">${key}</option>`;
+                  /*  let podName = document.getElementById('namespaceSelector')
+
+                   func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', selectors.podList);*/
+                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods/selectors`, 'application/json', selectors.labelSelector);
+                },
+
+                labelSelector(data) {
+                    const labelSelectors = data.labels;
+                    let selectorsHtml = ``;
+                    for(let i = 0; i <= Object.getOwnPropertyNames(labelSelectors).length-1; i++){
+                        selectorsHtml += `<option value="${labelSelectors[i]}">${labelSelectors[i]}</option>`;
+                        func.appendHtml(document.getElementById('labelSelector'), selectorsHtml);
                     }
-                    func.appendHtml(document.getElementById('createProvider'), createProviderHtml);
-                    func.appendHtml(document.getElementById('registerProvider'), registerProviderHtml);
+                },
 
-                    createClusters.event();
+                podList(data){
+                    let html = `<tr>
+                              <td class="user-info-td1">
+                                <input type="checkbox" id="user" checked name="organization_user">
+                                <label for="$user" class="checkbox-label"></label>
+                              </td>
+                              <td class="user-info-td2" id=${data.items.name}>${data.items.name}</td>
+                              <td class="user-info-td3" id=${data.items.namespace}>${data.items.namespace}</td>
+                              <td class="user-info-td3" id=${data.items.podStatus}>${data.items.podStatus}</td>
+                            </tr>`;
+                    func.appendHtml(document.querySelector(".podList"), html, "tbody",);
+
+
                 },
 
                 event() {
                     document.getElementById('save').addEventListener('click', () => {
-                        func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, createClusters.save);
+                        func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, selectors.save);
                     }, false);
                     document.getElementById('register').addEventListener('click', () => {
-                        func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, createClusters.save);
+                        func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, selectors.save);
                     }, false);
                 },
 
@@ -284,7 +302,7 @@
                     let createType = document.querySelector('.tab-btn li.active').getAttribute('type');
                     let arg;
 
-                    if(createClusters.validCheck(createType)){
+                    if(selectors.validCheck(createType)){
 
                         switch(createType) {
                             case 'create':
@@ -293,7 +311,7 @@
                                     "resourceName": document.getElementById('createName').value,
                                     "providerType": document.getElementById('createProvider').value,
                                     "sshKey": document.getElementById('createSshKeys').value,
-                                    "cloudAccountId": createClusters.getCloudAccount(),
+                                    "cloudAccountId": selectors.getCloudAccount(),
                                     "hclScript": document.getElementById('createTemplatesDetail').value,
                                     "description": document.getElementById('createDescription').value,
                                     "isClusterRegister": false
@@ -311,7 +329,7 @@
                                 }
                         }
                         //check FILE
-                        func.saveData('POST', `${func.url}clusters`, JSON.stringify(arg), true, 'application/json', createClusters.saveComp);
+                        func.saveData('POST', `${func.url}clusters`, JSON.stringify(arg), true, 'application/json', selectors.saveComp);
                     }
                 },
 
@@ -330,7 +348,7 @@
                 validCheck(type){
                     if(type == 'create') {
                         if(isEmpty(document.getElementById('createProvider').value)) {
-                            func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE,  createClusters.validReset);
+                            func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE,  selectors.validReset);
                             IS_VCHK = true;
                             return false;
                         }
@@ -338,7 +356,7 @@
                     else if(type == 'register') {
                         if(isEmpty(document.getElementById('registerName').value) || isEmpty(document.getElementById('registerIP').value) ||
                             isEmpty(document.getElementById('registerCredentials').value) || isEmpty(document.getElementById('registerProvider').value)) {
-                            func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE,  createClusters.validReset);
+                            func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE,  selectors.validReset);
                             IS_VCHK = true;
                             return false;
                         }
@@ -350,18 +368,21 @@
                     IS_VCHK = false;
                 }
             };
-            createClusters.init();
+            selectors.init();
         };
 
         function changeProviderSelect() {
-            func.removeHtml(document.getElementById('createCloudAccount'));
-            func.removeHtml(document.getElementById('createSshKeys'));
-            func.removeHtml(document.getElementById('createTemplates'));
+            func.removeHtml(document.getElementById('labelSelector'));
+
+            let podName = document.getElementById('namespaceSelector')
+
+     //       func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', selectors.podList);
 
             let html = ``;
-            let provider = document.querySelector('#createProvider > option:checked').value;
+            let provider = document.querySelector('#namespaceSelector > option:checked').value;
             if(provider != '') {
-                func.loadData('GET', `${func.url}accounts/provider/${provider}`, 'application/json', (e) => {
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', (e) => {
+                    console.log("hi")
                     for (let item of e.items) {
                         html += `<option value="${item.name}" data-id="${item.id}"`;
                         html += `>${item.name}</option>`;
