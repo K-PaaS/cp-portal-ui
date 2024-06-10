@@ -24,10 +24,11 @@
                     <table>
                         <caption>Experiments List</caption>
                         <colgroup >
-                            <col width="15%" />
-                            <col width="15%" />
-                            <col width="15%" />
-                            <col width="35%" />
+                            <col width="13%" />
+                            <col width="13%" />
+                            <col width="13%" />
+                            <col width="30%" />
+                            <col width="11%" />
                             <col width="20%" />
                         </colgroup>
                         <thead>
@@ -36,6 +37,7 @@
                             <th scope="col">Kind</th>
                             <th scope="col">Name</th>
                             <th scope="col">UUID</th>
+                            <th scope="col">Namespace</th>
                             <th scope="col">Created Time</th>
                         </tr>
                         </thead>
@@ -105,16 +107,18 @@
                             if(status === 'deleting' || status === 'injecting' || status === 'running') {
                                 let html = `<tr><td id="${data.items[i].resourceUid}"><span class="left experiment-${status}"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
                                                 <td>${data.items[i].kind}</td>
-                                                <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-uid="${data.items[i].resourceUid}" data-kind="${data.items[i].kind}">${data.items[i].resourceName}</a></td>
+                                                <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-id="${data.items[i].namespace}" data-uid="${data.items[i].resourceUid}" data-kind="${data.items[i].kind}">${data.items[i].resourceName}</a></td>
                                                 <td>${data.items[i].resourceUid}</td>
+                                                <td>${data.items[i].namespace}</td>
                                                 <td>${data.items[i].creationTimestamp}</td></tr>`;
 
                                 func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             } else {
                                 let html = `<tr><td id="${data.items[i].resourceUid}"><span class="left experiment-${status}"><span class="lds-circle"><span></span></span>${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
                                                  <td>${data.items[i].kind}</td>
-                                                <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-uid="${data.items[i].resourceUid}">${data.items[i].resourceName}</a></td>
+                                                <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-id="${data.items[i].namespace}" data-uid="${data.items[i].resourceUid}">${data.items[i].resourceName}</a></td>
                                                 <td>${data.items[i].resourceUid}</td>
+                                                <td>${data.items[i].namespace}</td>
                                                 <td>${data.items[i].creationTimestamp}</td></tr>`;
 
                                 func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
