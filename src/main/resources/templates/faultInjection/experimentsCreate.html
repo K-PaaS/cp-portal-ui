@@ -15,9 +15,9 @@
             <!-- tab btn -->
             <ul class="tab-btn">
                 <!-- 활성화시 active 클래스 추가 -->
-                <li type="podFault"><a href="javascript:">Pod Fault</a></li>
-                <li type="networkAttack"><a href="javascript:">Network Attack</a></li>
-                <li type="stressTest"><a href="javascript:">Stress Test</a></li>
+                <li type="podFault" class="experiments" id="podFault"><a href="javascript:">Pod Fault</a></li>
+                <li type="networkAttack" class="experiments" id="networkAttack"><a href="javascript:">Network Attack</a></li>
+                <li type="stressTest" class="experiments" id="stressTest"><a href="javascript:">Stress Test</a></li>
             </ul>
             <!-- // tab btn -->
             <!-- tab content -->
@@ -28,6 +28,12 @@
                         <dt><label for="namePod">Name</label></dt>
                         <dd>
                             <input class="name" id="namePod" type="text"  th:placeholder="#{M0876}"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="gracePeriod">Grace period</label></dt>
+                        <dd>
+                            <input id="gracePeriod" type="text"  th:placeholder="#{M0884}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -76,13 +82,6 @@
                             </div>
                         </dd>
                     </dl>
-                    <!-- btn -->
-                    <div class="btn02">
-                        <div>
-                            <button type="submit" id="savePod" th:text="#{M0030}"></button>
-                            <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
-                        </div>
-                    </div>
                 </div>
                 <!-- Network Attack-->
                 <div>
@@ -125,7 +124,7 @@
                     <dl>
                         <dt><label for="durationNetwork">Duration</label></dt>
                         <dd>
-                            <input id="durationNetwork" type="text"  th:placeholder="#{M0877}"/>
+                            <input class="duration" id="durationNetwork" type="text"  th:placeholder="#{M0877}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -174,13 +173,6 @@
                             </div>
                         </dd>
                     </dl>
-                    <!-- btn -->
-                    <div class="btn02">
-                        <div>
-                            <button type="submit" id="saveNetwork" th:text="#{M0030}"></button>
-                            <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
-                        </div>
-                    </div>
                 </div>
                 <!-- Stress Test-->
                 <div>
@@ -197,9 +189,9 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label for="load">CPU Load</label></dt>
+                        <dt><label for="cpuLoad">CPU Load</label></dt>
                         <dd>
-                            <input id="load" type="text"  th:placeholder="#{M0879}"/>
+                            <input id="cpuLoad" type="text"  th:placeholder="#{M0879}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -209,15 +201,15 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label for="size">Memory Size</label></dt>
+                        <dt><label for="memorySize">Memory Size</label></dt>
                         <dd>
-                            <input id="size" type="text"  th:placeholder="#{M0882}"/>
+                            <input id="memorySize" type="text"  th:placeholder="#{M0882}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="durationStress">Duration</label></dt>
                         <dd>
-                            <input id="durationStress" type="text"  th:placeholder="#{M0877}"/>
+                            <input class="duration" id="durationStress" type="text"  th:placeholder="#{M0877}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -266,12 +258,11 @@
                             </div>
                         </dd>
                     </dl>
-                    <!-- btn -->
-                    <div class="btn02">
-                        <div>
-                            <button type="submit" id="saveStress" th:text="#{M0030}"></button>
-                            <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
-                        </div>
+                </div>
+                <div class="btn02">
+                    <div>
+                        <button type="submit" class="save" th:text="#{M0030}"></button>
+                        <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
                     </div>
                 </div>
             </div>
@@ -282,6 +273,10 @@
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
+        window.onload = () => {
+            func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
+        }
+
         let tabs = document.querySelector('.tab-btn');
         let tabBtns = document.querySelectorAll('.tab-btn li');
         let tabContent = document.querySelectorAll('.tab-content > div');
@@ -308,10 +303,6 @@
                 tabContent[0].style.display = ''
                 init();
             })(i);
-        }
-
-        window.onload = () => {
-            func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
         }
 
         function init() {
@@ -375,7 +366,7 @@
                     if(Object.keys(dataLabels).includes(labelSelectValue)) {
                         html += `<tr>
                                       <td>
-                                        <input type="checkbox" id="check_${data.items[i].name}" name="check_${data.items[i].name}" value=${data.items[i].name} />
+                                        <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
                                         <label for="check_${data.items[i].name}"></label>
                                       </td>
                                       <td id=${data.items[i].name}>${data.items[i].name}</td>
@@ -386,7 +377,7 @@
                     if(labelSelectValue === 'all') {
                         html += `<tr>
                                       <td>
-                                        <input type="checkbox" id="check_${data.items[i].name}" name="check_${data.items[i].name}" value=${data.items[i].name} />
+                                        <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
                                         <label for="check_${data.items[i].name}"></label>
                                       </td>
                                       <td id=${data.items[i].name}>${data.items[i].name}</td>
@@ -397,6 +388,10 @@
             }
             func.appendHtml(document.getElementsByClassName("podList")[tabIndex], html, "tbody",);
         }
+
+            document.querySelector('.save').addEventListener('click', () => {
+                func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, save);
+            }, false);
 
         function validCheck(){
             if(isEmpty(document.getElementsByClassName('name')[tabIndex].value)) {
@@ -423,8 +418,6 @@
                 return false;
             }
 
-
-
             return true;
         }
 
@@ -433,48 +426,77 @@
         }
 
         function save() {
-            let createType = document.querySelector('.tab-btn li.active').getAttribute('type');
-            let arg;
-
-            if(validCheck()){
-
-                switch(createType) {
-                    case 'podFault':
-                        arg = {
-                            "cluster" : document.getElementById('createName').value,
-                            "resourceName": document.getElementById('createName').value,
-                            "providerType": document.getElementById('createProvider').value,
-                            "sshKey": document.getElementById('createSshKeys').value,
-                            "cloudAccountId": createClusters.getCloudAccount(),
-                            "hclScript": document.getElementById('createTemplatesDetail').value,
-                            "description": document.getElementById('createDescription').value,
-                            "isClusterRegister": false
-                        }
-                        break;
-                    case 'networkAttack':
-                        arg = {
-                            "cluster": document.getElementById('registerName').value,
-                            "resourceName": document.getElementById('registerName').value,
-                            "clusterApiUrl": document.getElementById('registerIP').value,
-                            "providerType": document.getElementById('registerProvider').value,
-                            "clusterToken": document.getElementById('registerCredentials').value,
-                            "description": document.getElementById('registerDescription').value,
-                            "isClusterRegister": true
-                        }
-                    case 'stressTest':
-                        arg = {
-                            "cluster": document.getElementById('registerName').value,
-                            "resourceName": document.getElementById('registerName').value,
-                            "clusterApiUrl": document.getElementById('registerIP').value,
-                            "providerType": document.getElementById('registerProvider').value,
-                            "clusterToken": document.getElementById('registerCredentials').value,
-                            "description": document.getElementById('registerDescription').value,
-                            "isClusterRegister": true
-                        }
-                }
-                //check FILE
-                func.saveData('POST', `${func.url}clusters`, JSON.stringify(arg), true, 'application/json', createClusters.saveComp);
+            let kind = document.querySelector('.tab-btn li.active').getAttribute('type');
+            let namespaceSelectors = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
+            let labelSelectors = document.getElementsByClassName('labelSelect')[tabIndex].value;
+            let metadataName = document.getElementsByClassName('name')[tabIndex].value;
+            let gracePeriod = document.getElementById('gracePeriod').value;
+            let latency = document.getElementById('latency').value;
+            let correlation = document.getElementById('correlation').value;
+            let jitter = document.getElementById("jitter").value;
+            let direction = document.getElementById("direction").value;
+            let externalTargets = document.getElementById("externalTargets").value;
+            let memory = {
+                "workers": document.getElementById("memoryWorkers").value,
+                "size": document.getElementById("memorySize").value
             }
+            let cpu = {
+                "workers": document.getElementById("cpuWorkers").value,
+                "load": document.getElementById("cpuLoad").value
+            }
+            let duration;
+            if(tabIndex !== 0){
+                duration = document.getElementsByClassName('duration')[tabIndex-1].value;
+            }
+
+            const checkbox = 'input[name="checkboxPod"]:checked';
+            const checkedPod = document.querySelectorAll(checkbox);
+            let podName = [];
+            checkedPod.forEach((el) => {
+                podName.push(el.value);
+            });
+
+          //  if(validCheck()){
+                    const podFault = {
+                        kind,
+                        namespaceSelectors,
+                        labelSelectors,
+                        metadataName,
+                        podName,
+                        gracePeriod
+                    }
+                    const networkAttack = {
+                        kind,
+                        namespaceSelectors,
+                        labelSelectors,
+                        metadataName,
+                        podName,
+                        duration,
+                        latency,
+                        correlation,
+                        jitter,
+                        direction,
+                        externalTargets
+                    }
+                    const stressTest = {
+                        kind,
+                        namespaceSelectors,
+                        labelSelectors,
+                        metadataName,
+                        podName,
+                        duration,
+                        memory,
+                        cpu
+                    }
+          //  }
+
+            let obj = kind === 'podFault' ? podFault : kind === 'networkAttack' ? networkAttack : stressTest;
+            func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelectors}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
+
+        }
+
+        function saveComp() {
+            document.location.href = "/container-platform/experiments"
         }
 
     </script>
