@@ -7,8 +7,8 @@
     <div id="content" class="sub-page">
         <article class="location">
             <ul>
-                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)">FaultInjection</a></li>
-                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)">Experiments</a></li>
+                <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)">Chaos</a></li>
+                <li><a onclick="movePage(URI_CP_CHAOS_EVENTS)">Experiments</a></li>
             </ul>
         </article>
         <article class="base detail">
@@ -120,7 +120,7 @@
             <div class="btn02">
                 <button type="submit" id="delete" th:text="#{M0026}"></button>
                 <div>
-                    <a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)" th:text="#{M0028}"></a>
+                    <a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)" th:text="#{M0028}"></a>
                 </div>
             </div>
         </article>
@@ -139,12 +139,11 @@
 <th:block layout:fragment="script">
     <script type="text/javascript">
         window.onload = () => {
-            func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
+            func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EXPERIMENTS);
             const experimentsDetail = {
                 init(){
                     // experimentsDetail 정보 조회
                   //  func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.draw);
-
 
 
 
@@ -159,7 +158,7 @@
                     document.getElementById('name').innerText = data.resourceName;
                     document.getElementById('uid').innerText = data.resourceUid;
                     document.getElementById('namespace').innerHTML = data.namespace;
-                    document.getElementById('createdTime').innerText = data.creationTimestamp;
+                    document.getElementById('createdTime').innerText = data.creationTimestamp.replace('T', ' ').replace('Z', '');
 
                     if(status === 'deleting' || status === 'injecting' || status === 'running') {
                         document.getElementById('status').innerHTML = '<span class="left experiment-' + status + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
@@ -229,9 +228,11 @@
 
                     if(data.items.length > 0){
                         for(var i=0; i<=data.items.length-1; i++){
+                            let createdTime = data.items[i].creationTimestamp.replace('T', ' ').replace('Z', '');
+
                             var html = `<tr>
                                     <td class="left">${data.items[i].note}</td>
-                                    <td>${data.items[i].creationTimestamp}</td>
+                                    <td>${createdTime}</td>
                                 </tr>`;
 
                             func.appendHtml(document.querySelector('.eventList'), html, 'tbody');

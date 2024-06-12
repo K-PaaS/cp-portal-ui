@@ -33,8 +33,8 @@ public class ConstantsUrl {
     public static final String URI_CP_MANAGEMENTS_INACTIVE_USERS = "/container-platform/inactiveUsers";
     public static final String URI_CP_MANAGEMENTS_CONFIGMAPS = "/container-platform/configMaps";
 
-    public static final String URI_CP_FAULTINJECTION_EXPERIMENTS = "/container-platform/experiments";
-    public static final String URI_CP_FAULTINJECTION_EVENTS = "/container-platform/events";
+    public static final String URI_CP_CHAOS_EXPERIMENTS = "/container-platform/experiments";
+    public static final String URI_CP_CHAOS_EVENTS = "/container-platform/events";
     public static final String URI_CP_INFO_ACCESS = "/container-platform/access";
     public static final String URI_CP_INFO_PRIVATE_REPOSITORY = "/container-platform/private_repository";
 
