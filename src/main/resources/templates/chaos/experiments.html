@@ -6,8 +6,8 @@
     <div id="content" class="sub-page">
         <article class="location">
             <ul>
-                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)">FaultInjection</a></li>
-                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)">Experiments</a></li>
+                <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)">Chaos</a></li>
+                <li><a onclick="movePage(URI_CP_CHAOS_EVENTS)">Experiments</a></li>
             </ul>
             <!-- Click event class="on" -->
             <fieldset>
@@ -24,12 +24,12 @@
                     <table>
                         <caption>Experiments List</caption>
                         <colgroup >
-                            <col width="13%" />
-                            <col width="13%" />
-                            <col width="13%" />
-                            <col width="30%" />
-                            <col width="11%" />
-                            <col width="20%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                            <col width="16%" />
+                            <col width="29%" />
+                            <col width="15%" />
+                            <col width="16%" />
                         </colgroup>
                         <thead>
                         <tr>
@@ -57,7 +57,7 @@
     <script type="text/javascript">
     window.onload = () => {
 
-        func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EXPERIMENTS);
+        func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EXPERIMENTS);
         callbackFuncNameLoad();
 
         const experiments = {
@@ -103,6 +103,7 @@
                             if(status === 'finished') {
                                 status = 'completed';
                             }
+                            let createdTime = data.items[i].creationTimestamp.replace('T', ' ').replace('Z', '');
 
                             if(status === 'deleting' || status === 'injecting' || status === 'running') {
                                 let html = `<tr><td id="${data.items[i].resourceUid}"><span class="left experiment-${status}"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
@@ -110,7 +111,7 @@
                                                 <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-id="${data.items[i].namespace}" data-uid="${data.items[i].resourceUid}" data-kind="${data.items[i].kind}">${data.items[i].resourceName}</a></td>
                                                 <td>${data.items[i].resourceUid}</td>
                                                 <td>${data.items[i].namespace}</td>
-                                                <td>${data.items[i].creationTimestamp}</td></tr>`;
+                                                <td>${createdTime}</td></tr>`;
 
                                 func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             } else {
@@ -119,7 +120,7 @@
                                                 <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-id="${data.items[i].namespace}" data-uid="${data.items[i].resourceUid}">${data.items[i].resourceName}</a></td>
                                                 <td>${data.items[i].resourceUid}</td>
                                                 <td>${data.items[i].namespace}</td>
-                                                <td>${data.items[i].creationTimestamp}</td></tr>`;
+                                                <td>${createdTime}</td></tr>`;
 
                                 func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             }
@@ -164,7 +165,7 @@
             }, false);
 
                 document.querySelector('.create').addEventListener('click', () => {
-                    document.location.href = URI_CP_FAULTINJECTION_EXPERIMENTS + URI_CP_CREATE;
+                    document.location.href = URI_CP_CHAOS_EXPERIMENTS + URI_CP_CREATE;
                 }, false);
 
                 // status 정보 조회
@@ -200,7 +201,7 @@
                         sessionStorage.setItem('name', e.target.getAttribute('data-name'));
                         sessionStorage.setItem('kind', e.target.getAttribute('data-kind'));
 
-                    document.location.href = URI_CP_FAULTINJECTION_EXPERIMENTS + URI_CP_DETAILS;
+                    document.location.href = URI_CP_CHAOS_EXPERIMENTS + URI_CP_DETAILS;
                 }, true);
                 }
             },

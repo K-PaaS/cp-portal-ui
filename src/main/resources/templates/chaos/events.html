@@ -6,8 +6,8 @@
     <div id="content" class="sub-page">
         <article class="location">
             <ul>
-                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EXPERIMENTS)">FaultInjection</a></li>
-                <li><a onclick="movePage(URI_CP_FAULTINJECTION_EVENTS)">Events</a></li>
+                <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)">Chaos</a></li>
+                <li><a onclick="movePage(URI_CP_CHAOS_EVENTS)">Events</a></li>
             </ul>
             <!-- Click event class="on" -->
             <fieldset>
@@ -55,7 +55,7 @@
     <script type="text/javascript">
     window.onload = () => {
 
-        func.init(ASIDE_DP1.FAULTINJECTION, ASIDE_DP2.EVENTS);
+        func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EVENTS);
         callbackFuncNameLoad();
 
         const events = {
@@ -93,12 +93,14 @@
                 if(data.httpStatusCode == 200){
                     if(data.items.length > 0){
                         for(var i=0; i<=data.items.length-1; i++){
+                            let createdTime = data.items[i].created_at.replace('T', ' ').replace('Z', '');
+
                             var html = `<tr><td>${data.items[i].object_id}</td>
                                             <td>${data.items[i].namespace}</td>
                                             <td>${data.items[i].name}</td>
                                             <td>${data.items[i].kind}</td>
                                             <td>${data.items[i].message}</td>
-                                            <td>${data.items[i].created_at}</td></tr>`;
+                                            <td>${createdTime}</td></tr>`;
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         };

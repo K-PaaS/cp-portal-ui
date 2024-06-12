@@ -1,4 +1,4 @@
-package org.container.platform.web.ui.faultInjection.events;
+package org.container.platform.web.ui.chaos.events;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class EventsController {
 
-    private static final String BASE_URL = "faultInjection/";
+    private static final String BASE_URL = "chaos/";
 
     /**
      * Events 목록 페이지 이동(Go to the Events list page)
@@ -18,7 +18,7 @@ public class EventsController {
      * @return the view
      */
     @ApiOperation(value = "Events 목록 페이지 이동(Go to the Experiments list page)", nickname = "getEventsList")
-    @GetMapping(value = ConstantsUrl.URI_CP_FAULTINJECTION_EVENTS )
+    @GetMapping(value = ConstantsUrl.URI_CP_CHAOS_EVENTS )
     public String getEventsList() { return BASE_URL + "events";}
 
 }
