@@ -704,6 +704,9 @@ const func = {
 		location.href = location.href;
 	},
 
+	none() {
+		return false;
+	},
 	loading(){
 		var html = `<div id="loading">
 						<div class="cubeSet">

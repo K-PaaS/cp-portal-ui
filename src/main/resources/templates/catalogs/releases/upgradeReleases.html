@@ -103,6 +103,7 @@
                 init() {
                     func.nameLoad = releases.reset;
                     releases.initValuesView("");
+                    releases.initManifestView();
                     releases.load();
                     releases.event();
                 },
@@ -186,6 +187,10 @@
                     func.appendHtml(document.getElementById('chart_versions_sel'), html, 'select');
                     $('#chart_versions_sel').val(releases.info.chart_version).prop("selected",true);
                     releases.initValues();
+
+                    if(html.length < 1) {
+                        func.alertPopup('ERROR', MSG_CHART_NOT_FOUND , true, MSG_CONFIRM, func.none);
+                    }
                 },
 
                 initValues() {
@@ -280,7 +285,6 @@
                         "values" : releases.definedValues,
                     };
 
-                    console.log("templateReleases:"+ JSON.stringify(templateReleases));
                     func.dryRun('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.info.name}?preview=true`, JSON.stringify(templateReleases), true, 'application/json', releases.initManifest);
                 },
 
