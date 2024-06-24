@@ -89,25 +89,26 @@
                 if(charts.offset == 0) charts.allItemCount = data.itemMetaData.allItemCount;
                 if(data.httpStatusCode == 200){
                   if(data.items.length > 0){
-                        var icon = "";
-                        for(var i=0; i<data.items.length; i++) {
-                            var data_item = JSON.stringify(data.items[i]);
-                            icon = (data.items[i].icon.length < 1) ? DEFAULT_ICON_PATH : data.items[i].icon;
-                            var html = `<tr>` +
+                        let icon = "";
+                        for(let i=0; i<data.items.length; i++) {
+                            let chart = data.items[i];
+                            let data_item = JSON.stringify({name:chart.name, repoName:chart.repoName, version:chart.version, icon:chart.icon});
+                            icon = (chart.icon.length < 1) ? DEFAULT_ICON_PATH : chart.icon;
+                            let html = `<tr>` +
                                 `<td class="chart-td-first"><div class="chart-logo-wrap"><img class="chart-logo" src="${icon}" onerror="this.src='${DEFAULT_ICON_PATH}';"></div></td>` +
-                                `<td class="left chart-td-sec"><a href="javascript:;" data-item='${data_item}' data-name="${data.items[i].name}">${data.items[i].name}</a></td>` +
-                                `<td class="left">${data.items[i].description}</td>` +
-                                `<td class="center box"><div class="label-center-wrapper"><dl><dt>${data.items[i].version}</dt></dl></div></td>`;
+                                `<td class="left chart-td-sec"><a href="javascript:;" data-item='${data_item}' data-name="${chart.name}">${chart.name}</a></td>` +
+                                `<td class="left">${chart.description}</td>` +
+                                `<td class="center box"><div class="label-center-wrapper"><dl><dt>${chart.version}</dt></dl></div></td>`;
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         }
                         ;
                     } else {
-                        var html = '<tr><td colspan="4">No Data.</td></tr>';
+                        let html = '<tr><td colspan="4">No Data.</td></tr>';
 
                         func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                     };
                 } else {
-                    var html = '<tr><td colspan="4">No Data.</td></tr>';
+                    let html = '<tr><td colspan="4">No Data.</td></tr>';
 
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                 }

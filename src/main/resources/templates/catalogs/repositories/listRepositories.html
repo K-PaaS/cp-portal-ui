@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 <div layout:fragment="content">
@@ -40,6 +41,7 @@
                         <a class="more" href="javascript:;">more</a>
                     </div>
                     <!-- btn -->
+                    <a id="clearCache" th:text="#{M0913}" sec:authorize="hasAnyAuthority('SUPER_ADMIN','CLUSTER_ADMIN')" style="right:105px; background-color:#bdbfc4;"></a>
                     <a href="javascript:;" class="add" th:text="#{M0223}"></a>
                 </div>
         </article>
@@ -116,16 +118,33 @@
                 document.querySelector('.more').addEventListener('click', (e) => {
                     if(document.querySelector('.listTable').querySelectorAll('tr').length < repos.allItemCount){
                     repos.offset++;
-
                     repos.load();
                 };
             }, false);
 
+                // repo 추가 버튼 event
                 document.querySelector('.add').addEventListener('click', (e) => {
                     document.location.href = URI_CP_CATALOG_REPOSITORIES + URI_CP_ADD;
             }, false);
-            },
 
+                // cache clear 버튼 event
+                document.getElementById('clearCache').addEventListener('click', (e) => {
+                let html = `${MSG_CHECK_TO_CLEAR_CACHE}<div class="modal-detail">${MSG_CHECK_TO_CLEAR_CACHE_REPO_UPDATE}</div>`;
+                    func.alertPopup('CLEAR CACHE', html, true, MSG_CONFIRM, repos.clearCache);
+                }, false);
+            },
+            clearCache(){
+                func.dryRun('DELETE', `${func.url}catalog/repositories/cache/clear`, '', true, 'application/json', repos.finishedClearCache);
+            },
+            finishedClearCache(data) {
+                let failedList = data.items;
+                let html = `${MSG_COMPLETED_CLEAR_CACHE}`;
+                if(failedList.length > 0) {
+                    html += `<div class="modal-detail">${MSG_FAILED_TO_UPDATE_REPO}</div>`;
+                    html += `<div class="modal-detail" style="background-color:#f5f5f5;">${failedList.join('<br/>')}</div>`;
+                }
+                func.alertPopup('SUCCESS', html , true, MSG_CONFIRM, func.none);
+            },
             listEvent(){
                 var listAll = document.querySelector('.listTable').querySelectorAll('a');
 

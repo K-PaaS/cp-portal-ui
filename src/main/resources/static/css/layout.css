@@ -6,10 +6,10 @@
 @font-face{font-family:'Apple SD Gothic Neo B'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoB.ttf')}
 @font-face{font-family:'Apple SD Gothic Neo L'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoL.ttf')}
 @font-face{font-family:'Font Awesome 5 Free'; src:url('../font/Apple+산돌고딕+Neo/fa-solid-900.ttf')}
+@font-face{font-family:'Noto Sans Mono'; src:url('../font/Noto_Sans_Mono/static/NotoSansMono-Regular.ttf')}
 
 
-*, :before, :after {margin:0; padding:0; border:0; font-style:normal; vertical-align:top; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; outline:none;
-	font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free" !important;}
+*, :before, :after {margin:0; padding:0; border:0; font-style:normal; vertical-align:top; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; outline:none;}
 
 html {-webkit-font-smoothing:antialiased;}
 table {width:100%; border-collapse:collapse; border-spacing:0; table-layout:fixed;}
@@ -18,9 +18,9 @@ ul, ol, dl {list-style:none; word-break:keep-all; word-break:break-word;}
 hr {display:none;}
 caption, figcaption, legend {overflow:hidden; position:absolute; z-index:-1; height:0; visibility:hidden;}
 
-h1, h2, h3, h4, h5, h6, strong {font-weight:500;}
+h1, h2, h3, h4, h5, h6, strong, p{font-weight:500; font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free",monospace !important;}
 
-a {color:#333; text-decoration:none;}
+a {color:#333; text-decoration:none; font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free",monospace !important;}
 a:focus {text-decoration:none;}
 a:hover {text-decoration:none; cursor:pointer;}
 
@@ -281,7 +281,7 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .table_style01 {margin-bottom:57px; border-top:2px solid #333333;}
 .notice h4 {text-align:left; font-size:22px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; margin-bottom:6px;}
 .table_style01 table {background-color:#fff; padding-bottom:20px;}
-.table_style01 table tr th {text-align:center; background-color:#f7f7f7; padding:12px 11px 10px 11px; border-bottom:1px solid #ebebeb; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; border-left:1px solid #ebebeb;}
+.table_style01 table tr th {text-align:center; background-color:#f7f7f7; padding:12px 11px 10px 11px; border-bottom:1px solid #ebebeb; font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free"; font-weight:500; border-left:1px solid #ebebeb;}
 .table_style01 table tr th:first-child {border-left:0;}
 .table_style01 table tr th.left {text-align:left;}
 .table_style01 table tr td {text-align:center; border:1px solid #ebebeb; border-left:0; padding:18px 11px 16px 11px; color:#818894; font-size:15px; white-space:normal; letter-spacing:-0.2px;}
@@ -375,16 +375,16 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 
 /* modal */
 .modal-wrap {display:flex; position:fixed; top:0; left:0; align-items:center; justify-content:center; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.11); z-index:100;}
-.modal {position:relative;background-color:#fff; padding:30px 39px 40px 39px; text-align:center; border:1px solid #d9d9d9; min-width: 360px; max-width: 1200px;}
+.modal {position:relative; width:360px; background-color:#fff; padding:30px 39px 40px 39px; text-align:center; border:1px solid #d9d9d9;}
 .modal.midium {width:800px;}
 .modal.wide {width:1200px;}
 .modal h5 {font-size:21px; font-weight:400; margin-bottom:15px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; letter-spacing:-0.2px;}
-.modal p {font-size:16px; line-height:25px; letter-spacing:-0.8px; overflow: auto;}
+.modal p {scrollbar-width: thin;max-height: 200px;width: 100%;font-size: 16px;line-height: 25px;letter-spacing: -0.8px;overflow: auto;}
 .modal p span {color:#ff7500; line-height:30px;}
 .modal dl {display:flex; width:100%;}
 .modal h5 + dl {margin-bottom:10px;}
 .modal dl dt {width:110px; font-weight:600; line-height:250px;}
-.modal h5 + dl dt {line-height:50px;}
+.modal h5 + dl dt {line-height:50px; font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free",monospace !important;}
 .modal dl dd {flex:1;}
 .modal dl dd fieldset {position:relative; display:inline-block; margin-left:1px; width:100%;}
 .modal dl dd fieldset:after {content:""; width:10px; height:10px; border-bottom:2px solid #666666; border-left:2px solid #666666; transform:rotate(-45deg); position:absolute; top:19px; right:22px;cursor:pointer;}
@@ -403,10 +403,10 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .base div.creat {padding:47px 39px 60px 39px;}
 .creat > div > dl:first-child {margin-top:0;}
 .creat > div > dl {margin-top:30px;}
-.creat > div > dl dt {font-size:16px; color:#47494d; margin-bottom:7px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:400;}
+.creat > div > dl dt {font-size:16px; color:#47494d; margin-bottom:7px; font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free",monospace !important; font-weight:400;}
 .creat > div > dl dd {position:relative;}
 .creat > div > dl dl {margin-top:30px;}
-.creat > div > dl dl dt {font-size:16px; color:#47494d; margin-bottom:7px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:400;}
+.creat > div > dl dl dt {font-size:16px; color:#47494d; margin-bottom:7px; font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free",monospace !important; font-weight:400;}
 .creat > div > dl dl dd {position:relative;}
 .creat > div > dl dd input:not(.CodeMirror-search-field) {width:100%; border:1px solid #ebebeb; height:50px; line-height:48px; padding-left:18px; margin-left:1px; font-size:18px;}
 .creat > div > dl dd input:disabled::placeholder {color:#a6a6a6;}
@@ -670,9 +670,9 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 #localeLangDiv fieldset select {height: 40px; line-height:40px; width:100%; padding-left:18px; font-size:18px; color:#47494d; cursor:pointer;}
 #u_locale_lang{width : 115px;height: 40px;}
 
-.guideButtonDiv{margin: -3px 20px 0 0 !important; cursor : pointer;}
+.guideButtonDiv{margin: 4px 14px 0 0 !important; cursor : pointer;}
 .guideButtonSelect{display: flex; justify-content : center; weight: 25px; height: 60px;}
-.guideButtonI {color: #ffffff; font-size: 25px; margin-top: 10px;}
+.guideButtonI {color: #ffffff; font-size: 22px;}
 
 header > div > div > div > div > div {width: 25px; position:relative; padding-bottom:34px; padding-top:3px; color:#ffffff; font-size:27px; line-height:30px;}
 header > div > div > div > div > div > a {color:#ffffff; font-size:27px; display:block; line-height:30px; padding-right:30px; background:url("../img/arrowtop_icon.png") no-repeat 0 0; background-position:right 50%; transition:.3s; white-space: nowrap;  text-overflow: ellipsis; overflow: hidden;}
@@ -857,6 +857,7 @@ header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color
 .tab-cont-wrap .tab-btn2 li:first-child {margin-left :0;}
 .tab-cont-wrap .tab-btn2 a {display: block; font-size: 17px; padding: 14px; background-color: transparent; color: #343a40; min-width: 150px; text-align: center; border: 1px solid #D0D0D0; border-bottom: none;}
 .tab-cont-wrap .tab-btn2 li.active a {color: #0d6efd;}
+pre code.hljs {font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free",monospace !important;}
 
 #chart_versions_sel{font-size: 17px; line-height: 30px; padding-left: 10px;}
 .chart_versions_dl fieldset:after {right:15px !important;}
@@ -864,8 +865,9 @@ header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color
 .modal-pane-wrap{width:100%; height: 35px; display: flex;}
 #rollback-manifest-diff{text-align: left;}
 #rollback_revision_sel{width:60px;height:28px; margin-top:2px; background-color:#fff; border:1px solid #d1d1d1;font-size: 15px;}
-.CodeMirror { border: 1px solid #ddd; font-family: unset !important; font-size: 16px;}
+.CodeMirror {border: 1px solid #ddd; font-size: 16px;}
 .CodeMirror-merge-left .CodeMirror{background: #F8F8F8;}
+.CodeMirror,.CodeMirror-merge {font-size: 13px; font-family: "Noto Sans Mono", monospace !important; font-optical-sizing: auto;}
 .header-label-wrapper{height:55px; line-height: 43px; width:100%; margin-bottom: 20px;}
 .header-label{padding:4px 8px; background:#eee; border-radius:5px; font-size: 15px;}
 .info-label{padding:3px 8px; background:#F5F5F5; border-radius:5px; font-size: 13px;}
@@ -880,9 +882,10 @@ header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color
 .aside_btn {height:38px; line-height: 41px; text-align:center; width:70px; position:absolute; top:50px; right:120px; color:#ffffff; background-color:#bdbfc4; border-radius:2px;}
 .modal-pane{width:47%; height:100%; line-height: 33px; text-align: left;}
 .modal-pane-nw{height:100%; line-height: 33px; text-align: left;}
-span.clicky {cursor: pointer;background:#0950bf;color: white;padding: 0 6px;border-radius: 3px; height: 25px; float: right;}
-span.clicky3 {cursor: pointer;height: 25px; float: right;}
+span.icon-pane {cursor: pointer;background:#0950bf;color: white;padding: 0 6px;border-radius: 3px; height: 25px; float: right;}
+span.icon-pane i{line-height: 24px !important;}
+span.icon-pane3 {cursor: pointer;height: 25px; float: right;}
 .btn_bg_none{background-color: rgb(189, 191, 196) !important; cursor: not-allowed !important;}
-.clicky2 {cursor: pointer;background: #eee; color: #343a40; padding: 2px 10px;border-radius: 3px; line-height: 27px; float: right; font-size: 15px;}
-.clicky2-active {background: #0d6efd;; color: #fff;}
-.monospace {font-family: monospace !important; }
+.icon-pane2 {cursor: pointer;background: #eee; color: #343a40; padding: 2px 10px;border-radius: 3px; line-height: 27px; float: right; font-size: 15px;}
+.icon-pane2-active {background: #0d6efd;; color: #fff;}
+.modal-detail{font-size:14px !important; color: #707477; margin-top:15px; margin-bottom:-10px; max-height: 100px;overflow: auto;scrollbar-width: thin;}

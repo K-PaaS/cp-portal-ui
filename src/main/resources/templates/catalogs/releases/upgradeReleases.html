@@ -41,16 +41,16 @@
                                 <div style="width:6%;"></div>
                                 <div class="modal-pane"><span class="title-label" th:text="#{M0905}"></span>
                                     <span class="info-label" th:text="#{M0907}"></span>
-                                    <span id="values_collapse_btn" class="clicky">
-                                     <i title="collapse" style="line-height: 28px !important;" class="fa-regular fa-square-minus"></i></span></div>
+                                    <span id="values_collapse_btn" class="icon-pane">
+                                     <i title="collapse" class="fa-regular fa-square-minus"></i></span></div>
                             </div>
-                            <div id="upgrade_values_view" class="monospace"></div>
+                            <div id="upgrade_values_view"></div>
                         </dd>
                     </dl>
                     <dl>
                         <dd>
                             <div class="modal-pane-wrap" style="height:unset; margin-top:40px;">
-                                <div class="modal-pane-nw"><button type="button" id="render_template_btn" class="clicky2"></button></div>
+                                <div class="modal-pane-nw"><button type="button" id="render_template_btn" class="icon-pane2"></button></div>
                             </div>
                         </dd>
                     </dl>
@@ -61,8 +61,8 @@
                                 <div style="width:6%;"></div>
                                 <div class="modal-pane"><span class="title-label" th:text="#{M0910}"></span>
                                     <span class="info-label" th:text="#{M0911}"></span>
-                                    <span id="manifest_collapse_btn" class="clicky">
-                                     <i title="collapse" style="line-height: 28px !important;" class="fa-regular fa-square-minus"></i></span></div>
+                                    <span id="manifest_collapse_btn" class="icon-pane">
+                                     <i title="collapse" class="fa-regular fa-square-minus"></i></span></div>
                             </div>
                             <div id="upgrade_manifest_view"></div>
                         </dd>
@@ -84,7 +84,6 @@
     <script type="text/javascript">
         window.onload = () => {
             func.init(ASIDE_DP1.CATALOGS, ASIDE_DP2.CATALOG_REPOSITORIES);
-            callbackFuncNameLoad();
             let valuesMgView, manifestMgView;
             let values_collapse = false, manifest_collapse = false;
             let relObj = JSON.parse(sessionStorage.getItem('releaseItem'));
@@ -103,6 +102,7 @@
                 init() {
                     func.nameLoad = releases.reset;
                     releases.initValuesView("");
+                    releases.initManifestView();
                     releases.load();
                     releases.event();
                 },
@@ -186,6 +186,10 @@
                     func.appendHtml(document.getElementById('chart_versions_sel'), html, 'select');
                     $('#chart_versions_sel').val(releases.info.chart_version).prop("selected",true);
                     releases.initValues();
+
+                    if(html.length < 1) {
+                        func.alertPopup('ERROR', MSG_CHART_NOT_FOUND , true, MSG_CONFIRM, func.none);
+                    }
                 },
 
                 initValues() {
@@ -280,7 +284,6 @@
                         "values" : releases.definedValues,
                     };
 
-                    console.log("templateReleases:"+ JSON.stringify(templateReleases));
                     func.dryRun('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.info.name}?preview=true`, JSON.stringify(templateReleases), true, 'application/json', releases.initManifest);
                 },
 
@@ -307,11 +310,11 @@
                 },
 
                 renderTemplateBtnActive() {
-                    el_render_template_btn.addClass("clicky2-active");
+                    el_render_template_btn.addClass("icon-pane2-active");
                     el_render_template_btn.attr("disabled", false);
                 },
                 renderTemplateBtnInActive() {
-                    el_render_template_btn.removeClass("clicky2-active");
+                    el_render_template_btn.removeClass("icon-pane2-active");
                     el_render_template_btn.attr("disabled", true);
 
                 },
