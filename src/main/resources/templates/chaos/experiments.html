@@ -87,44 +87,59 @@
                 func.loading();
 
                 // experimentsList 정보 조회
-             //   func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments`, 'application/json', experiments.draw);
-
-
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments`, 'application/json', experiments.draw);
             },
 
             draw(data){
                 if(experiments.offset == 0) experiments.allItemCount = data.itemMetaData.allItemCount;
-
-
                 if(data.httpStatusCode == 200){
                     if(data.items.length > 0){
                         for(let i = 0; i <= data.items.length-1; i++){
-                            let status = data.items[i].status;
-                            if(status === 'finished') {
-                                status = 'completed';
-                            }
-                            let createdTime = data.items[i].creationTimestamp.replace('T', ' ').replace('Z', '');
+                            let condition = {};
 
-                            if(status === 'deleting' || status === 'injecting' || status === 'running') {
-                                let html = `<tr><td id="${data.items[i].resourceUid}"><span class="left experiment-${status}"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                            for(let j = 0; j < data.items[i].status.conditions.length; j++){
+                                let type = data.items[i].status.conditions[j].type;
+                                let satus = data.items[i].status.conditions[j].status;
+                                condition[type] = satus;
+
+                            }
+                            let experimentStatus;
+
+                            if(condition.Paused === 'True') {
+                                experimentStatus = 'paused';
+                            }
+                            else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
+                                experimentStatus = 'injecting';
+                            }
+                            else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
+                                experimentStatus = 'running';
+                            }
+                            if(condition.length === 0){
+                                experimentStatus = 'completed';
+                            }
+
+                            let createdTime = data.items[i].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
+
+                            if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
+                                let html = `<tr><td id="${data.items[i].metadata.uid}"><span class="left experiment-${experimentStatus}"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>${experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1)}</span></td>
                                                 <td>${data.items[i].kind}</td>
-                                                <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-id="${data.items[i].namespace}" data-uid="${data.items[i].resourceUid}" data-kind="${data.items[i].kind}">${data.items[i].resourceName}</a></td>
-                                                <td>${data.items[i].resourceUid}</td>
-                                                <td>${data.items[i].namespace}</td>
+                                                <td><a href="javascript:;" data-name="${data.items[i].metadata.name}" data-id="${data.items[i].metadata.namespace}" data-uid="${data.items[i].metadata.uid}" data-kind="${data.items[i].kind}">${data.items[i].metadata.name}</a></td>
+                                                <td>${data.items[i].metadata.uid}</td>
+                                                <td>${data.items[i].metadata.namespace}</td>
                                                 <td>${createdTime}</td></tr>`;
 
                                 func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             } else {
-                                let html = `<tr><td id="${data.items[i].resourceUid}"><span class="left experiment-${status}"><span class="lds-circle"><span></span></span>${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                                let html = `<tr><td id="${data.items[i].metadata.uid}"><span class="left experiment-${experimentStatus}"><span class="lds-circle"><span></span></span>${experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1)}</span></td>
                                                  <td>${data.items[i].kind}</td>
-                                                <td><a href="javascript:;" data-name="${data.items[i].resourceName}" data-id="${data.items[i].namespace}" data-uid="${data.items[i].resourceUid}">${data.items[i].resourceName}</a></td>
-                                                <td>${data.items[i].resourceUid}</td>
-                                                <td>${data.items[i].namespace}</td>
+                                                <td><a href="javascript:;" data-name="${data.items[i].metadata.name}" data-id="${data.items[i].metadata.namespace}" data-uid="${data.items[i].metadata.uid}">${data.items[i].metadata.name}</a></td>
+                                                <td>${data.items[i].metadata.uid}</td>
+                                                <td>${data.items[i].metadata.namespace}</td>
                                                 <td>${createdTime}</td></tr>`;
 
                                 func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             }
-                            experiments.statusList.push(data.items[i].resourceUid);
+                            experiments.statusList.push(data.items[i].metadata.uid);
 
                         }
 
@@ -169,27 +184,45 @@
                 }, false);
 
                 // status 정보 조회
-               // func.loadDataInterval('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments`, 'application/json', experiments.status);
+             //   func.loadDataInterval('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments`, 'application/json', experiments.status);
+
 
 
             },
+/*
 
             status(data){
                 for(let i = 0; i <= experiments.statusList.length -1; i++){
-                    let status = data.items[i].status;
-                    if(status === 'finished') {
-                        status = 'completed';
+                    let conditions = {};
+                    for(let j = 0; j <= data.items[i].status.conditions.length; i++){
+                        let type = data.items[i].status.conditions[j].type;
+                        let satus = data.items[i].status.conditions[j].status;
+                        conditions[type] = satus;
+                    }
+                    let experimentStatus;
+                    if(conditions.Paused === 'True') {
+                        experimentStatus = 'paused';
+                    }
+                    if(conditions.AllInjected === 'False' && conditions.Selected === 'True') {
+                        experimentStatus = 'injecting';
+                    }
+                    if(conditions.AllInjected === 'True' && conditions.Selected === 'True') {
+                        experimentStatus = 'running';
+                    }
+                    if(conditions.keys().length === 0){
+                        experimentStatus = 'completed';
                     }
 
-                    if(data.items[i].resourceUid === experiments.statusList[i]) {
-                        if(status === 'deleting' || status === 'injecting' || status === 'running') {
-                            document.getElementById(experiments.statusList[i]).innerHTML = '<span class="left experiment-' + status + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
+                    if(data.items[i].metadata.uid === experiments.statusList[i]) {
+                        if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
+                            document.getElementById(experiments.statusList[i]).innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                         } else {
-                            document.getElementById(experiments.statusList[i]).innerHTML = '<span class="left experiment-' + status + '"><span class="lds-circle"><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
+                            document.getElementById(experiments.statusList[i]).innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-circle"><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                         }
                     }
                 }
             },
+*/
 
             listEvent(){
                 var listAll = document.querySelector('.listTable').querySelectorAll('a');
