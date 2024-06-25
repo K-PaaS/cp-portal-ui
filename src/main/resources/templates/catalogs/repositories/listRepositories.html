@@ -81,20 +81,22 @@
                 if(repos.offset == 0) repos.allItemCount = data.itemMetaData.allItemCount;
                 if(data.httpStatusCode == 200){
                    if(data.items.length > 0){
-                        for(var i=0; i<data.items.length; i++){
-                            var html = `<tr>` +
-                                `<td class="left"><a href="javascript:;" data-name="${data.items[i].name}" data-url="${data.items[i].url}">${data.items[i].name}</a></td>` +
-                                `<td class="letf box"><dl><dt>${data.items[i].url}</dt></dl></td></tr>`;
+                        for(let i=0; i<data.items.length; i++){
+                            let repo = data.items[i];
+                            let data_item = JSON.stringify({name:repo.name, url:repo.url});
+                            let html = `<tr>` +
+                                `<td class="left"><a href="javascript:;" data-item='${data_item}'>${repo.name}</a></td>` +
+                                `<td class="letf box"><dl><dt>${repo.url}</dt></dl></td></tr>`;
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         };
                     } else {
-                        var html = '<tr><td colspan="2">No Data.</td></tr>';
+                        let html = '<tr><td colspan="2">No Data.</td></tr>';
 
                         func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                     };
                 } else {
-                    var html = '<tr><td colspan="2">No Data.</td></tr>';
+                    let html = '<tr><td colspan="2">No Data.</td></tr>';
 
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                 }
@@ -146,12 +148,11 @@
                 func.alertPopup('SUCCESS', html , true, MSG_CONFIRM, func.none);
             },
             listEvent(){
-                var listAll = document.querySelector('.listTable').querySelectorAll('a');
+                let listAll = document.querySelector('.listTable').querySelectorAll('a');
 
-                for(var i=repos.offset*10; i<=listAll.length-1; i++){
+                for(let i=repos.offset*10; i<=listAll.length-1; i++){
                     listAll[i].addEventListener('click', (e) => {
-                    sessionStorage.setItem('repoName', e.target.getAttribute('data-name'));
-                        sessionStorage.setItem('repoUrl', e.target.getAttribute('data-url'));
+                    sessionStorage.setItem('repoItem', e.target.getAttribute('data-item'));
                     document.location.href = URI_CP_CATALOG_REPOSITORIES + URI_CP_CATALOG_CHARTS;
                 }, true);
                 };

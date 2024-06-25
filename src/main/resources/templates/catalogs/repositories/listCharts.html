@@ -17,7 +17,7 @@
         </article>
             <article class="base">
                 <div class="notice">
-                        <h2 id="repo-name-header"></h2>
+                        <h2 id="repo-name-header" style="text-overflow:ellipsis;width:70%;"></h2>
                         <div class="header-label-wrapper"><span class="header-label" id="repo-url-header"></span></div>
                     <!-- User -->
                     <div class="table_style01 table_chart">
@@ -56,14 +56,15 @@
 
         func.init(ASIDE_DP1.CATALOGS, ASIDE_DP2.CATALOG_REPOSITORIES);
         callbackFuncNameLoad();
+        let repoObj = JSON.parse(sessionStorage.getItem('repoItem'));
 
         const charts = {
             offset : 0, // 로드 페이지 넘버
             limit : 10, // 로드 게시물 개수
             allItemCount : 0, //게시물 총 개수
             searchName : '',
-            name : sessionStorage.getItem('repoName'),
-            url : sessionStorage.getItem('repoUrl'),
+            repoName : repoObj.name,
+            repoUrl : repoObj.url,
 
             init(){
                 func.nameLoad = charts.reset;
@@ -79,12 +80,12 @@
 
             load(){
                 func.loading();
-                func.loadData('GET', `${func.url}catalog/repositories/${charts.name}/charts?searchName=${document.getElementById('searchText').value}&limit=${charts.limit}&offset=${charts.offset}`, 'application/json', charts.draw);
+                func.loadData('GET', `${func.url}catalog/repositories/${charts.repoName}/charts?searchName=${document.getElementById('searchText').value}&limit=${charts.limit}&offset=${charts.offset}`, 'application/json', charts.draw);
             },
 
             draw(data){
-                document.getElementById("repo-name-header").innerText  = charts.name;
-                document.getElementById("repo-url-header").innerText  = charts.url;
+                document.getElementById("repo-name-header").innerText  = charts.repoName;
+                document.getElementById("repo-url-header").innerText  = charts.repoUrl;
 
                 if(charts.offset == 0) charts.allItemCount = data.itemMetaData.allItemCount;
                 if(data.httpStatusCode == 200){
@@ -159,11 +160,11 @@
             },
 
             delete(){
-                func.saveData('DELETE', `${func.url}catalog/repositories/${charts.name}`, '', true, 'application/json', func.historyBack);
+                func.saveData('DELETE', `${func.url}catalog/repositories/${charts.repoName}`, '', true, 'application/json', func.historyBack);
             },
 
             update(){
-                func.saveData('PUT', `${func.url}catalog/repositories/${charts.name}`, '', true, 'application/json', charts.returnPage);
+                func.saveData('PUT', `${func.url}catalog/repositories/${charts.repoName}`, '', true, 'application/json', charts.returnPage);
             },
 
             returnPage() {
