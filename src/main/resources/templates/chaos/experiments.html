@@ -87,7 +87,7 @@
                 func.loading();
 
                 // experimentsList 정보 조회
-                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments`, 'application/json', experiments.draw);
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?includeUsage=true&limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.draw);
             },
 
             draw(data){
@@ -99,8 +99,8 @@
 
                             for(let j = 0; j < data.items[i].status.conditions.length; j++){
                                 let type = data.items[i].status.conditions[j].type;
-                                let satus = data.items[i].status.conditions[j].status;
-                                condition[type] = satus;
+                                let status = data.items[i].status.conditions[j].status;
+                                condition[type] = status;
 
                             }
                             let experimentStatus;
@@ -123,7 +123,7 @@
                             if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
                                 let html = `<tr><td id="${data.items[i].metadata.uid}"><span class="left experiment-${experimentStatus}"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>${experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1)}</span></td>
                                                 <td>${data.items[i].kind}</td>
-                                                <td><a href="javascript:;" data-name="${data.items[i].metadata.name}" data-id="${data.items[i].metadata.namespace}" data-uid="${data.items[i].metadata.uid}" data-kind="${data.items[i].kind}">${data.items[i].metadata.name}</a></td>
+                                                <td><a href="javascript:;" data-name="${data.items[i].metadata.name}" data-namespace="${data.items[i].metadata.namespace}" data-uid="${data.items[i].metadata.uid}" data-kind="${data.items[i].kind}">${data.items[i].metadata.name}</a></td>
                                                 <td>${data.items[i].metadata.uid}</td>
                                                 <td>${data.items[i].metadata.namespace}</td>
                                                 <td>${createdTime}</td></tr>`;
@@ -184,32 +184,36 @@
                 }, false);
 
                 // status 정보 조회
-             //   func.loadDataInterval('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments`, 'application/json', experiments.status);
+                func.loadDataInterval('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?includeUsage=true&limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.status);
 
 
 
             },
-/*
 
             status(data){
+
                 for(let i = 0; i <= experiments.statusList.length -1; i++){
-                    let conditions = {};
-                    for(let j = 0; j <= data.items[i].status.conditions.length; i++){
+                    let condition = {};
+
+                    for(let j = 0; j < data.items[i].status.conditions.length; j++){
                         let type = data.items[i].status.conditions[j].type;
-                        let satus = data.items[i].status.conditions[j].status;
-                        conditions[type] = satus;
+                        let status = data.items[i].status.conditions[j].status;
+                        condition[type] = status;
+
                     }
+
                     let experimentStatus;
-                    if(conditions.Paused === 'True') {
+
+                    if(condition.Paused === 'True') {
                         experimentStatus = 'paused';
                     }
-                    if(conditions.AllInjected === 'False' && conditions.Selected === 'True') {
+                    else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
                         experimentStatus = 'injecting';
                     }
-                    if(conditions.AllInjected === 'True' && conditions.Selected === 'True') {
+                    else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
                         experimentStatus = 'running';
                     }
-                    if(conditions.keys().length === 0){
+                    if(condition.length === 0){
                         experimentStatus = 'completed';
                     }
 
@@ -222,7 +226,6 @@
                     }
                 }
             },
-*/
 
             listEvent(){
                 var listAll = document.querySelector('.listTable').querySelectorAll('a');
@@ -231,6 +234,7 @@
 
                     listAll[i].addEventListener('click', (e) => {
                         sessionStorage.setItem('uid', e.target.getAttribute('data-uid'));
+                        sessionStorage.setItem('chaosNamespace', e.target.getAttribute('data-namespace'));
                         sessionStorage.setItem('name', e.target.getAttribute('data-name'));
                         sessionStorage.setItem('kind', e.target.getAttribute('data-kind'));
 
