@@ -142,59 +142,84 @@
             func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EXPERIMENTS);
             const experimentsDetail = {
                 init(){
+
                     // experimentsDetail 정보 조회
-                  //  func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.draw);
+                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.draw);
 
 
 
                 },
 
                 draw(data){
-                    let status = data.status;
-                    if(status === 'finished') {
-                        status = 'completed';
-                    }
                     // Details data
-                    document.getElementById('name').innerText = data.resourceName;
-                    document.getElementById('uid').innerText = data.resourceUid;
-                    document.getElementById('namespace').innerHTML = data.namespace;
-                    document.getElementById('createdTime').innerText = data.creationTimestamp.replace('T', ' ').replace('Z', '');
+                    document.getElementById('name').innerText = sessionStorage.getItem('name');
+                    document.getElementById('uid').innerText = sessionStorage.getItem('uid');
+                    document.getElementById('namespace').innerHTML = sessionStorage.getItem('chaosNamespace');
+                    document.getElementById('createdTime').innerText = data.items[0].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
 
-                    if(status === 'deleting' || status === 'injecting' || status === 'running') {
-                        document.getElementById('status').innerHTML = '<span class="left experiment-' + status + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
+                    let condition = {};
+
+                    for(let i = 0; i < data.items[0].status.conditions.length; i++){
+                        let type = data.items[0].status.conditions[i].type;
+                        let status = data.items[0].status.conditions[i].status;
+                        condition[type] = status;
+                    }
+                    let experimentStatus;
+
+                    if(condition.Paused === 'True') {
+                        experimentStatus = 'paused';
+                    }
+                    else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
+                        experimentStatus = 'injecting';
+                    }
+                    else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
+                        experimentStatus = 'running';
+                    }
+                    if(condition.length === 0){
+                        experimentStatus = 'completed';
+                    }
+
+                    if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                     } else {
-                        document.getElementById('status').innerHTML = '<span class="left experiment-' + status + '"><span class="lds-circle"><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-circle"><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                     }
 
                     // Scope
-                    document.getElementById('namespaceSelector').innerText = data.namespaceSelectors;
+                    document.getElementById('namespaceSelector').innerText = data.items[0].spec.selector.namespaces[0];
 
-                    const labelSelectors = data.labelSelectors;
+                    const labelSelectors = data.items[0].spec.selector.labelSelectors;
 
-                    for(let i = 0; i <= Object.getOwnPropertyNames(labelSelectors).length-1; i++){
-                        let html = `<dl><dt>${Object.getOwnPropertyNames(labelSelectors)[i]}</dt><dd>${labelSelectors[Object.keys(labelSelectors)[i]]}</dd></dl>`;
+
+                    if(labelSelectors !== null) {
+                        for (let i = 0; i <= Object.getOwnPropertyNames(labelSelectors).length - 1; i++) {
+                            let html = `<dl><dt>${Object.getOwnPropertyNames(labelSelectors)[i]}</dt><dd>${labelSelectors[Object.keys(labelSelectors)[i]]}</dd></dl>`;
+                            func.appendHtml(document.getElementById('labelSelectors'), html, 'dl');
+                        }
+                    }else {
+                        let html = `<dl>-</dl>`;
                         func.appendHtml(document.getElementById('labelSelectors'), html, 'dl');
                     }
 
                     // Experiment
-                    document.getElementById('kind').innerHTML = data.kind;
+                    document.getElementById('kind').innerHTML = data.items[0].kind;
 
-                    if(data.kind === 'PodChaos'){
-                        const action = data.action;
+                    if(data.items[0].kind === 'PodChaos' && data.items[0].kind === 'NetworkChaos'){
+                        const action = data.items[0].spec.action;
                         let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>`;
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
                     }
 
-                    if(data.kind === 'NetworkChaos'){
-                        const action = data.action;
-                        const direction = data.direction;
+                   /* if(data.items[0].kind === 'NetworkChaos'){
+                        const action = data.items[0].spec.action;
+                        const direction = data.items[0].direction;
                         let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>
                                     <tr><th scope="row" class="left">Direction</th><td class="left" id="direction">${direction}</td></tr>`;
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
-                    }
+                    }*/
 
-                    if(data.kind === 'StressChaos'){
-                        const memoryObj = data.memory;
+                    if(data.items[0].kind === 'StressChaos'){
+                        const memoryObj = data.items[0].spec.stressors.memory;
                         let html = `<tr><th scope="row" class="left">Memory</th><td class="left" id="memory"></td></tr>`;
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
 
@@ -206,9 +231,9 @@
                     }
 
                     // Run
-                    const duration =  data.duration;
+                    const duration =  data.items[0].spec.duration;
 
-                    if(duration == ''){
+                    if(duration === null){
                         document.getElementById('duration').innerHTML = 'Run continuously';
                     }
                     if(duration){
