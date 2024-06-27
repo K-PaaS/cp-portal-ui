@@ -204,30 +204,39 @@
                     // Experiment
                     document.getElementById('kind').innerHTML = data.items[0].kind;
 
-                    if(data.items[0].kind === 'PodChaos' && data.items[0].kind === 'NetworkChaos'){
+                    if(data.items[0].kind === 'PodChaos' || data.items[0].kind === 'NetworkChaos'){
                         const action = data.items[0].spec.action;
                         let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>`;
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
                     }
 
-                   /* if(data.items[0].kind === 'NetworkChaos'){
-                        const action = data.items[0].spec.action;
-                        const direction = data.items[0].direction;
-                        let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>
-                                    <tr><th scope="row" class="left">Direction</th><td class="left" id="direction">${direction}</td></tr>`;
-                        func.appendHtml(document.getElementById('experiment'), html, 'tbody');
-                    }*/
-
                     if(data.items[0].kind === 'StressChaos'){
-                        const memoryObj = data.items[0].spec.stressors.memory;
-                        let html = `<tr><th scope="row" class="left">Memory</th><td class="left" id="memory"></td></tr>`;
-                        func.appendHtml(document.getElementById('experiment'), html, 'tbody');
 
-                        let memory = '';
-                        for(let i = 0; i <= Object.getOwnPropertyNames(memoryObj).length-1; i++) {
-                            memory += Object.getOwnPropertyNames(memoryObj)[i] + ": " + memoryObj[Object.keys(memoryObj)[i]] + "\n";
+                        if(data.items[0].spec.stressors.memory != null) {
+                            const memoryObj = data.items[0].spec.stressors.memory;
+
+                            let html1 = `<tr><th scope="row" class="left">Memory</th><td class="left" id="memory"></td></tr>`;
+                            func.appendHtml(document.getElementById('experiment'), html1, 'tbody');
+
+                            let memory = '';
+                            for (let i = 0; i <= Object.getOwnPropertyNames(memoryObj).length - 1; i++) {
+                                memory += Object.getOwnPropertyNames(memoryObj)[i] + ": " + memoryObj[Object.keys(memoryObj)[i]] + "\n";
+                            }
+                            document.getElementById('memory').innerText = memory;
                         }
-                        document.getElementById('memory').innerText = memory;
+
+                        if(data.items[0].spec.stressors.cpu != null) {
+                            const cpuObj = data.items[0].spec.stressors.cpu;
+
+                            let html2 = `<tr><th scope="row" class="left">CPU</th><td class="left" id="cpu"></td></tr>`;
+                            func.appendHtml(document.getElementById('experiment'), html2, 'tbody');
+
+                            let cpu = '';
+                            for (let i = 0; i <= Object.getOwnPropertyNames(cpuObj).length - 1; i++) {
+                                cpu += Object.getOwnPropertyNames(cpuObj)[i] + ": " + cpuObj[Object.keys(cpuObj)[i]] + "\n";
+                            }
+                            document.getElementById('cpu').innerText = cpu;
+                        }
                     }
 
                     // Run
@@ -243,7 +252,7 @@
                     // event 정보 조회
                    // func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments-events/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.list);
 
-
+                    experimentsDetail.event();
 
                 },
 
@@ -268,7 +277,7 @@
                         func.appendHtml(document.querySelector('.eventList'), html, 'tbody');
                     };
 
-                    experimentsDetail.event();
+
                 },
 
                 event(){
@@ -296,7 +305,8 @@
                 },
 
                 delete(){
-                    func.saveData('DELETE', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/${sessionStorage.getItem('name')}`, '', true, 'application/json', func.historyBack);
+
+                    func.saveData('DELETE', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, '', true, 'application/json', func.historyBack);
                 },
             }
 
