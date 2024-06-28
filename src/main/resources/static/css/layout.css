@@ -859,6 +859,7 @@ header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color
 .tab-cont-wrap .tab-btn2 li.active a {color: #0d6efd;}
 pre code.hljs {font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕", "Font Awesome 5 Free",monospace !important;}
 
+.deprecated{font-size: 14px; margin: 1px 5px 0 -5px; color:#c74b50;}
 #chart_versions_sel{font-size: 17px; line-height: 30px; padding-left: 10px;}
 .chart_versions_dl fieldset:after {right:15px !important;}
 #repo-add-auth-dl input[type="text"]{ width: 95% !important;}
@@ -882,10 +883,11 @@ pre code.hljs {font-family:'Apple SD Gothic Neo',"Noto Sans KR", "맑은 고딕"
 .aside_btn {height:38px; line-height: 41px; text-align:center; width:70px; position:absolute; top:50px; right:120px; color:#ffffff; background-color:#bdbfc4; border-radius:2px;}
 .modal-pane{width:47%; height:100%; line-height: 33px; text-align: left;}
 .modal-pane-nw{height:100%; line-height: 33px; text-align: left;}
-span.icon-pane {cursor: pointer;background:#0950bf;color: white;padding: 0 6px;border-radius: 3px; height: 25px; float: right;}
-span.icon-pane i{line-height: 24px !important;}
+span.icon-pane {width:24px; height: 24px; cursor:pointer; float: right; border:1px solid #787878;}
 span.icon-pane3 {cursor: pointer;height: 25px; float: right;}
 .btn_bg_none{background-color: rgb(189, 191, 196) !important; cursor: not-allowed !important;}
 .icon-pane2 {cursor: pointer;background: #eee; color: #343a40; padding: 2px 10px;border-radius: 3px; line-height: 27px; float: right; font-size: 15px;}
 .icon-pane2-active {background: #0d6efd;; color: #fff;}
 .modal-detail{font-size:14px !important; color: #707477; margin-top:15px; margin-bottom:-10px; max-height: 100px;overflow: auto;scrollbar-width: thin;}
+.expand{content:url("../img/expand_content.png"); width:23px; height:23px;}
+.collapse{content:url("../img/collapse_content.png") !important;}
