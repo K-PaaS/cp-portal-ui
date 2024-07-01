@@ -73,6 +73,7 @@ const func = {
 				e.target.parentNode.classList.toggle('on');
 			} else {
 				if(document.getElementById('searchText').value != ''){
+					IS_SEARCH = true;
 					func.nameLoad();
 				};
 			}
@@ -80,6 +81,7 @@ const func = {
 
 			document.getElementById('searchText').onkeydown = function(event) {
 				if(event.keyCode === 13){
+					IS_SEARCH = true;
 					func.nameLoad();
 				};
 			};
@@ -825,4 +827,13 @@ const func = {
 	moveToEngUserGuideLink(){
 		window.open('about:blank').location.href = GUIDE_URL_ENG + GUIDE_LIST[func.depth1];
 	},
+	isCollapse(id, collapse) {
+		let el =  document.getElementById(id);
+		el.classList.toggle('collapse');
+		if(collapse) {
+			el.title="Collapse Content";
+		}else {
+			el.title="Expand Content"
+		}
+	}
 }
