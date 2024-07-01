@@ -120,7 +120,8 @@
                     let versions = data.items;
                     let html = ``;
                     for (let v of versions) {
-                        html += `<option value="${v.version}">${v.name}@${v.version}&nbsp;&nbsp;(App Version ${v.app_version})</option>`;
+                        let app_version = v.app_version.length > 0 ? `&nbsp;&nbsp;(App Version ${v.app_version})` : '' ;
+                        html += `<option value="${v.version}">${v.name}@${v.version}${app_version}</option>`;
                     }
                     func.appendHtml(document.getElementById('chart_versions_sel'), html, 'select');
                     document.getElementById('chart_versions_sel').selectedIndex = "0";
@@ -154,12 +155,12 @@
                         let releaseName =  document.getElementById('release_name').value;
                         //check release_name
                         if(releaseName.length < 1) {
-                            func.alertPopup('ALERT', MSG_REQUIRED_RELEASE_NAME, false, MSG_CLOSE, charts.reset());
+                            func.alertPopup('ALERT', MSG_REQUIRED_RELEASE_NAME, true, MSG_CONFIRM, 'closed');
                             return false;
                         }
                         //check namespace
-                        if(sessionStorage.getItem('nameSpace').toLowerCase() == "all") {
-                            func.alertPopup('ALERT', MSG_SELECTED_NAMESPACE_ALL, false, MSG_CLOSE, charts.reset());
+                        if(sessionStorage.getItem('nameSpace').toLowerCase() === "all") {
+                            func.alertPopup('ALERT', MSG_SELECTED_NAMESPACE_ALL, true, MSG_CONFIRM, 'closed');
                             return false;
                         }
 
@@ -170,7 +171,7 @@
                 },
 
                 install(){
-                    let releaseName =  document.getElementById('release_name').value;
+                    let releaseName =  document.getElementById('release_name').value.trim();
                     let installChart = {
                         "repo" : charts.repoName,
                         "chart": charts.chartName,
