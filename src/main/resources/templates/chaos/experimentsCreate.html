@@ -31,6 +31,16 @@
                         </dd>
                     </dl>
                     <dl>
+                        <dt><label>Namespace</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select class="chaosNamespace" id="chaosNamespacePod">
+                                    <option selected disabled hidden value='' th:text="#{M0885}"></option>
+                                </select>
+                            </fieldset>
+                        </dd>
+                    </dl>
+                    <dl>
                         <dt><label for="gracePeriod">Grace period</label></dt>
                         <dd>
                             <input id="gracePeriod" type="text"  th:placeholder="#{M0884}"/>
@@ -89,6 +99,16 @@
                         <dt><label for="nameNetwork">Name</label></dt>
                         <dd>
                             <input class="name" id="nameNetwork" type="text"  th:placeholder="#{M0876}"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label>Namespace</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select class="chaosNamespace" id="chaosNamespaceNetwork">
+                                    <option selected disabled hidden value='' th:text="#{M0885}"></option>
+                                </select>
+                            </fieldset>
                         </dd>
                     </dl>
                     <dl>
@@ -180,6 +200,16 @@
                         <dt><label for="nameStress">Name</label></dt>
                         <dd>
                             <input class="name" id="nameStress" type="text"  th:placeholder="#{M0876}"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label>Namespace</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select class="chaosNamespace" id="chaosNamespaceStress">
+                                    <option selected disabled hidden value='' th:text="#{M0885}"></option>
+                                </select>
+                            </fieldset>
                         </dd>
                     </dl>
                     <dl>
@@ -275,6 +305,7 @@
     <script type="text/javascript">
         window.onload = () => {
             func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EXPERIMENTS);
+            init();
         }
 
         let tabs = document.querySelector('.tab-btn');
@@ -290,7 +321,8 @@
                     tabIndex = idx;
                     for( let j=0; j<tabBtns.length; j++ ) {
                         tabBtns[j].classList.remove('active');
-                        tabContent[j].style.display = 'none'
+                        tabContent[j].style.display = 'none';
+                        func.removeHtml(document.getElementsByClassName('chaosNamespace')[j]);
                         func.removeHtml(document.getElementsByClassName('namespaceSelect')[j]);
                         func.removeHtml(document.getElementsByClassName('labelSelect')[j]);
                         func.removeHtml(document.getElementsByClassName('podList')[j]);
@@ -299,14 +331,23 @@
                     tabContent[idx].style.display = '';
                     init();
                 };
-                tabContent[idx].style.display = 'none';
-                tabContent[0].style.display = ''
-                init();
             })(i);
         }
 
+
         function init() {
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', chaosNamespaces);
             func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', namespaceSelector);
+        }
+
+        function chaosNamespaces(data) {
+
+            let chaosNamespace = `<option selected hidden value='' >${CHAOS_NAMESPACE}</option>`;
+            for (let i = 0; i < data.items.length; i++) {
+                if(data.items[i].cpNamespace === 'ALL') continue;
+                chaosNamespace += `<option value="${data.items[i].cpNamespace}">${data.items[i].cpNamespace}</option>`;
+            }
+            func.appendHtml(document.getElementsByClassName('chaosNamespace')[tabIndex], chaosNamespace);
         }
 
         function namespaceSelector(data) {
@@ -319,13 +360,11 @@
 
             func.appendHtml(document.getElementsByClassName('namespaceSelect')[tabIndex], namespaceSelect);
             func.appendHtml(document.getElementsByClassName('labelSelect')[tabIndex], labelSelect);
-
         }
 
         function changeNamespaceSelect() {
             func.removeHtml(document.getElementsByClassName('labelSelect')[tabIndex]);
             func.removeHtml(document.getElementsByClassName('podList')[tabIndex]);
-
             let namespaceSelect = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
             func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods`, 'application/json', labelSelector);
         }
@@ -427,9 +466,10 @@
 
         function save() {
             let kind = document.querySelector('.tab-btn li.active').getAttribute('type');
+            let name = document.getElementsByClassName('name')[tabIndex].value;
+            let chaosNamespace = document.getElementsByClassName('chaosNamespace')[tabIndex].value;
             let namespaceSelectors = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
             let labelSelectors = document.getElementsByClassName('labelSelect')[tabIndex].value;
-            let metadataName = document.getElementsByClassName('name')[tabIndex].value;
             let gracePeriod = document.getElementById('gracePeriod').value;
             let latency = document.getElementById('latency').value;
             let correlation = document.getElementById('correlation').value;
@@ -459,17 +499,19 @@
           //  if(validCheck()){
                     const podFault = {
                         kind,
+                        name,
+                        chaosNamespace,
                         namespaceSelectors,
                         labelSelectors,
-                        metadataName,
                         podName,
                         gracePeriod
                     }
                     const networkAttack = {
                         kind,
+                        name,
+                        chaosNamespace,
                         namespaceSelectors,
                         labelSelectors,
-                        metadataName,
                         podName,
                         duration,
                         latency,
@@ -480,9 +522,10 @@
                     }
                     const stressTest = {
                         kind,
+                        name,
+                        chaosNamespace,
                         namespaceSelectors,
                         labelSelectors,
-                        metadataName,
                         podName,
                         duration,
                         memory,
