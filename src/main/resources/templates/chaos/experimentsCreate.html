@@ -27,15 +27,15 @@
                     <dl>
                         <dt><label for="namePod">Name</label></dt>
                         <dd>
-                            <input class="name" id="namePod" type="text"  th:placeholder="#{M0876}"/>
+                            <input class="name" id="namePod" type="text"  th:placeholder="#{M0872}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label>Namespace</label></dt>
                         <dd>
                             <fieldset>
-                                <select class="chaosNamespace" id="chaosNamespacePod">
-                                    <option selected disabled hidden value='' th:text="#{M0885}"></option>
+                                <select class="chaosNamespace" id="chaosNamespacePod" >
+                                    <option selected disabled hidden value='' th:text="#{M0874}"></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -43,7 +43,7 @@
                     <dl>
                         <dt><label for="gracePeriod">Grace period</label></dt>
                         <dd>
-                            <input id="gracePeriod" type="text"  th:placeholder="#{M0884}"/>
+                            <input id="gracePeriod" type="text"  th:placeholder="#{M0873}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -98,7 +98,7 @@
                     <dl>
                         <dt><label for="nameNetwork">Name</label></dt>
                         <dd>
-                            <input class="name" id="nameNetwork" type="text"  th:placeholder="#{M0876}"/>
+                            <input class="name" id="nameNetwork" type="text"  th:placeholder="#{M0872}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -106,7 +106,7 @@
                         <dd>
                             <fieldset>
                                 <select class="chaosNamespace" id="chaosNamespaceNetwork">
-                                    <option selected disabled hidden value='' th:text="#{M0885}"></option>
+                                    <option selected disabled hidden value='' th:text="#{M0874}"></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -118,33 +118,9 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label for="jitter">Jitter</label></dt>
-                        <dd>
-                            <input id="jitter" type="text"  th:placeholder="#{M0872}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="correlation">Correlation</label></dt>
-                        <dd>
-                            <input id="correlation" type="text"  th:placeholder="#{M0873}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="direction">Direction</label></dt>
-                        <dd>
-                            <input id="direction" type="text"  th:placeholder="#{M0874}"/>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="externalTargets">External targets</label></dt>
-                        <dd>
-                            <input id="externalTargets" type="text"  th:placeholder="#{M0875}"/>
-                        </dd>
-                    </dl>
-                    <dl>
                         <dt><label for="durationNetwork">Duration</label></dt>
                         <dd>
-                            <input class="duration" id="durationNetwork" type="text"  th:placeholder="#{M0877}"/>
+                            <input class="duration" id="durationNetwork" type="text"  th:placeholder="#{M0873}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -199,7 +175,7 @@
                     <dl>
                         <dt><label for="nameStress">Name</label></dt>
                         <dd>
-                            <input class="name" id="nameStress" type="text"  th:placeholder="#{M0876}"/>
+                            <input class="name" id="nameStress" type="text"  th:placeholder="#{M0872}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -207,7 +183,7 @@
                         <dd>
                             <fieldset>
                                 <select class="chaosNamespace" id="chaosNamespaceStress">
-                                    <option selected disabled hidden value='' th:text="#{M0885}"></option>
+                                    <option selected disabled hidden value='' th:text="#{M0874}"></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -215,31 +191,31 @@
                     <dl>
                         <dt><label for="cpuWorkers">CPU Workers</label></dt>
                         <dd>
-                            <input id="cpuWorkers" type="text"  th:placeholder="#{M0878}"/>
+                            <input id="cpuWorkers" type="text"  th:placeholder="#{M0875}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="cpuLoad">CPU Load</label></dt>
                         <dd>
-                            <input id="cpuLoad" type="text"  th:placeholder="#{M0879}"/>
+                            <input id="cpuLoad" type="text"  th:placeholder="#{M0876}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="memoryWorkers">Memory Workers</label></dt>
                         <dd>
-                            <input id="memoryWorkers" type="text"  th:placeholder="#{M0881}"/>
+                            <input id="memoryWorkers" type="text"  th:placeholder="#{M0877}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="memorySize">Memory Size</label></dt>
                         <dd>
-                            <input id="memorySize" type="text"  th:placeholder="#{M0882}"/>
+                            <input id="memorySize" type="text"  th:placeholder="#{M0878}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="durationStress">Duration</label></dt>
                         <dd>
-                            <input class="duration" id="durationStress" type="text"  th:placeholder="#{M0877}"/>
+                            <input class="duration" id="durationStress" type="text"  th:placeholder="#{M0873}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -331,6 +307,8 @@
                     tabContent[idx].style.display = '';
                     init();
                 };
+                tabContent[idx].style.display = 'none';
+                tabContent[0].style.display = '';
             })(i);
         }
 
@@ -439,6 +417,12 @@
                 return false;
             }
 
+            if(isEmpty(document.getElementsByClassName('chaosNamespace')[tabIndex].value)) {
+                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                IS_VCHK = true;
+                return false;
+            }
+
             if(isEmpty(document.getElementsByClassName('namespaceSelect')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
@@ -465,17 +449,24 @@
         }
 
         function save() {
-            let kind = document.querySelector('.tab-btn li.active').getAttribute('type');
+            let fault = document.querySelector('.tab-btn li.active').getAttribute('type');
             let name = document.getElementsByClassName('name')[tabIndex].value;
             let chaosNamespace = document.getElementsByClassName('chaosNamespace')[tabIndex].value;
-            let namespaceSelectors = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
-            let labelSelectors = document.getElementsByClassName('labelSelect')[tabIndex].value;
+            let namespaces = [document.getElementsByClassName('namespaceSelect')[tabIndex].value];
+            let labelSelector = document.getElementsByClassName('labelSelect')[tabIndex].value;
+            let labelSelectors = {};
+            const labelSelectorKey = labelSelector.split(':')[0];
+            const labelSelectorValue = labelSelector.split(':')[1];
+
+            if(labelSelectors === 'all'){
+                labelSelectors = null;
+            }
+            else {
+                labelSelectors[labelSelectorKey] = labelSelectorValue;
+            }
+
             let gracePeriod = document.getElementById('gracePeriod').value;
             let latency = document.getElementById('latency').value;
-            let correlation = document.getElementById('correlation').value;
-            let jitter = document.getElementById("jitter").value;
-            let direction = document.getElementById("direction").value;
-            let externalTargets = document.getElementById("externalTargets").value;
             let memory = {
                 "workers": document.getElementById("memoryWorkers").value,
                 "size": document.getElementById("memorySize").value
@@ -491,50 +482,61 @@
 
             const checkbox = 'input[name="checkboxPod"]:checked';
             const checkedPod = document.querySelectorAll(checkbox);
-            let podName = [];
+            let pods = {};
+            let podsList = [];
             checkedPod.forEach((el) => {
-                podName.push(el.value);
+                podsList.push(el.value);
             });
+            pods[namespaces[0]] = podsList;
+
+
+            let cluster = sessionStorage.getItem('cluster');
+            let namespace = chaosNamespace;
+
 
           //  if(validCheck()){
                     const podFault = {
-                        kind,
+                        kind: 'PodChaos',
+                        action: 'pod-kill',
+                        cluster,
+                        namespace,
                         name,
                         chaosNamespace,
-                        namespaceSelectors,
+                        namespaces,
                         labelSelectors,
-                        podName,
+                        pods,
                         gracePeriod
                     }
                     const networkAttack = {
-                        kind,
+                        kind: 'NetworkChaos',
+                        action: 'delay',
+                        cluster,
+                        namespace,
                         name,
                         chaosNamespace,
-                        namespaceSelectors,
+                        namespaces,
                         labelSelectors,
-                        podName,
+                        pods,
                         duration,
-                        latency,
-                        correlation,
-                        jitter,
-                        direction,
-                        externalTargets
+                        latency
                     }
                     const stressTest = {
-                        kind,
+                        kind: 'StressChaos',
+                        cluster,
+                        namespace,
                         name,
                         chaosNamespace,
-                        namespaceSelectors,
+                        namespaces,
                         labelSelectors,
-                        podName,
+                        pods,
                         duration,
                         memory,
                         cpu
                     }
           //  }
 
-            let obj = kind === 'podFault' ? podFault : kind === 'networkAttack' ? networkAttack : stressTest;
-            func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelectors}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
+            let obj = fault === 'podFault' ? podFault : fault === 'networkAttack' ? networkAttack : stressTest;
+            func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaces}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
 
         }
 

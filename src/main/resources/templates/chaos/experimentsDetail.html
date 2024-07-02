@@ -142,12 +142,8 @@
             func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EXPERIMENTS);
             const experimentsDetail = {
                 init(){
-
                     // experimentsDetail 정보 조회
                     func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.draw);
-
-
-
                 },
 
                 draw(data){
