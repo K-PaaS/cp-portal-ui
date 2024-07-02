@@ -8,6 +8,15 @@ spring:
 management:
   security:
     enabled: false
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
 
 private:
   repository:
