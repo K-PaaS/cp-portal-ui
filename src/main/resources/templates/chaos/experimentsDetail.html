@@ -216,7 +216,9 @@
 
                             let memory = '';
                             for (let i = 0; i <= Object.getOwnPropertyNames(memoryObj).length - 1; i++) {
-                                memory += Object.getOwnPropertyNames(memoryObj)[i] + ": " + memoryObj[Object.keys(memoryObj)[i]] + "\n";
+                                if(Object.getOwnPropertyNames(memoryObj)[i] !== 'oomScoreAdj') {
+                                    memory += Object.getOwnPropertyNames(memoryObj)[i] + ": " + memoryObj[Object.keys(memoryObj)[i]] + "\n";
+                                }
                             }
                             document.getElementById('memory').innerText = memory;
                         }
