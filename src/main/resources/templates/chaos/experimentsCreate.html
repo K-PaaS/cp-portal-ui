@@ -27,14 +27,14 @@
                     <dl>
                         <dt><label for="namePod">Name</label></dt>
                         <dd>
-                            <input class="name" id="namePod" type="text"  th:placeholder="#{M0872}"/>
+                            <input class="name" id="namePod" type="text" th:placeholder="#{M0872}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label>Namespace</label></dt>
                         <dd>
                             <fieldset>
-                                <select class="chaosNamespace" id="chaosNamespacePod" >
+                                <select class="chaosNamespace" id="chaosNamespacePod">
                                     <option selected disabled hidden value='' th:text="#{M0874}"></option>
                                 </select>
                             </fieldset>
@@ -43,14 +43,15 @@
                     <dl>
                         <dt><label for="gracePeriod">Grace period</label></dt>
                         <dd>
-                            <input id="gracePeriod" type="text"  th:placeholder="#{M0873}"/>
+                            <input id="gracePeriod" type="text" th:placeholder="#{M0873}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select class="namespaceSelect" id="namespaceSelectPod" onchange="changeNamespaceSelect()">
+                                <select class="namespaceSelect" id="namespaceSelectPod"
+                                        onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -72,11 +73,11 @@
                             <div class="table_style01">
                                 <table>
                                     <caption>Pod List</caption>
-                                    <colgroup >
-                                        <col width="12%" />
-                                        <col width="38%" />
-                                        <col width="30%" />
-                                        <col width="20%" />
+                                    <colgroup>
+                                        <col width="12%"/>
+                                        <col width="38%"/>
+                                        <col width="30%"/>
+                                        <col width="20%"/>
                                     </colgroup>
                                     <thead>
                                     <tr>
@@ -94,11 +95,11 @@
                     </dl>
                 </div>
                 <!-- Network Attack-->
-                <div>
+                <div class="network">
                     <dl>
                         <dt><label for="nameNetwork">Name</label></dt>
                         <dd>
-                            <input class="name" id="nameNetwork" type="text"  th:placeholder="#{M0872}"/>
+                            <input class="name" id="nameNetwork" type="text" th:placeholder="#{M0872}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -114,20 +115,38 @@
                     <dl>
                         <dt><label for="latency">Latency</label></dt>
                         <dd>
-                            <input id="latency" type="text"  th:placeholder="#{M0871}"/>
+                            <input id="latency" class="latency" type="text" th:placeholder="#{M0871}"/>
+                            <input id="msLatency" class="latencyRadio" type="radio" name="latency" value="ms"/>
+                            <label for="msLatency" class="latencyRadioLabel">ms</label>
+                            <input id="sLatency" class="latencyRadio" type="radio" name="latency" value="s"/>
+                            <label for="sLatency" class="latencyRadioLabel">s</label>
+                            <input id="mLatency" class="latencyRadio" type="radio" name="latency" value="m"/>
+                            <label for="mLatency" class="latencyRadioLabel">m</label>
+                            <input id="hLatency" class="latencyRadio" type="radio" name="latency" value="h"/>
+                            <label for="hLatency" class="latencyRadioLabel">h</label>
+
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="durationNetwork">Duration</label></dt>
                         <dd>
-                            <input class="duration" id="durationNetwork" type="text"  th:placeholder="#{M0873}"/>
+                            <input class="duration" id="durationNetwork" type="text" th:placeholder="#{M0873}"/>
+                            <input id="msDurationNetwork" class="durationRadio" type="radio" name="duration" value="ms"/>
+                            <label for="msDurationNetwork" class="durationRadioLabel">ms</label>
+                            <input id="sDurationNetwork" class="durationRadio" type="radio" name="duration" value="s"/>
+                            <label for="sDurationNetwork" class="durationRadioLabel">s</label>
+                            <input id="mDurationNetwork" class="durationRadio" type="radio" name="duration" value="m"/>
+                            <label for="mDurationNetwork" class="durationRadioLabel">m</label>
+                            <input id="hDurationNetwork" class="durationRadio" type="radio" name="duration" value="h"/>
+                            <label for="hDurationNetwork" class="durationRadioLabel">h</label>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select class="namespaceSelect" id="namespaceSelectNetwork" onchange="changeNamespaceSelect()">
+                                <select class="namespaceSelect" id="namespaceSelectNetwork"
+                                        onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -149,11 +168,11 @@
                             <div class="table_style01">
                                 <table>
                                     <caption>Pod List</caption>
-                                    <colgroup >
-                                        <col width="12%" />
-                                        <col width="38%" />
-                                        <col width="30%" />
-                                        <col width="20%" />
+                                    <colgroup>
+                                        <col width="12%"/>
+                                        <col width="38%"/>
+                                        <col width="30%"/>
+                                        <col width="20%"/>
                                     </colgroup>
                                     <thead>
                                     <tr>
@@ -175,7 +194,7 @@
                     <dl>
                         <dt><label for="nameStress">Name</label></dt>
                         <dd>
-                            <input class="name" id="nameStress" type="text"  th:placeholder="#{M0872}"/>
+                            <input class="name" id="nameStress" type="text" th:placeholder="#{M0872}"/>
                         </dd>
                     </dl>
                     <dl>
@@ -191,38 +210,58 @@
                     <dl>
                         <dt><label for="cpuWorkers">CPU Workers</label></dt>
                         <dd>
-                            <input id="cpuWorkers" type="text"  th:placeholder="#{M0875}"/>
+                            <input id="cpuWorkers" type="text" th:placeholder="#{M0875}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="cpuLoad">CPU Load</label></dt>
                         <dd>
-                            <input id="cpuLoad" type="text"  th:placeholder="#{M0876}"/>
+                            <input id="cpuLoad" type="text" th:placeholder="#{M0876}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="memoryWorkers">Memory Workers</label></dt>
                         <dd>
-                            <input id="memoryWorkers" type="text"  th:placeholder="#{M0877}"/>
+                            <input id="memoryWorkers" type="text" th:placeholder="#{M0877}"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="memorySize">Memory Size</label></dt>
                         <dd>
-                            <input id="memorySize" type="text"  th:placeholder="#{M0878}"/>
+                            <input class="memorySize" id="memorySize"  type="text" th:placeholder="#{M0878}"/>
+                            <input id="bMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="B"/>
+                            <label for="bMemorySize" class="memorySizeRadioLabel">B</label>
+                            <input id="kbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="KB"/>
+                            <label for="kbMemorySize" class="memorySizeRadioLabel">KB</label>
+                            <input id="mbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="MB"/>
+                            <label for="mbMemorySize" class="memorySizeRadioLabel">MB</label>
+                            <input id="gbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="GB"/>
+                            <label for="gbMemorySize" class="memorySizeRadioLabel">GB</label>
+                            <input id="tbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="TB"/>
+                            <label for="tbMemorySize" class="memorySizeRadioLabel">TB</label>
+
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="durationStress">Duration</label></dt>
                         <dd>
-                            <input class="duration" id="durationStress" type="text"  th:placeholder="#{M0873}"/>
+                            <input class="duration" id="durationStress" type="text" th:placeholder="#{M0873}"/>
+                            <input id="msDurationStress" class="durationRadio" type="radio" name="duration" value="ms"/>
+                            <label for="msDurationStress" class="durationRadioLabel">ms</label>
+                            <input id="sDurationStress" class="durationRadio" type="radio" name="duration" value="s"/>
+                            <label for="sDurationStress" class="durationRadioLabel">s</label>
+                            <input id="mDurationStress" class="durationRadio" type="radio" name="duration" value="m"/>
+                            <label for="mDurationStress" class="durationRadioLabel">m</label>
+                            <input id="hDurationStress" class="durationRadio" type="radio" name="duration" value="h"/>
+                            <label for="hDurationStress" class="durationRadioLabel">h</label>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label>Namespace Selector</label></dt>
                         <dd>
                             <fieldset>
-                                <select class="namespaceSelect" id="namespaceSelectStress" onchange="changeNamespaceSelect()">
+                                <select class="namespaceSelect" id="namespaceSelectStress"
+                                        onchange="changeNamespaceSelect()">
                                     <option selected disabled hidden value='' th:text="#{M0869}"></option>
                                 </select>
                             </fieldset>
@@ -244,11 +283,11 @@
                             <div class="table_style01">
                                 <table>
                                     <caption>Pod List</caption>
-                                    <colgroup >
-                                        <col width="12%" />
-                                        <col width="38%" />
-                                        <col width="30%" />
-                                        <col width="20%" />
+                                    <colgroup>
+                                        <col width="12%"/>
+                                        <col width="38%"/>
+                                        <col width="30%"/>
+                                        <col width="20%"/>
                                     </colgroup>
                                     <thead>
                                     <tr>
@@ -291,17 +330,43 @@
 
         tabBtns[0].classList.add('active');
 
-        for (let i = 0; i < tabBtns.length; i ++) {
-            (function(idx) {
-                tabBtns[idx].onclick = function() {
+        for (let i = 0; i < tabBtns.length; i++) {
+            (function (idx) {
+                tabBtns[idx].onclick = function () {
                     tabIndex = idx;
-                    for( let j=0; j<tabBtns.length; j++ ) {
+                    for (let j = 0; j < tabBtns.length; j++) {
                         tabBtns[j].classList.remove('active');
                         tabContent[j].style.display = 'none';
                         func.removeHtml(document.getElementsByClassName('chaosNamespace')[j]);
                         func.removeHtml(document.getElementsByClassName('namespaceSelect')[j]);
                         func.removeHtml(document.getElementsByClassName('labelSelect')[j]);
                         func.removeHtml(document.getElementsByClassName('podList')[j]);
+                        if(document.getElementsByClassName('latency')[j] !== undefined){
+                            func.removeHtml(document.getElementsByClassName('latency')[j]);
+                            document.getElementsByClassName('latencyRadio')[0].checked = false;
+                            document.getElementsByClassName('latencyRadio')[1].checked = false;
+                            document.getElementsByClassName('latencyRadio')[2].checked = false;
+                            document.getElementsByClassName('latencyRadio')[3].checked = false;
+                        }
+                        if(document.getElementsByClassName('duration')[j] !== undefined){
+                            func.removeHtml(document.getElementsByClassName('duration')[j]);
+                            document.getElementsByClassName('durationRadio')[0].checked = false;
+                            document.getElementsByClassName('durationRadio')[1].checked = false;
+                            document.getElementsByClassName('durationRadio')[2].checked = false;
+                            document.getElementsByClassName('durationRadio')[3].checked = false;
+                            document.getElementsByClassName('durationRadio')[4].checked = false;
+                            document.getElementsByClassName('durationRadio')[5].checked = false;
+                            document.getElementsByClassName('durationRadio')[6].checked = false;
+                            document.getElementsByClassName('durationRadio')[7].checked = false;
+                        }
+                        if(document.getElementsByClassName('memorySize')[j] !== undefined){
+                            func.removeHtml(document.getElementsByClassName('memorySize')[j]);
+                            document.getElementsByClassName('memorySizeRadio')[0].checked = false;
+                            document.getElementsByClassName('memorySizeRadio')[1].checked = false;
+                            document.getElementsByClassName('memorySizeRadio')[2].checked = false;
+                            document.getElementsByClassName('memorySizeRadio')[3].checked = false;
+                            document.getElementsByClassName('memorySizeRadio')[4].checked = false;
+                        }
                     }
                     tabBtns[idx].classList.add('active');
                     tabContent[idx].style.display = '';
@@ -312,7 +377,6 @@
             })(i);
         }
 
-
         function init() {
             func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', chaosNamespaces);
             func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', namespaceSelector);
@@ -322,7 +386,7 @@
 
             let chaosNamespace = `<option selected hidden value='' >${CHAOS_NAMESPACE}</option>`;
             for (let i = 0; i < data.items.length; i++) {
-                if(data.items[i].cpNamespace === 'ALL') continue;
+                if (data.items[i].cpNamespace === 'ALL') continue;
                 chaosNamespace += `<option value="${data.items[i].cpNamespace}">${data.items[i].cpNamespace}</option>`;
             }
             func.appendHtml(document.getElementsByClassName('chaosNamespace')[tabIndex], chaosNamespace);
@@ -332,7 +396,7 @@
             let namespaceSelect = `<option selected hidden value='' >${NAMESPACESELECT}</option>`;
             let labelSelect = `<option selected hidden value='' >${LABELSELECT}</option>`;
             for (let i = 0; i < data.items.length; i++) {
-                if(data.items[i].cpNamespace === 'ALL') continue;
+                if (data.items[i].cpNamespace === 'ALL') continue;
                 namespaceSelect += `<option value="${data.items[i].cpNamespace}">${data.items[i].cpNamespace}</option>`;
             }
 
@@ -350,15 +414,15 @@
         function labelSelector(data) {
 
             let labelSelectors = {};
-            for(let i = 0; i < data.items.length; i++) {
+            for (let i = 0; i < data.items.length; i++) {
                 const labels = data.items[i].labels
-                for(let key in data.items[i].labels){
+                for (let key in data.items[i].labels) {
                     labelSelectors[key] = labels[key];
                 }
             }
 
             let labelSelect = `<option selected hidden value='' >${LABELSELECT}</option><option value='all' >All</option>`;
-            for(let key in labelSelectors) {
+            for (let key in labelSelectors) {
                 labelSelect += `<option value="${key}:${labelSelectors[key]}">${key}:${labelSelectors[key]}</option>`;
             }
             func.appendHtml(document.getElementsByClassName('labelSelect')[tabIndex], labelSelect);
@@ -366,6 +430,7 @@
         }
 
         let labelSelectValue;
+
         function changeLabelSelect() {
             func.removeHtml(document.getElementsByClassName('podList')[tabIndex]);
 
@@ -380,8 +445,8 @@
 
             for (let i = 0; i < data.items.length; i++) {
                 const dataLabels = data.items[i].labels;
-                    if(Object.keys(dataLabels).includes(labelSelectValue)) {
-                        html += `<tr>
+                if (Object.keys(dataLabels).includes(labelSelectValue)) {
+                    html += `<tr>
                                       <td>
                                         <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
                                         <label for="check_${data.items[i].name}"></label>
@@ -390,9 +455,9 @@
                                       <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
                                       <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
                                     </tr>`;
-                    }
-                    if(labelSelectValue === 'all') {
-                        html += `<tr>
+                }
+                if (labelSelectValue === 'all') {
+                    html += `<tr>
                                       <td>
                                         <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
                                         <label for="check_${data.items[i].name}"></label>
@@ -401,41 +466,41 @@
                                       <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
                                       <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
                                     </tr>`;
-                    }
+                }
             }
             func.appendHtml(document.getElementsByClassName("podList")[tabIndex], html, "tbody",);
         }
 
-            document.querySelector('.save').addEventListener('click', () => {
-                func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, save);
-            }, false);
+        document.querySelector('.save').addEventListener('click', () => {
+            func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, save);
+        }, false);
 
-        function validCheck(){
-            if(isEmpty(document.getElementsByClassName('name')[tabIndex].value)) {
+        function validCheck() {
+            if (isEmpty(document.getElementsByClassName('name')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
-            if(isEmpty(document.getElementsByClassName('chaosNamespace')[tabIndex].value)) {
+            if (isEmpty(document.getElementsByClassName('chaosNamespace')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
-            if(isEmpty(document.getElementsByClassName('namespaceSelect')[tabIndex].value)) {
+            if (isEmpty(document.getElementsByClassName('namespaceSelect')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
-            if(isEmpty(document.getElementsByClassName('labelSelect')[tabIndex].value)) {
+            if (isEmpty(document.getElementsByClassName('labelSelect')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
-            if(isEmpty(document.getElementsByClassName('podList')[tabIndex].value)) {
+            if (isEmpty(document.getElementsByClassName('podList')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
@@ -444,7 +509,7 @@
             return true;
         }
 
-        function validReset(){
+        function validReset() {
             IS_VCHK = false;
         }
 
@@ -458,26 +523,55 @@
             const labelSelectorKey = labelSelector.split(':')[0];
             const labelSelectorValue = labelSelector.split(':')[1];
 
-            if(labelSelectors === 'all'){
+            if (labelSelectors === 'all') {
                 labelSelectors = null;
-            }
-            else {
+            } else {
                 labelSelectors[labelSelectorKey] = labelSelectorValue;
             }
 
             let gracePeriod = document.getElementById('gracePeriod').value;
-            let latency = document.getElementById('latency').value;
+
+            const latencyRadios = document.querySelectorAll('.latencyRadio');
+            let selectedLatencyValue;
+            latencyRadios.forEach(radio => {
+                if (radio.checked) {
+                    selectedLatencyValue = radio.value;
+                }
+            });
+            let latency = document.getElementById('latency').value + selectedLatencyValue;
+
+            const memorySizeRadios = document.querySelectorAll('.memorySizeRadio');
+            let selectedMemorySizeValue;
+            memorySizeRadios.forEach(radio => {
+                if (radio.checked) {
+                    selectedMemorySizeValue = radio.value;
+                }
+            });
+            let memorySize = document.getElementById('memorySize').value + selectedMemorySizeValue;
             let memory = {
                 "workers": document.getElementById("memoryWorkers").value,
-                "size": document.getElementById("memorySize").value
+                "size": memorySize
             }
             let cpu = {
                 "workers": document.getElementById("cpuWorkers").value,
                 "load": document.getElementById("cpuLoad").value
             }
+            let stressors = {
+                memory,
+                cpu
+            }
+
+
+            const durationRadios = document.querySelectorAll('.durationRadio');
+            let selectedDurationValue;
+            durationRadios.forEach(radio => {
+                if (radio.checked) {
+                    selectedDurationValue = radio.value;
+                }
+            });
             let duration;
-            if(tabIndex !== 0){
-                duration = document.getElementsByClassName('duration')[tabIndex-1].value;
+            if (tabIndex !== 0) {
+                duration = document.getElementsByClassName('duration')[tabIndex - 1].value + selectedDurationValue;
             }
 
             const checkbox = 'input[name="checkboxPod"]:checked';
@@ -494,46 +588,45 @@
             let namespace = chaosNamespace;
 
 
-          //  if(validCheck()){
-                    const podFault = {
-                        kind: 'PodChaos',
-                        action: 'pod-kill',
-                        cluster,
-                        namespace,
-                        name,
-                        chaosNamespace,
-                        namespaces,
-                        labelSelectors,
-                        pods,
-                        gracePeriod
-                    }
-                    const networkAttack = {
-                        kind: 'NetworkChaos',
-                        action: 'delay',
-                        cluster,
-                        namespace,
-                        name,
-                        chaosNamespace,
-                        namespaces,
-                        labelSelectors,
-                        pods,
-                        duration,
-                        latency
-                    }
-                    const stressTest = {
-                        kind: 'StressChaos',
-                        cluster,
-                        namespace,
-                        name,
-                        chaosNamespace,
-                        namespaces,
-                        labelSelectors,
-                        pods,
-                        duration,
-                        memory,
-                        cpu
-                    }
-          //  }
+            //  if(validCheck()){
+            const podFault = {
+                kind: 'PodChaos',
+                action: 'pod-kill',
+                cluster,
+                namespace,
+                name,
+                chaosNamespace,
+                namespaces,
+                labelSelectors,
+                pods,
+                gracePeriod
+            }
+            const networkAttack = {
+                kind: 'NetworkChaos',
+                action: 'delay',
+                cluster,
+                namespace,
+                name,
+                chaosNamespace,
+                namespaces,
+                labelSelectors,
+                pods,
+                duration,
+                latency
+            }
+            const stressTest = {
+                kind: 'StressChaos',
+                cluster,
+                namespace,
+                name,
+                chaosNamespace,
+                namespaces,
+                labelSelectors,
+                pods,
+                duration,
+                stressors
+            }
+            //  }
 
             let obj = fault === 'podFault' ? podFault : fault === 'networkAttack' ? networkAttack : stressTest;
             func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaces}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
