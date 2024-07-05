@@ -84,6 +84,8 @@
                 func.loading();
 
                 // event 정보 조회
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events`, 'application/json', events.draw);
+
             },
 
             draw(data){
