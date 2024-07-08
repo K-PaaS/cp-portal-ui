@@ -84,7 +84,7 @@
                 func.loading();
 
                 // event 정보 조회
-                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events`, 'application/json', events.draw);
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events?limit=${events.limit}&offset=${events.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', events.draw);
 
             },
 
@@ -95,13 +95,14 @@
                 if(data.httpStatusCode == 200){
                     if(data.items.length > 0){
                         for(var i=0; i<=data.items.length-1; i++){
-                            let createdTime = data.items[i].created_at.replace('T', ' ').replace('Z', '');
+                            let createdTime = data.items[i].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
 
-                            var html = `<tr><td>${data.items[i].object_id}</td>
-                                            <td>${data.items[i].namespace}</td>
-                                            <td>${data.items[i].name}</td>
-                                            <td>${data.items[i].kind}</td>
-                                            <td>${data.items[i].message}</td>
+                            var html = `<tr><td>${data.items[i].metadata.uid}</td>
+                                            <td>${data.items[i].metadata.namespace}</td>
+                                            <td>${data.items[i].metadata.name}</td>
+                                            <!--<td>\${data.items[i].metadata.kind}</td>-->
+                                            <td>PodChaos</td>
+                                            <td>${data.items[i].note}</td>
                                             <td>${createdTime}</td></tr>`;
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');

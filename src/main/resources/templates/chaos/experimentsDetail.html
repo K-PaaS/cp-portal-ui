@@ -99,7 +99,7 @@
                 </div>
                 <h4>Events</h4>
                 <div class="table_style01">
-                    <table>
+                    <table class="eventTable">
                         <caption>Events</caption>
                         <colgroup >
                             <col width="80%" />
@@ -248,7 +248,8 @@
                     }
 
                     // event 정보 조회
-                   // func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments-events/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.list);
+                  // func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.list);
+                   func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events`, 'application/json', experimentsDetail.list);
 
                     experimentsDetail.event();
 
@@ -260,14 +261,17 @@
 
                     if(data.items.length > 0){
                         for(var i=0; i<=data.items.length-1; i++){
-                            let createdTime = data.items[i].creationTimestamp.replace('T', ' ').replace('Z', '');
+                            let name = data.items[i].metadata.name.split('.')[0];
+                            let createdTime = data.items[i].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
 
-                            var html = `<tr>
+                            if(name === sessionStorage.getItem('name')) {
+                                var html = `<tr class="eventRow">
                                     <td class="left">${data.items[i].note}</td>
                                     <td>${createdTime}</td>
                                 </tr>`;
-
+                            }
                             func.appendHtml(document.querySelector('.eventList'), html, 'tbody');
+
                         };
                     } else {
                         var html = '<tr><td colspan="2">No Data.</td></tr>';
