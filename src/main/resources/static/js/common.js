@@ -2,6 +2,7 @@
 const func = {
 
 	url : URI_REQUEST_CP_API,
+	chaosUrl : CHAOS_URL,
 	ui : 'http://localhost:8091/',
 	nameLoad : new function(){},
 	clusterData:  new Object(),

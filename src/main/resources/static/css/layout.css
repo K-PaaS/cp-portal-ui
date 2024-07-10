@@ -336,8 +336,8 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .latencyRadioLabel,
 .durationRadioLabel,
 .memorySizeRadioLabel{margin: 15px 20px 10px 30px;}
-.eventList {display: block; max-height: 400px; overflow-y: scroll;}
-.eventRow {width: 100%;}
+.scrollTableList {display: block; max-height: 400px; overflow-y: scroll; width: 1070px; !important;}
+.eventFirstColumn {width: 856px;}
 
 /* more btn */
 .more {position:relative; display:block; width:58px; height:30px; line-height:30px; margin:0 auto; color:#47494d; font-size:17px; padding-right:15px; margin-top:20px; opacity:.3; cursor:default;}

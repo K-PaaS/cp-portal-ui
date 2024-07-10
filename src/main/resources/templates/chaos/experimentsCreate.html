@@ -630,7 +630,7 @@
             //  }
 
             let obj = fault === 'podFault' ? podFault : fault === 'networkAttack' ? networkAttack : stressTest;
-            func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaces}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
+            func.saveData('POST', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaces}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
 
         }
 
