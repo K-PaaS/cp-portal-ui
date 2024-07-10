@@ -94,3 +94,6 @@ server:
 
 cpApi:
   url: ${CP_PORTAL_API_URI}
+
+chaosApi:
+  url: ${CP_PORTAL_CHAOS_API_URI}

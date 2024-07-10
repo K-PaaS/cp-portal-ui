@@ -85,9 +85,8 @@
 
             load(){
                 func.loading();
-
                 // experimentsList 정보 조회
-                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.draw);
+                func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.draw);
             },
 
             draw(data){
@@ -184,7 +183,7 @@
                 }, false);
 
                 // status 정보 조회
-            //    func.loadDataInterval('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?includeUsage=true&limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.status);
+              //  func.loadDataInterval('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.status);
 
 
 
