@@ -248,7 +248,6 @@
                     }
 
                     // event 정보 조회
-                  // func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.list);
                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events`, 'application/json', experimentsDetail.list);
 
                     experimentsDetail.event();
@@ -288,21 +287,41 @@
                     }, false);
 
                     // detail status 정보 조회
-                    // func.loadDataInterval('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experiments.status);
+                     func.loadDataInterval('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.status);
 
 
                 },
 
                 status(data){
-                        let status = data.status;
-                        if(status === 'finished') {
-                            status = 'completed';
-                        }
-                        if(status === 'deleting' || status === 'injecting' || status === 'running') {
-                            document.getElementById('status').innerHTML = '<span class="left experiment-' + status + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
-                        } else {
-                            document.getElementById('status').innerHTML = '<span class="left experiment-' + status + '"><span class="lds-circle"><span></span></span>' + status.charAt(0).toUpperCase() + status.slice(1) + '</span>';
-                        }
+                    let condition = {};
+
+                    for(let i = 0; i < data.items[0].status.conditions.length; i++){
+                        let type = data.items[0].status.conditions[i].type;
+                        let status = data.items[0].status.conditions[i].status;
+                        condition[type] = status;
+                    }
+                    let experimentStatus;
+
+                    if(condition.Paused === 'True') {
+                        experimentStatus = 'paused';
+                    }
+                    else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
+                        experimentStatus = 'injecting';
+                    }
+                    else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
+                        experimentStatus = 'running';
+                    }
+                    if(condition.length === 0){
+                        experimentStatus = 'completed';
+                    }
+
+                    if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
+                    } else {
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-circle"><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
+                    }
+
+
 
                 },
 
