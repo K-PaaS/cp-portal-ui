@@ -384,7 +384,6 @@
         }
 
         function chaosNamespaces(data) {
-
             let chaosNamespace = `<option selected hidden value='' >${CHAOS_NAMESPACE}</option>`;
             for (let i = 0; i < data.items.length; i++) {
                 if (data.items[i].cpNamespace === 'ALL') continue;
@@ -476,33 +475,43 @@
             func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, save);
         }, false);
 
+        function validReset() {
+            IS_VCHK = false;
+        }
         function validCheck() {
+            const regExp = /^[0-9a-z]+$/;
+
             if (isEmpty(document.getElementsByClassName('name')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_ENTER_NAME, true, MSG_CLOSE, validReset);
+                IS_VCHK = true;
+                return false;
+            }
+            if (!regExp.test(document.getElementsByClassName('name')[tabIndex].value)) {
+                func.alertPopup('ERROR', MSG_INVALID_NAME_, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
             if (isEmpty(document.getElementsByClassName('chaosNamespace')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_NAMESPACE, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
             if (isEmpty(document.getElementsByClassName('namespaceSelect')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_NAMESPACESELECTOR, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
             if (isEmpty(document.getElementsByClassName('labelSelect')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_LABELSELECTOR, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
 
             if (isEmpty(document.getElementsByClassName('podList')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_REQUEST_VALUE_IS_MISSING, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_TARGET_POD, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
@@ -510,9 +519,7 @@
             return true;
         }
 
-        function validReset() {
-            IS_VCHK = false;
-        }
+
 
         function save() {
             let fault = document.querySelector('.tab-btn li.active').getAttribute('type');
@@ -589,49 +596,49 @@
             let namespace = chaosNamespace;
 
 
-            //  if(validCheck()){
-            const podFault = {
-                kind: 'PodChaos',
-                action: 'pod-kill',
-                cluster,
-                namespace,
-                name,
-                chaosNamespace,
-                namespaces,
-                labelSelectors,
-                pods,
-                gracePeriod
-            }
-            const networkAttack = {
-                kind: 'NetworkChaos',
-                action: 'delay',
-                cluster,
-                namespace,
-                name,
-                chaosNamespace,
-                namespaces,
-                labelSelectors,
-                pods,
-                duration,
-                latency
-            }
-            const stressTest = {
-                kind: 'StressChaos',
-                cluster,
-                namespace,
-                name,
-                chaosNamespace,
-                namespaces,
-                labelSelectors,
-                pods,
-                duration,
-                stressors
-            }
-            //  }
+            if(validCheck()){
+                const podFault = {
+                    kind: 'PodChaos',
+                    action: 'pod-kill',
+                    cluster,
+                    namespace,
+                    name,
+                    chaosNamespace,
+                    namespaces,
+                    labelSelectors,
+                    pods,
+                    gracePeriod
+                }
+                const networkAttack = {
+                    kind: 'NetworkChaos',
+                    action: 'delay',
+                    cluster,
+                    namespace,
+                    name,
+                    chaosNamespace,
+                    namespaces,
+                    labelSelectors,
+                    pods,
+                    duration,
+                    latency
+                }
+                const stressTest = {
+                    kind: 'StressChaos',
+                    cluster,
+                    namespace,
+                    name,
+                    chaosNamespace,
+                    namespaces,
+                    labelSelectors,
+                    pods,
+                    duration,
+                    stressors
+                }
 
-            let obj = fault === 'podFault' ? podFault : fault === 'networkAttack' ? networkAttack : stressTest;
-            func.saveData('POST', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaces}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
 
+                let obj = fault === 'podFault' ? podFault : fault === 'networkAttack' ? networkAttack : stressTest;
+                func.saveData('POST', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaces}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
+            }
         }
 
         function saveComp() {
