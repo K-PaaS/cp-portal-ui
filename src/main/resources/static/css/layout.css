@@ -334,7 +334,8 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 #durationStress {width:50%; border:1px solid #ebebeb; height:50px; line-height:48px; padding-left:18px; margin-left:1px; font-size:18px;}
 .latencyRadio {height:50px; line-height:48px; padding-left:18px; margin-left:1px; font-size:18px; !important;}
 .latencyRadioLabel,
-.durationRadioLabel,
+.durationNetworkRadioLabel,
+.durationStressRadioLabel,
 .memorySizeRadioLabel{margin: 15px 20px 10px 30px;}
 .scrollTableList {display: block; max-height: 400px; overflow-y: scroll; width: 1070px; !important;}
 .eventFirstColumn {width: 856px;}
