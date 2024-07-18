@@ -248,7 +248,7 @@
                     }
 
                     // event 정보 조회
-                   func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events`, 'application/json', experimentsDetail.list);
+                   func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events?event=True&object_id=${sessionStorage.getItem('uid')}&limit=999`, 'application/json', experimentsDetail.list);
 
                     experimentsDetail.event();
 
@@ -260,12 +260,12 @@
 
                     if(data.items.length > 0){
                         for(var i=0; i<=data.items.length-1; i++){
-                            let name = data.items[i].metadata.name.split('.')[0];
-                            let createdTime = data.items[i].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
+                            let name = data.items[i].name.split('.')[0];
+                            let createdTime = data.items[i].created_at.replace('T', ' ').replace('Z', '');
 
                             if(name === sessionStorage.getItem('name')) {
                                 var html = `<tr>
-                                    <td class="left eventFirstColumn">${data.items[i].note}</td>
+                                    <td class="left eventFirstColumn">${data.items[i].message}</td>
                                     <td>${createdTime}</td>
                                 </tr>`;
                             }
