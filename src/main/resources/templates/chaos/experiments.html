@@ -82,8 +82,8 @@
                 // experimentsList 정보 조회
                 func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.draw);
             },
-
             draw(data){
+                experiments.statusList = [];
                 if(experiments.offset == 0) experiments.allItemCount = data.itemMetaData.allItemCount;
                 if(data.httpStatusCode == 200){
                     if(data.items.length > 0){
@@ -116,8 +116,7 @@
                 }
 
                 if(document.getElementById('loading')){
-                    document.getElementById('wrap').removeChild(document.getElementById('loading'));
-                }
+                    document.getElementById('wrap').removeChild(document.getElementById('loading'));                }
                 experiments.listEvent();
             },
 
