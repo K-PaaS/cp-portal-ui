@@ -24,19 +24,17 @@
                     <table>
                         <caption>Experiments List</caption>
                         <colgroup >
-                            <col width="12%" />
-                            <col width="12%" />
-                            <col width="16%" />
-                            <col width="29%" />
                             <col width="15%" />
-                            <col width="16%" />
+                            <col width="15%" />
+                            <col width="25%" />
+                            <col width="25%" />
+                            <col width="20%" />
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">Status</th>
                             <th scope="col">Kind</th>
                             <th scope="col">Name</th>
-                            <th scope="col">UUID</th>
                             <th scope="col">Namespace</th>
                             <th scope="col">Created Time</th>
                         </tr>
@@ -69,17 +67,13 @@
 
             init(){
                 func.nameLoad = experiments.reset;
-
                 experiments.load();
-
                 experiments.event();
             },
 
             reset(){
                 func.removeHtml(document.querySelector('.listTable'));
-
                 experiments.offset = 0;
-
                 experiments.load();
             },
 
@@ -94,64 +88,25 @@
                 if(data.httpStatusCode == 200){
                     if(data.items.length > 0){
                         for(let i = 0; i <= data.items.length-1; i++){
-                            let condition = {};
-
-                            for(let j = 0; j < data.items[i].status.conditions.length; j++){
-                                let type = data.items[i].status.conditions[j].type;
-                                let status = data.items[i].status.conditions[j].status;
-                                condition[type] = status;
-
-                            }
-                            let experimentStatus;
-
-                            if(condition.Paused === 'True') {
-                                experimentStatus = 'paused';
-                            }
-                            else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
-                                experimentStatus = 'injecting';
-                            }
-                            else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
-                                experimentStatus = 'running';
-                            }
-                            if(condition.length === 0){
-                                experimentStatus = 'completed';
-                            }
-
                             let createdTime = data.items[i].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
-
-                            if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
-                                let html = `<tr><td id="${data.items[i].metadata.uid}"><span class="left experiment-${experimentStatus}"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>${experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1)}</span></td>
+                            let html = `<tr><td id="${data.items[i].metadata.uid}"></td>
                                                 <td>${data.items[i].kind}</td>
                                                 <td><a href="javascript:;" data-name="${data.items[i].metadata.name}" data-namespace="${data.items[i].metadata.namespace}" data-uid="${data.items[i].metadata.uid}" data-kind="${data.items[i].kind}">${data.items[i].metadata.name}</a></td>
-                                                <td>${data.items[i].metadata.uid}</td>
                                                 <td>${data.items[i].metadata.namespace}</td>
                                                 <td>${createdTime}</td></tr>`;
 
-                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                            } else {
-                                let html = `<tr><td id="${data.items[i].metadata.uid}"><span class="left experiment-${experimentStatus}"><span class="lds-circle"><span></span></span>${experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1)}</span></td>
-                                                 <td>${data.items[i].kind}</td>
-                                                <td><a href="javascript:;" data-name="${data.items[i].metadata.name}" data-namespace="${data.items[i].metadata.namespace}" data-uid="${data.items[i].metadata.uid}">${data.items[i].metadata.name}</a></td>
-                                                <td>${data.items[i].metadata.uid}</td>
-                                                <td>${data.items[i].metadata.namespace}</td>
-                                                <td>${createdTime}</td></tr>`;
-
-                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                            }
+                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             experiments.statusList.push(data.items[i].metadata.uid);
-
                         }
-
+                        func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}&limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.status);
                     } else {
                         let html = '<tr><td colspan="6">No Data.</td></tr>';
-
                         func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                     }
                 } else {
                     let html = '<tr><td colspan="6">No Data.</td></tr>';
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                 }
-
 
                 // more 버튼 활성, 비활성
                 if(document.querySelector('.listTable').querySelectorAll('tr').length < experiments.allItemCount){
@@ -163,9 +118,7 @@
                 if(document.getElementById('loading')){
                     document.getElementById('wrap').removeChild(document.getElementById('loading'));
                 }
-
                 experiments.listEvent();
-
             },
 
             event(){
@@ -173,50 +126,28 @@
                 document.querySelector('.more').addEventListener('click', (e) => {
                     if(document.querySelector('.listTable').querySelectorAll('tr').length < experiments.allItemCount){
                     experiments.offset++;
-
                     experiments.load();
                 }
             }, false);
-
                 document.querySelector('.create').addEventListener('click', () => {
                     document.location.href = URI_CP_CHAOS_EXPERIMENTS + URI_CP_CREATE;
                 }, false);
+                setInterval(experiments.statusInterval, 1200);
+            },
 
+            statusInterval(){
                 // status 정보 조회
-                func.loadDataInterval('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.status);
-
-
-
+                func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}&limit=${experiments.limit}&offset=${experiments.offset}`, 'application/json', experiments.status);
             },
 
             status(data){
-
                 for(let i = 0; i <= experiments.statusList.length -1; i++){
-                    let condition = {};
+                    let experimentStatus = data.items[i].status;
 
-                    for(let j = 0; j < data.items[i].status.conditions.length; j++){
-                        let type = data.items[i].status.conditions[j].type;
-                        let status = data.items[i].status.conditions[j].status;
-                        condition[type] = status;
-
+                    if( experimentStatus === 'finished'){
+                        experimentStatus = 'completed'
                     }
-
-                    let experimentStatus;
-
-                    if(condition.Paused === 'True') {
-                        experimentStatus = 'paused';
-                    }
-                    else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
-                        experimentStatus = 'injecting';
-                    }
-                    else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
-                        experimentStatus = 'running';
-                    }
-                    if(condition.length === 0){
-                        experimentStatus = 'completed';
-                    }
-
-                    if(data.items[i].metadata.uid === experiments.statusList[i]) {
+                    if(data.items[i].uid === experiments.statusList[i]) {
                         if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
                             document.getElementById(experiments.statusList[i]).innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                         } else {
@@ -230,21 +161,16 @@
                 var listAll = document.querySelector('.listTable').querySelectorAll('a');
 
                 for(var i=experiments.offset*10; i<=listAll.length-1; i++){
-
                     listAll[i].addEventListener('click', (e) => {
                         sessionStorage.setItem('uid', e.target.getAttribute('data-uid'));
                         sessionStorage.setItem('chaosNamespace', e.target.getAttribute('data-namespace'));
                         sessionStorage.setItem('name', e.target.getAttribute('data-name'));
                         sessionStorage.setItem('kind', e.target.getAttribute('data-kind'));
-
-
-
                     document.location.href = URI_CP_CHAOS_EXPERIMENTS + URI_CP_DETAILS;
                 }, true);
                 }
             },
         }
-
         experiments.init();
     }
 </script>
