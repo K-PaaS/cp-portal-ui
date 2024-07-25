@@ -141,14 +141,18 @@
         window.onload = () => {
             func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EXPERIMENTS);
             const experimentsDetail = {
+                statusList: [sessionStorage.getItem('uid')],
                 init(){
                     // experimentsDetail 정보 조회
                     func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.draw);
                 },
 
                 draw(data){
+
                     // Details data
                     document.getElementById('name').innerText = sessionStorage.getItem('name');
+                    document.getElementById('status').innerText = sessionStorage.getItem('status');
+
                     document.getElementById('uid').innerText = sessionStorage.getItem('uid');
                     document.getElementById('namespace').innerHTML = sessionStorage.getItem('chaosNamespace');
                     document.getElementById('createdTime').innerText = data.items[0].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
@@ -160,26 +164,6 @@
                         let status = data.items[0].status.conditions[i].status;
                         condition[type] = status;
                     }
-                    // let experimentStatus;
-                    //
-                    // if(condition.Paused === 'True') {
-                    //     experimentStatus = 'paused';
-                    // }
-                    // else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
-                    //     experimentStatus = 'injecting';
-                    // }
-                    // else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
-                    //     experimentStatus = 'running';
-                    // }
-                    // if(condition.length === 0){
-                    //     experimentStatus = 'completed';
-                    // }
-                    //
-                    // if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
-                    //     document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
-                    // } else {
-                 //       document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-circle"><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
-                 //   }
 
                     // Scope
                     document.getElementById('namespaceSelector').innerText = data.items[0].spec.selector.namespaces[0];
@@ -289,7 +273,7 @@
 
                 statusInterval(){
                     // detail status 정보 조회
-                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.status);
+                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}`, 'application/json', experimentsDetail.status);
                 },
 
                 status(data){
