@@ -69,10 +69,10 @@
                 </ul>
             </li>
             <li class="plus" aside_d1="chaos">
-                <a href="javascript:" class="dep01">Chaos</a>
+                <a href="javascript:" class="dep01" sec:authorize="!hasAnyAuthority('USER')">Chaos</a>
                 <ul class="sub">
-                    <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)" aside_d2="experiments">Experiments</a></li>
-                    <li><a onclick="movePage(URI_CP_CHAOS_EVENTS)" aside_d2="events">Events</a></li>
+                    <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)" sec:authorize="!hasAnyAuthority('USER')" aside_d2="experiments">Experiments</a></li>
+                    <li><a onclick="movePage(URI_CP_CHAOS_EVENTS)" sec:authorize="!hasAnyAuthority('USER')" aside_d2="events">Events</a></li>
                 </ul>
             </li>
             <li class="plus" aside_d1="info">
