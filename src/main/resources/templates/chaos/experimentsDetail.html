@@ -273,30 +273,14 @@
 
                 statusInterval(){
                     // detail status 정보 조회
-                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}`, 'application/json', experimentsDetail.status);
+                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status/${sessionStorage.getItem('uid')}`, 'application/json', experimentsDetail.status);
                 },
 
                 status(data){
-                    let condition = {};
+                    let experimentStatus = data.status;
 
-                    for(let i = 0; i < data.items[0].status.conditions.length; i++){
-                        let type = data.items[0].status.conditions[i].type;
-                        let status = data.items[0].status.conditions[i].status;
-                        condition[type] = status;
-                    }
-                    let experimentStatus;
-
-                    if(condition.Paused === 'True') {
-                        experimentStatus = 'paused';
-                    }
-                    else if(condition.AllInjected === 'False' && condition.Selected === 'True') {
-                        experimentStatus = 'injecting';
-                    }
-                    else if(condition.AllInjected === 'True' && condition.Selected === 'True') {
-                        experimentStatus = 'running';
-                    }
-                    if(condition.length === 0){
-                        experimentStatus = 'completed';
+                    if( experimentStatus === 'finished'){
+                        experimentStatus = 'completed'
                     }
 
                     if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
