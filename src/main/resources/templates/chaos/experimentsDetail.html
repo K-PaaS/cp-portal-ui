@@ -182,10 +182,23 @@
                     // Experiment
                     document.getElementById('kind').innerHTML = data.items[0].kind;
 
-                    if(data.items[0].kind === 'PodChaos' || data.items[0].kind === 'NetworkChaos'){
+                    if(data.items[0].kind === 'PodChaos'){
                         const action = data.items[0].spec.action;
+                        const gracePeriod = data.items[0].spec.gracePeriod;
+
+                        let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>`;
+                        html += `<tr><th scope="row" class="left">Grace Period</th><td class="left" id="gracePeriod">${gracePeriod}</td></tr>`;
+                        func.appendHtml(document.getElementById('experiment'), html, 'tbody');
+
+
+                    }
+                    if(data.items[0].kind === 'NetworkChaos'){
+                        const action = data.items[0].spec.action;
+
                         let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>`;
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
+
+
                     }
 
                     if(data.items[0].kind === 'StressChaos'){
@@ -230,7 +243,7 @@
                     }
 
                     // event 정보 조회
-                   func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events?event=True&object_id=${sessionStorage.getItem('uid')}&limit=999`, 'application/json', experimentsDetail.list);
+                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events?event=True&object_id=${sessionStorage.getItem('uid')}&limit=999`, 'application/json', experimentsDetail.list);
 
                     experimentsDetail.event();
 
@@ -267,7 +280,7 @@
                     }, false);
 
                     setInterval(experimentsDetail.statusInterval, 1200);
-                      },
+                },
 
                 statusInterval(){
                     // detail status 정보 조회
