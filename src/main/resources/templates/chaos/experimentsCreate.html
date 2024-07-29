@@ -474,7 +474,7 @@
                 IS_VCHK = true;
                 return false;
             }
-            if (!regExp.test(document.getElementsByClassName('name')[tabIndex].value)) {
+            if (!regExp.test(document.getElementsByClassName('name')[tabIndex].value) || regExpNum.test(document.getElementsByClassName('name')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_INVALID_NAME_, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
