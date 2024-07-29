@@ -165,6 +165,8 @@
                         sessionStorage.setItem('chaosNamespace', e.target.getAttribute('data-namespace'));
                         sessionStorage.setItem('name', e.target.getAttribute('data-name'));
                         sessionStorage.setItem('kind', e.target.getAttribute('data-kind'));
+                        sessionStorage.setItem('status', document.getElementById(sessionStorage.getItem('uid')).innerText);
+
                     document.location.href = URI_CP_CHAOS_EXPERIMENTS + URI_CP_DETAILS;
                 }, true);
                 }

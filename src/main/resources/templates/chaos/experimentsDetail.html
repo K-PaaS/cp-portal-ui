@@ -151,18 +151,16 @@
 
                     // Details data
                     document.getElementById('name').innerText = sessionStorage.getItem('name');
-                    document.getElementById('status').innerText = sessionStorage.getItem('status');
-
                     document.getElementById('uid').innerText = sessionStorage.getItem('uid');
                     document.getElementById('namespace').innerHTML = sessionStorage.getItem('chaosNamespace');
                     document.getElementById('createdTime').innerText = data.items[0].metadata.creationTimestamp.replace('T', ' ').replace('Z', '');
 
-                    let condition = {};
+                    let experimentStatus = sessionStorage.getItem('status').toLowerCase();
 
-                    for(let i = 0; i < data.items[0].status.conditions.length; i++){
-                        let type = data.items[0].status.conditions[i].type;
-                        let status = data.items[0].status.conditions[i].status;
-                        condition[type] = status;
+                    if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
+                    } else {
+                        document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-circle"><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                     }
 
                     // Scope
