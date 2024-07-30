@@ -8,18 +8,19 @@
         <article class="location">
             <ul>
                 <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)">Chaos</a></li>
-                <li><a onclick="movePage(URI_CP_CHAOS_EVENTS)">Experiments</a></li>
+                <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)">Experiments</a></li>
             </ul>
         </article>
+        <div id="chart"></div>
         <article class="base detail">
             <div class="notice">
                 <h4>Details</h4>
                 <div class="table_style01">
                     <table>
                         <caption>Details</caption>
-                        <colgroup >
-                            <col width="20%" />
-                            <col width="80%" />
+                        <colgroup>
+                            <col width="20%"/>
+                            <col width="80%"/>
                         </colgroup>
                         <tbody class="listTable">
                         <tr>
@@ -49,9 +50,9 @@
                 <div class="table_style01">
                     <table>
                         <caption>Scope</caption>
-                        <colgroup >
-                            <col width="20%" />
-                            <col width="80%" />
+                        <colgroup>
+                            <col width="20%"/>
+                            <col width="80%"/>
                         </colgroup>
                         <tbody class="listTable">
                         <tr>
@@ -69,9 +70,9 @@
                 <div class="table_style01">
                     <table>
                         <caption>Experiment</caption>
-                        <colgroup >
-                            <col width="20%" />
-                            <col width="80%" />
+                        <colgroup>
+                            <col width="20%"/>
+                            <col width="80%"/>
                         </colgroup>
                         <tbody class="listTable" id="experiment">
                         <tr>
@@ -85,9 +86,9 @@
                 <div class="table_style01">
                     <table>
                         <caption>Run</caption>
-                        <colgroup >
-                            <col width="20%" />
-                            <col width="80%" />
+                        <colgroup>
+                            <col width="20%"/>
+                            <col width="80%"/>
                         </colgroup>
                         <tbody class="listTable" id="run">
                         <tr>
@@ -101,9 +102,9 @@
                 <div class="table_style01">
                     <table class="eventTable">
                         <caption>Events</caption>
-                        <colgroup >
-                            <col width="80%" />
-                            <col width="20%" />
+                        <colgroup>
+                            <col width="80%"/>
+                            <col width="20%"/>
                         </colgroup>
                         <thead>
                         <tr>
@@ -137,17 +138,19 @@
     </div>
 </div>
 <th:block layout:fragment="script">
+    <!-- ChartJS -->
+    <script src="/plugins/chart.js-3.8.0/package/dist/chart.min.js"></script>
     <script type="text/javascript">
         window.onload = () => {
             func.init(ASIDE_DP1.CHAOS, ASIDE_DP2.EXPERIMENTS);
             const experimentsDetail = {
                 statusList: [sessionStorage.getItem('uid')],
-                init(){
+                init() {
                     // experimentsDetail 정보 조회
                     func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.draw);
                 },
 
-                draw(data){
+                draw(data) {
 
                     // Details data
                     document.getElementById('name').innerText = sessionStorage.getItem('name');
@@ -157,7 +160,7 @@
 
                     let experimentStatus = sessionStorage.getItem('status').toLowerCase();
 
-                    if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
+                    if (experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
                         document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                     } else {
                         document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-circle"><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
@@ -169,12 +172,12 @@
                     const labelSelectors = data.items[0].spec.selector.labelSelectors;
 
 
-                    if(labelSelectors !== null) {
+                    if (labelSelectors !== null) {
                         for (let i = 0; i <= Object.getOwnPropertyNames(labelSelectors).length - 1; i++) {
                             let html = `<dl><dt>${Object.getOwnPropertyNames(labelSelectors)[i]}</dt><dd>${labelSelectors[Object.keys(labelSelectors)[i]]}</dd></dl>`;
                             func.appendHtml(document.getElementById('labelSelectors'), html, 'dl');
                         }
-                    }else {
+                    } else {
                         let html = `<dl>-</dl>`;
                         func.appendHtml(document.getElementById('labelSelectors'), html, 'dl');
                     }
@@ -182,7 +185,7 @@
                     // Experiment
                     document.getElementById('kind').innerHTML = data.items[0].kind;
 
-                    if(data.items[0].kind === 'PodChaos'){
+                    if (data.items[0].kind === 'PodChaos') {
                         const action = data.items[0].spec.action;
                         const gracePeriod = data.items[0].spec.gracePeriod;
 
@@ -192,7 +195,7 @@
 
 
                     }
-                    if(data.items[0].kind === 'NetworkChaos'){
+                    if (data.items[0].kind === 'NetworkChaos') {
                         const action = data.items[0].spec.action;
 
                         let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>`;
@@ -201,9 +204,17 @@
 
                     }
 
-                    if(data.items[0].kind === 'StressChaos'){
+                    if (data.items[0].kind === 'StressChaos') {
+                        // draw chart
+                        experimentsDetail.drawChart();
 
-                        if(data.items[0].spec.stressors.memory != null) {
+                        // CPU, Memory, App 정상 여부 조회
+                        // func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events?event=True&object_id=${sessionStorage.getItem('uid')}&limit=999`, 'application/json', experimentsDetail.chart);
+                        func.loadData('GET', `https://run.mocky.io/v3/72c2f391-c91c-450b-abf9-47f28500ba6a`, 'application/json', experimentsDetail.chart);
+                       // func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/overview`, 'application/json', experimentsDetail.chart);
+
+
+                        if (data.items[0].spec.stressors.memory != null) {
                             const memoryObj = data.items[0].spec.stressors.memory;
 
                             let html1 = `<tr><th scope="row" class="left">Memory</th><td class="left" id="memory"></td></tr>`;
@@ -211,14 +222,14 @@
 
                             let memory = '';
                             for (let i = 0; i <= Object.getOwnPropertyNames(memoryObj).length - 1; i++) {
-                                if(Object.getOwnPropertyNames(memoryObj)[i] !== 'oomScoreAdj') {
+                                if (Object.getOwnPropertyNames(memoryObj)[i] !== 'oomScoreAdj') {
                                     memory += Object.getOwnPropertyNames(memoryObj)[i] + ": " + memoryObj[Object.keys(memoryObj)[i]] + "\n";
                                 }
                             }
                             document.getElementById('memory').innerText = memory;
                         }
 
-                        if(data.items[0].spec.stressors.cpu != null) {
+                        if (data.items[0].spec.stressors.cpu != null) {
                             const cpuObj = data.items[0].spec.stressors.cpu;
 
                             let html2 = `<tr><th scope="row" class="left">CPU</th><td class="left" id="cpu"></td></tr>`;
@@ -233,12 +244,12 @@
                     }
 
                     // Run
-                    const duration =  data.items[0].spec.duration;
+                    const duration = data.items[0].spec.duration;
 
-                    if(duration === null){
+                    if (duration === null) {
                         document.getElementById('duration').innerHTML = 'Run continuously';
                     }
-                    if(duration){
+                    if (duration) {
                         document.getElementById('duration').innerHTML = duration;
                     }
 
@@ -249,32 +260,107 @@
 
                 },
 
-                list(data){
+                list(data) {
 
                     func.removeHtml(document.querySelector('.scrollTableList'));
 
-                    if(data.items.length > 0){
-                        for(var i=0; i<=data.items.length-1; i++){
+                    if (data.items.length > 0) {
+                        for (let i = 0; i <= data.items.length - 1; i++) {
                             let name = data.items[i].name.split('.')[0];
                             let createdTime = data.items[i].created_at.replace('T', ' ').replace('Z', '');
 
-                            if(name === sessionStorage.getItem('name')) {
-                                var html = `<tr>
+                            if (name === sessionStorage.getItem('name')) {
+                                let html = `<tr>
                                     <td class="left eventFirstColumn">${data.items[i].message}</td>
                                     <td>${createdTime}</td>
                                 </tr>`;
+                                func.appendHtml(document.querySelector('.scrollTableList'), html, 'tbody');
                             }
-                            func.appendHtml(document.querySelector('.scrollTableList'), html, 'tbody');
 
-                        };
+                        }
+                        ;
                     } else {
-                        var html = '<tr><td colspan="2">No Data.</td></tr>';
+                        let html = '<tr><td rowspan="2">No Data.</td></tr>';
 
                         func.appendHtml(document.querySelector('.scrollTableList'), html, 'tbody');
-                    };
+                    }
+                    ;
                 },
 
-                event(){
+                drawChart() {
+                    document.getElementById('chart').innerHTML = `<article class="chart base-type2" style="padding-bottom: 0;">
+                        <ul>
+                            <li>
+                                <h5 style="margin-bottom: 0;">CPU</h5>
+                                <div>
+                                    <canvas id="cpuChart" style="height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                            </li>
+                            <li>
+                                <h5 style="margin-bottom: 0;">Memory</h5>
+                                <div>
+                                    <canvas id="memChart" style="height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                            </li>
+                            <li>
+                                <h5 style="margin-bottom: 0;">Comm</h5>
+                                <div>
+                                    <canvas id="commChart" style="height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                            </li>
+                        </ul>
+                    </article>`
+                },
+
+                chart(data) {
+                    const dataId = ['cpuChart', 'memChart', 'commChart'];
+                    let labels = [];
+                    let cpuData = [];
+                    let memData = [];
+                    let commData = [];
+
+                    for(let i = 0; i < data.items.length; i++) {
+                        labels.push(data.items[i].time.replace('T', ' ').replace('+09:00', ''))
+                        cpuData.push(data.items[i].cpu.replace('m', ''))
+                        memData.push(data.items[i].mem.replace('Mi', ''))
+                        commData.push(data.items[i].comm)
+
+                    }
+
+                    let dataArr = [cpuData, memData, commData];
+
+                    for (let i = 0; i < dataId.length; i++) {
+                        let usageRawData = dataArr[i];
+                        let dataSets = {
+                            labels: labels,
+                            datasets: [{
+                                label: '',
+                                data: usageRawData,
+                                backgroundColor: 'rgb(75, 192, 192)'
+                            }]
+                        };
+
+                        let config = {
+                            type: 'line',
+                            data: dataSets,
+                            options:{
+                                plugins:{
+                                    legend: {
+                                        display: false
+                                    },
+                                }
+                            }
+                        };
+
+                        new Chart(
+                            document.getElementById(dataId[i]),
+                            config
+                        );
+                    }
+
+                },
+
+                event() {
                     document.getElementById('delete').addEventListener('click', (e) => {
                         func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, experimentsDetail.delete);
                     }, false);
@@ -282,26 +368,26 @@
                     setInterval(experimentsDetail.statusInterval, 1200);
                 },
 
-                statusInterval(){
+                statusInterval() {
                     // detail status 정보 조회
                     func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status/${sessionStorage.getItem('uid')}`, 'application/json', experimentsDetail.status);
                 },
 
-                status(data){
+                status(data) {
                     let experimentStatus = data.status;
 
-                    if( experimentStatus === 'finished'){
+                    if (experimentStatus === 'finished') {
                         experimentStatus = 'completed'
                     }
 
-                    if(experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
+                    if (experimentStatus === 'deleting' || experimentStatus === 'injecting' || experimentStatus === 'running') {
                         document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-ring"><span></span><span></span><span></span><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                     } else {
                         document.getElementById('status').innerHTML = '<span class="left experiment-' + experimentStatus + '"><span class="lds-circle"><span></span></span>' + experimentStatus.charAt(0).toUpperCase() + experimentStatus.slice(1) + '</span>';
                     }
                 },
 
-                delete(){
+                delete() {
 
                     func.saveData('DELETE', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('chaosNamespace')}/experiments/${sessionStorage.getItem('kind')}/${sessionStorage.getItem('name')}`, '', true, 'application/json', func.historyBack);
                 },
