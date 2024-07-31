@@ -320,7 +320,7 @@
                     let commData = [];
 
                     for(let i = 0; i < data.items.length; i++) {
-                        labels.push(data.items[i].time.replace('T', ' ').replace('+09:00', ''))
+                        labels.push(data.items[i].time.replace(/.*T(\d{2}:\d{2}:\d{2}).*/, '$1'))
                         cpuData.push(data.items[i].cpu.replace('m', ''))
                         memData.push(data.items[i].mem.replace('Mi', ''))
                         commData.push(data.items[i].comm)
