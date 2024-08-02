@@ -83,7 +83,7 @@
             load(){
                 func.loading();
                 document.getElementById('searchText').value = "";
-                func.loadData('GET', `${func.url}catalog/repositories`, 'application/json', repos.initDraw);
+                func.loadData('GET', `${func.catalogUrl}/api/repositories`, 'application/json', repos.initDraw);
             },
 
             initDraw(data){
@@ -153,7 +153,7 @@
                 }, false);
             },
             clearCache(){
-                func.dryRun('DELETE', `${func.url}catalog/repositories/cache/clear`, '', true, 'application/json', repos.finishedClearCache);
+                func.dryRun('DELETE', `${func.catalogUrl}/api/repositories/cache/clear`, '', true, 'application/json', repos.finishedClearCache);
             },
             finishedClearCache(data) {
                 let failedList = data.items;

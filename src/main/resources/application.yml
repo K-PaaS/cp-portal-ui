@@ -4,15 +4,33 @@ spring:
   main:
     allow-bean-definition-overriding: true
     allow-circular-references: true
+  freemarker:
+    template-loader-path: classpath:/templates/
+
+server:
+  port: ${PORT:8090}
+  servlet:
+    session:
+      cookie:
+        name: CPADMINPORTALSESSION
 
 management:
   security:
     enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  level:
+    ROOT: INFO
+  path: classpath:logback-spring.xml
+  file: logs/application.log
 
 private:
   repository:
     url: ${REPOSITORY_URL}
-
 
 keycloak:
   oauth:
@@ -52,48 +70,31 @@ spring:
   config:
     activate:
       on-profile: local
-  freemarker:
-    template-loader-path: classpath:/templates/
-
-logging:
-  level:
-    ROOT: INFO
-  path: classpath:logback-spring.xml
-  file: logs/application.log
-
-server:
-  port: ${PORT:8090}
-  servlet:
-    session:
-      cookie:
-        name: CPADMINPORTALSESSION
 
 cpApi:
   url: http://localhost:3333
+
+chaosApi:
+  url: http://localhost:8092
+
+catalogApi:
+  url: http://localhost:8093
 
 ---
 spring:
   config:
     activate:
       on-profile: prod
-  freemarker:
-    template-loader-path: classpath:/templates/
-
-logging:
-  level:
-    ROOT: INFO
-  path: classpath:logback-spring.xml
-  file: logs/application.log
-
-server:
-  port: ${PORT:8090}
-  servlet:
-    session:
-      cookie:
-        name: CPADMINPORTALSESSION
 
 cpApi:
   url: ${CP_PORTAL_API_URI}
 
 chaosApi:
   url: ${CP_PORTAL_CHAOS_API_URI}
+
+catalogApi:
+  url: ${CP_PORTAL_CATALOG_API_URI}
+
+
+
+
