@@ -340,6 +340,13 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .scrollTableList {display: block; max-height: 400px; overflow-y: scroll; width: 1070px; !important;}
 .eventFirstColumn {width: 856px;}
 
+/* chaos chart */
+.chaosChart h4 {text-align:left; font-size:22px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; margin-bottom:6px;}
+.chaosChart > ul {display:flex; margin-top:17px; padding:0 2px; flex-wrap: wrap; max-height: 300px; margin-bottom: 57px;}
+.chaosChart > ul > li {flex: 1; min-width: 374px; margin-left:13px; max-height: 300px; background-color:#fff;  box-shadow:2px 5px 5px 1px rgba(204, 204, 204, 0.096); position:relative;}
+.chaosChart ul li h5 {font-size:26px; line-height:30px; font-weight:500; margin-bottom:40px; font-family:'Apple SD Gothic Neo B', sans-serif;}
+
+
 /* more btn */
 .more {position:relative; display:block; width:58px; height:30px; line-height:30px; margin:0 auto; color:#47494d; font-size:17px; padding-right:15px; margin-top:20px; opacity:.3; cursor:default;}
 .more:after {content:""; width:6.5px; height:6.5px; border-left:2px solid #6e6f72; border-bottom:2px solid #6e6f72; transform:rotate(-45deg); position:absolute; top:9px; right:7px;}
