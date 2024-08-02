@@ -6,6 +6,11 @@
 
     <script th:inline="javascript">
 
+    // REQUEST API URI
+    const URI_REQUEST_CP_API = [[${@environment.getProperty('cpApi.url')}]] + '/';
+    const URI_REQUEST_CATALOG_API = [[${@environment.getProperty('catalogApi.url')}]];
+    const URI_REQUEST_CHAOS_API = [[${@environment.getProperty('chaosApi.url')}]] + '/';
+
      // API URI
      var URI_CP_BASE_URL = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_BASE_URL}]];
      var URI_CP_INDEX_URL = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_INDEX_URL}]];
@@ -60,8 +65,6 @@
      var URI_CP_CATALOG_REPOSITORIES = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CATALOG_REPOSITORIES}]];
      var URI_CP_CATALOG_RELEASES = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CATALOG_RELEASES}]];
 
-
-     var URI_REQUEST_CP_API = [[${@environment.getProperty('cpApi.url')}]] + '/';
      //사용자 로그인 데이터 조회
      var URI_CP_GET_USER_LOGIN_DATA =  [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_GET_USER_LOGIN_DATA}]];
      var URI_CP_REFRESH_TOKEN = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_REFRESH_TOKEN}]];
@@ -190,7 +193,6 @@
      const NAMESPACESELECT = [[#{M0869}]];
      const LABELSELECT = [[#{M0870}]];
      const CHAOS_NAMESPACE = [[#{M0874}]];
-     const CHAOS_URL = [[${@environment.getProperty('chaosApi.url')}]] + '/';
      const CHAOS_TOKEN = [[${@environment.getProperty('chaos.token')}]];
      const MSG_ENTER_NAME = [[#{M0879}]];
      const MSG_INVALID_NAME_ = [[#{M0880}]];

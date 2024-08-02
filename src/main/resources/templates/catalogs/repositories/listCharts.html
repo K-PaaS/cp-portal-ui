@@ -89,7 +89,7 @@
             load(){
                 func.loading();
                 document.getElementById('searchText').value = "";
-                func.loadData('GET', `${func.url}catalog/repositories/${charts.repoName}/charts`, 'application/json', charts.initDraw);
+                func.loadData('GET', `${func.catalogUrl}/api/repositories/${charts.repoName}/charts`, 'application/json', charts.initDraw);
             },
 
             initDraw(data){
@@ -178,11 +178,11 @@
             },
 
             delete(){
-                func.saveData('DELETE', `${func.url}catalog/repositories/${charts.repoName}`, '', true, 'application/json', func.historyBack);
+                func.saveData('DELETE', `${func.catalogUrl}/api/repositories/${charts.repoName}`, '', true, 'application/json', func.historyBack);
             },
 
             update(){
-                func.saveData('PUT', `${func.url}catalog/repositories/${charts.repoName}`, '', true, 'application/json', charts.returnPage);
+                func.saveData('PUT', `${func.catalogUrl}/api/repositories/${charts.repoName}`, '', true, 'application/json', charts.returnPage);
             },
 
             returnPage() {

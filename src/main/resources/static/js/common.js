@@ -2,7 +2,8 @@
 const func = {
 
 	url : URI_REQUEST_CP_API,
-	chaosUrl : CHAOS_URL,
+	catalogUrl : URI_REQUEST_CATALOG_API,
+	chaosUrl : URI_REQUEST_CHAOS_API,
 	ui : 'http://localhost:8091/',
 	nameLoad : new function(){},
 	clusterData:  new Object(),
@@ -447,6 +448,7 @@ const func = {
 			request.setRequestHeader('Content-type', header);
 			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
 			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
 
 			request.onreadystatechange = () => {
 				if (request.readyState === XMLHttpRequest.DONE){
@@ -501,6 +503,7 @@ const func = {
 			request.setRequestHeader('Content-type', header);
 			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
 			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
 
 			request.onreadystatechange = () => {
 				if (request.readyState === XMLHttpRequest.DONE){
@@ -564,6 +567,7 @@ const func = {
 			request.setRequestHeader('Content-type', header);
 			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
 			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
 
 			request.onreadystatechange = () => {
 				if (request.readyState === XMLHttpRequest.DONE){
