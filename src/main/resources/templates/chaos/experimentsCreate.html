@@ -515,30 +515,51 @@
                     IS_VCHK = true;
                     return false;
                 }
-                if (radioCheck('latency') === 0) {
+                if (radioCheck('latency') === undefined) {
                     func.alertPopup('ERROR', MSG_SELECT_LATENCY_UNIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
-                if (!isEmpty(document.getElementById('durationNetwork').value) && !regExpNum.test(document.getElementById('durationNetwork').value)) {
+                if (isEmpty(document.getElementById('durationNetwork').value)) {
+                    func.alertPopup('ERROR', MSG_EMPTY_DURATION, true, MSG_CLOSE, validReset);
+                    IS_VCHK = true;
+                    return false;
+                }
+                if (!regExpNum.test(document.getElementById('durationNetwork').value)) {
                     func.alertPopup('ERROR', MSG_INVALID_DURATION, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
-                if (!isEmpty(document.getElementById('durationNetwork').value) && radioCheck('duration') === 0) {
+                console.log("duration : ", radioCheck('duration'))
+                if (radioCheck('duration') === undefined) {
                     func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
+               if(document.getElementsByClassName('durationNetworkRadio')[radioCheck('duration')].value === 'h' && document.getElementById('durationNetwork').value > 12) {
+                   func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
+                   IS_VCHK = true;
+                   return false;
+               }
             }
             if(fault === 'stressTest') {
-                if (!isEmpty(document.getElementById('durationStress').value) && !regExpNum.test(document.getElementById('durationStress').value)) {
+                if (isEmpty(document.getElementById('durationStress').value)) {
+                    func.alertPopup('ERROR', MSG_EMPTY_DURATION, true, MSG_CLOSE, validReset);
+                    IS_VCHK = true;
+                    return false;
+                }
+                if (!regExpNum.test(document.getElementById('durationStress').value)) {
                     func.alertPopup('ERROR', MSG_INVALID_DURATION, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
-                if (!isEmpty(document.getElementById('durationStress').value) && radioCheck('duration') === 0) {
+                if (radioCheck('duration') === undefined) {
                     func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CLOSE, validReset);
+                    IS_VCHK = true;
+                    return false;
+                }
+                if(document.getElementsByClassName('durationStressRadio')[radioCheck('duration')].value === 'h' && document.getElementById('durationStress').value > 12) {
+                    func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
@@ -583,10 +604,11 @@
             let cnt = 0;
             for(let i = 0; i < checkRadio.length; i++){
                 if(checkRadio[i].checked){
-                    cnt++;
+                    return cnt;
                 }
+                cnt++;
             }
-            return cnt;
+
         }
 
         function save() {

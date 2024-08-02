@@ -292,10 +292,14 @@
                         <ul>
                             <li>
                                 <div>
-                                    <canvas id="chaosChartResult" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="cpuMemChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
                                 </div>
                             </li>
-
+                            <li>
+                                <div>
+                                    <canvas id="appStatusChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                </div>
+                            </li>
                         </ul>
                     `
                 },
@@ -310,73 +314,97 @@
                         labels.push(data.items[i].measurementTime.replace(/.*T(\d{2}:\d{2}:\d{2}).*/, '$1'));
                         cpuRatio.push(data.items[i].cpuRatio)
                         memRatio.push(data.items[i].memRatio)
-                        appStatus.push(data.items[i].appStatus)
+                        appStatus.push(data.items[i].appStatus === 1 ? '정상' : '비정상' )
                     }
 
-                    const dataSets = {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'cpuRatio',
-                                data: cpuRatio,
-                                borderColor: 'RGB(255, 99, 132)',
-                                backgroundColor: 'RGB(255, 177, 193)',
-                            },
-                            {
-                                label: 'memRatio',
-                                data: memRatio,
-                                borderColor: 'RGB(75, 192, 192)',
-                                backgroundColor: 'RGB(165, 223, 223)',
-                            },
-                            {
-                                label: 'appStatus',
-                                data: appStatus,
-                                borderColor: 'RGB(54, 162, 235)',
-                                backgroundColor: 'RGB(154, 208, 245)',
-                                stepped: true,
-                                yAxisID: 'y2',
-                            }
-                        ]
-                    };
+                    const dataId = ['cpuMemChart', 'appStatusChart'];
 
-                    const config = {
-                        type: 'line',
-                        data: dataSets,
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    type: 'linear',
-                                    position: 'left',
-                                    stack: 'demo',
-                                    stackWeight: 2,
-                                    border: {
-                                        color: 'RGB(255, 177, 193)'
+                    let dataSets;
+                    let config;
+
+                    for(var i = 0; i < dataId.length; i++){
+                        if(dataId[i] === 'cpuMemChart') {
+                            dataSets = {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'CPU(%)',
+                                        data: cpuRatio,
+                                        borderColor: 'RGB(255, 99, 132)',
+                                        backgroundColor: 'RGB(255, 177, 193)',
                                     },
-                                    min: 0,
-                                    max: 100,
-                                    ticks: {
-                                        stepSize: 1
+                                    {
+                                        label: 'Memory(%)',
+                                        data: memRatio,
+                                        borderColor: 'RGB(54, 162, 235)',
+                                        backgroundColor: 'RGB(154, 208, 245)',
+                                    }
+                                ]
+                            };
+
+                            config = {
+                                type: 'line',
+                                data: dataSets,
+                                options: {
+                                    responsive: true,
+                                    scales: {
+                                        y: {
+                                            type: 'linear',
+                                            position: 'left',
+                                            stack: 'demo',
+                                            stackWeight: 1,
+                                            min: 0,
+                                            max: 100,
+                                            ticks: {
+                                                stepSize: 1
+                                            }
+                                        }
                                     }
                                 },
-                                y2: {
-                                    type: 'category',
-                                    labels: [1, 0],
-                                    offset: true,
-                                    position: 'left',
-                                    stack: 'demo',
-                                    stackWeight: 1,
-                                    border: {
-                                        color: 'RGB(154, 208, 245)'
+                            };
+                            new Chart(
+                                document.getElementById(dataId[i]),
+                                config
+                            );
+                        }
+                        if(dataId[i] === 'appStatusChart'){
+                            dataSets = {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'APP Status',
+                                        data: appStatus,
+                                        borderColor: 'RGB(75, 192, 192)',
+                                        backgroundColor: 'RGB(165, 223, 223)',
+                                        stepped: true,
                                     }
-                                }
-                            }
-                        },
-                    };
-                    new Chart(
-                        document.getElementById('chaosChartResult'),
-                        config
-                    );
+                                ]
+                            };
+
+                            config = {
+                                type: 'line',
+                                data: dataSets,
+                                options: {
+                                    responsive: true,
+                                    scales: {
+                                        y: {
+                                            type: 'category',
+                                            labels: ['정상', '비정상'],
+                                            offset: true,
+                                            position: 'left',
+                                            stack: 'demo',
+                                            stackWeight: 1,
+                                        }
+                                    }
+                                },
+                            };
+                            new Chart(
+                                document.getElementById(dataId[i]),
+                                config
+                            );
+                        }
+                    }
+
                 },
 
                 // drawChart() {
