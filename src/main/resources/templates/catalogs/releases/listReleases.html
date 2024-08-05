@@ -80,7 +80,7 @@
 
             load(){
              // func.loading();
-              func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases?searchName=${document.getElementById('searchText').value}&limit=${releases.limit}&offset=${releases.offset}`, 'application/json', releases.draw);
+              func.loadData('GET', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases?searchName=${document.getElementById('searchText').value}&limit=${releases.limit}&offset=${releases.offset}`, 'application/json', releases.draw);
             },
 
             draw(data){
@@ -149,14 +149,6 @@
                     document.location.href = URI_CP_CATALOG_RELEASES + URI_CP_DETAILS;
                 }, true);
                 };
-            },
-
-            delete(){
-                func.saveData('DELETE', `${func.url}catalog/repositories/${releases.name}`, '', true, 'application/json', func.historyBack);
-            },
-
-            update(){
-                func.saveData('PUT', `${func.url}catalog/repositories/${releases.name}`, '', true, 'application/json', releases.returnPage);
             },
 
             returnPage() {
