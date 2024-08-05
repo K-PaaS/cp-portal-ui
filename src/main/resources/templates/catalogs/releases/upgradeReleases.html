@@ -149,8 +149,8 @@
 
                 load() {
                   func.loading();
-                  func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${relObj.name}?userDefined=false`, 'application/json', releases.draw);
-                  func.loadData('GET', `${func.url}catalog/charts/${relObj.chart}/versions`,'application/json', releases.versions);
+                  func.loadData('GET', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${relObj.name}?userDefined=false`, 'application/json', releases.draw);
+                  func.loadData('GET', `${func.catalogUrl}/api/charts/${relObj.chart}/versions`,'application/json', releases.versions);
                   },
 
                 draw(data){
@@ -286,7 +286,7 @@
                         "values" : releases.definedValues,
                     };
 
-                    func.dryRun('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.info.name}?preview=true`, JSON.stringify(templateReleases), true, 'application/json', releases.initManifest);
+                    func.dryRun('POST', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.info.name}?preview=true`, JSON.stringify(templateReleases), true, 'application/json', releases.initManifest);
                 },
 
                 upgrade(){
@@ -300,7 +300,7 @@
                         "chart_version" : sel_chart_ver,
                         "values" : valuesMgView.editor().getValue()
                     };
-                    func.saveData('PUT', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.info.name}`, JSON.stringify(upgradeReleases), true, 'application/json', releases.moveReleaseDetails);
+                    func.saveData('PUT', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.info.name}`, JSON.stringify(upgradeReleases), true, 'application/json', releases.moveReleaseDetails);
                 },
 
                 reset(){

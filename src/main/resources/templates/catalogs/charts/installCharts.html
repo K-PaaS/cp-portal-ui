@@ -112,8 +112,8 @@
 
                 load() {
                     func.loading();
-                    func.loadData('GET', `${func.url}catalog/charts/${charts.chartName}/versions?repoName=${charts.repoName}`, 'application/json', charts.versions);
-                    func.loadData('GET', `${func.url}catalog/repositories/${charts.repoName}/charts/${charts.chartName}/info?info=values&version=${charts.chartLatestVersion}`, 'application/json', charts.initValues);
+                    func.loadData('GET', `${func.catalogUrl}/api/charts/${charts.chartName}/versions?repo=${charts.repoName}`, 'application/json', charts.versions);
+                    func.loadData('GET', `${func.catalogUrl}/api/repositories/${charts.repoName}/charts/${charts.chartName}/info?info=values&version=${charts.chartLatestVersion}`, 'application/json', charts.initValues);
                 },
 
                 versions(data) {
@@ -140,7 +140,7 @@
                     document.getElementById('chart_versions_sel').addEventListener('change', (e) => {
                         func.loading();
                         charts.chartTargetVersion =e.target.value;
-                        func.loadData('GET', `${func.url}catalog/repositories/${charts.repoName}/charts/${charts.chartName}/info?info=values&version=${charts.chartTargetVersion}`, 'application/json', charts.initValues);
+                        func.loadData('GET', `${func.catalogUrl}/api/repositories/${charts.repoName}/charts/${charts.chartName}/info?info=values&version=${charts.chartTargetVersion}`, 'application/json', charts.initValues);
                     }, false);
 
                     document.getElementById('collapse').addEventListener('click', (e) => {
@@ -178,7 +178,7 @@
                         "chart_version" : charts.chartTargetVersion,
                         "values" : valuesMgView.editor().getValue(),
                     };
-                    func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releaseName}`, JSON.stringify(installChart), true, 'application/json', charts.moveReleaseList);
+                    func.saveData('POST', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releaseName}`, JSON.stringify(installChart), true, 'application/json', charts.moveReleaseList);
                 },
 
                 reset(){

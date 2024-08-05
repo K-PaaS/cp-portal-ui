@@ -147,11 +147,11 @@
                     }).setSize("100%", "100%");
 
                     // info
-                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.name}`, 'application/json', releases.draw);
+                    func.loadData('GET', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}`, 'application/json', releases.draw);
                     // resources
-                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.name}/resources`, 'application/json', releases.resources);
+                    func.loadData('GET', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}/resources`, 'application/json', releases.resources);
                     // histories
-                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.name}/histories`, 'application/json', releases.histories);
+                    func.loadData('GET', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}/histories`, 'application/json', releases.histories);
                     },
 
                 draw(data) {
@@ -230,11 +230,11 @@
                 },
 
                 delete(){
-                    func.saveData('DELETE', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.name}`, '', true, 'application/json', func.historyBack);
+                    func.saveData('DELETE', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}`, '', true, 'application/json', func.historyBack);
                 },
                 rollback(){
                     let target_revision = releases.historiesList[revision_target_index].revision;
-                    func.saveData('PUT', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/catalog/releases/${releases.name}/versions/${target_revision}`, '', true, 'application/json', releases.returnPage);
+                    func.saveData('PUT', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}/versions/${target_revision}`, '', true, 'application/json', releases.returnPage);
                 },
                 setTabList(){
                     let tabBtns = document.querySelectorAll('.tab-btn2 li');
