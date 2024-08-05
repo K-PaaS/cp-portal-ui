@@ -132,13 +132,13 @@
                         <dt><label for="durationNetwork">Duration</label></dt>
                         <dd>
                             <input class="duration" id="durationNetwork" type="text" th:placeholder="#{M0890}"/>
-                            <input id="msDurationNetwork" class="durationNetworkRadio" type="radio" name="duration" value="ms"/>
+                            <input id="msDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="ms"/>
                             <label for="msDurationNetwork" class="durationNetworkRadioLabel">ms</label>
-                            <input id="sDurationNetwork" class="durationNetworkRadio" type="radio" name="duration" value="s"/>
+                            <input id="sDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="s"/>
                             <label for="sDurationNetwork" class="durationNetworkRadioLabel">s</label>
-                            <input id="mDurationNetwork" class="durationNetworkRadio" type="radio" name="duration" value="m"/>
+                            <input id="mDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="m"/>
                             <label for="mDurationNetwork" class="durationNetworkRadioLabel">m</label>
-                            <input id="hDurationNetwork" class="durationNetworkRadio" type="radio" name="duration" value="h"/>
+                            <input id="hDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="h"/>
                             <label for="hDurationNetwork" class="durationNetworkRadioLabel">h</label>
                         </dd>
                     </dl>
@@ -247,13 +247,13 @@
                         <dt><label for="durationStress">Duration</label></dt>
                         <dd>
                             <input class="duration" id="durationStress" type="text" th:placeholder="#{M0890}"/>
-                            <input id="msDurationStress" class="durationStressRadio" type="radio" name="duration" value="ms"/>
+                            <input id="msDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="ms"/>
                             <label for="msDurationStress" class="durationStressRadioLabel">ms</label>
-                            <input id="sDurationStress" class="durationStressRadio" type="radio" name="duration" value="s"/>
+                            <input id="sDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="s"/>
                             <label for="sDurationStress" class="durationStressRadioLabel">s</label>
-                            <input id="mDurationStress" class="durationStressRadio" type="radio" name="duration" value="m"/>
+                            <input id="mDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="m"/>
                             <label for="mDurationStress" class="durationStressRadioLabel">m</label>
-                            <input id="hDurationStress" class="durationStressRadio" type="radio" name="duration" value="h"/>
+                            <input id="hDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="h"/>
                             <label for="hDurationStress" class="durationStressRadioLabel">h</label>
                         </dd>
                     </dl>
@@ -398,7 +398,6 @@
         }
 
         function labelSelector(data) {
-
             let labelSelectors = {};
             for (let i = 0; i < data.items.length; i++) {
                 const labels = data.items[i].labels
@@ -406,7 +405,6 @@
                     labelSelectors[key] = labels[key];
                 }
             }
-
             let labelSelect = `<option selected hidden value='' >${LABELSELECT}</option><option value='all' >All</option>`;
             for (let key in labelSelectors) {
                 labelSelect += `<option value="${key}:${labelSelectors[key]}">${key}:${labelSelectors[key]}</option>`;
@@ -467,7 +465,6 @@
         function validCheck(fault) {
             const regExp = /^[0-9a-z]+$/;
             const regExpNum = /^[0-9]+$/;
-
 
             if (isEmpty(document.getElementsByClassName('name')[tabIndex].value)) {
                 func.alertPopup('ERROR', MSG_ENTER_NAME, true, MSG_CLOSE, validReset);
@@ -530,13 +527,12 @@
                     IS_VCHK = true;
                     return false;
                 }
-                console.log("duration : ", radioCheck('duration'))
-                if (radioCheck('duration') === undefined) {
+                if (radioCheck('durationNetwork') === undefined) {
                     func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
-               if(document.getElementsByClassName('durationNetworkRadio')[radioCheck('duration')].value === 'h' && document.getElementById('durationNetwork').value > 12) {
+               if(document.getElementsByClassName('durationNetworkRadio')[radioCheck('durationNetwork')].value === 'h' && document.getElementById('durationNetwork').value > 12) {
                    func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
                    IS_VCHK = true;
                    return false;
@@ -553,12 +549,12 @@
                     IS_VCHK = true;
                     return false;
                 }
-                if (radioCheck('duration') === undefined) {
+                if (radioCheck('durationStress') === undefined) {
                     func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
-                if(document.getElementsByClassName('durationStressRadio')[radioCheck('duration')].value === 'h' && document.getElementById('durationStress').value > 12) {
+                if(document.getElementsByClassName('durationStressRadio')[radioCheck('durationStress')].value === 'h' && document.getElementById('durationStress').value > 12) {
                     func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
@@ -568,13 +564,8 @@
                     IS_VCHK = true;
                     return false;
                 }
-                if (!isEmpty(document.getElementById("cpuWorkers").value) && (!regExpNum.test(document.getElementById('cpuWorkers').value) || 1 > document.getElementById("cpuWorkers").value || 8192 < document.getElementById("cpuWorkers").value)) {
+                if ((isEmpty(document.getElementById("cpuWorkers").value) && !isEmpty(document.getElementById("cpuLoad").value)) || (!isEmpty(document.getElementById("cpuWorkers").value) && (!regExpNum.test(document.getElementById('cpuWorkers').value) || 1 > document.getElementById("cpuWorkers").value || 8192 < document.getElementById("cpuWorkers").value))) {
                     func.alertPopup('ERROR', MSG_INVALID_CPU_WORKERS, true, MSG_CLOSE, validReset);
-                    IS_VCHK = true;
-                    return false;
-                }
-                if (!isEmpty(document.getElementById("memoryWorkers").value) && (!regExpNum.test(document.getElementById('memoryWorkers').value) || 1 > document.getElementById("memoryWorkers").value || 8192 < document.getElementById("memoryWorkers").value)) {
-                    func.alertPopup('ERROR', MSG_INVALID_MEMORY_WORKERS, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
@@ -583,19 +574,22 @@
                     IS_VCHK = true;
                     return false;
                 }
+                if ((isEmpty(document.getElementById("memoryWorkers").value) && !isEmpty(document.getElementById("memorySize").value)) || (!isEmpty(document.getElementById("memoryWorkers").value) && (!regExpNum.test(document.getElementById('memoryWorkers').value) || 1 > document.getElementById("memoryWorkers").value || 8192 < document.getElementById("memoryWorkers").value))) {
+                    func.alertPopup('ERROR', MSG_INVALID_MEMORY_WORKERS, true, MSG_CLOSE, validReset);
+                    IS_VCHK = true;
+                    return false;
+                }
                 if(!isEmpty(document.getElementById("memorySize").value) && (!regExpNum.test(document.getElementById('memorySize').value) || 0 > document.getElementById('memorySize').value || 100 < document.getElementById('memorySize').value)) {
                     func.alertPopup('ERROR', MSG_INVALID_MEMORY_SIZE, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
-                if (radioCheck('memorySize') === 0) {
+                if (!isEmpty(document.getElementById("memorySize").value) && radioCheck('memorySize') === undefined) {
                     func.alertPopup('ERROR', MSG_SELECT_MEMORY_SIZE_UNIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
             }
-
-
             return true;
         }
 
@@ -608,7 +602,6 @@
                 }
                 cnt++;
             }
-
         }
 
         function save() {
@@ -625,23 +618,31 @@
             } else {
                 labelSelectors[labelSelectorKey] = labelSelectorValue;
             }
-
             gracePeriod = document.getElementById('gracePeriod').value;
-
-            const durationRadios =document.getElementsByName('duration');
+            let durationRadios;
             let selectedDurationValue;
-            for(let i = 0; i < durationRadios.length; i++){
-                if(durationRadios[i].checked){
-                    selectedDurationValue = durationRadios[i].value
-                }
-            }
             let duration;
-            if (tabIndex !== 0) {
-                if(!isEmpty(document.getElementsByClassName('duration')[tabIndex - 1].value)) {
-                    duration = document.getElementsByClassName('duration')[tabIndex - 1].value + selectedDurationValue;
+                if(fault === 'networkAttack') {
+                    durationRadios =document.querySelectorAll('.durationNetworkRadio');
+                    durationRadios.forEach(radio => {
+                        if (radio.checked) {
+                            selectedDurationValue = radio.value;
+                        }
+                    });
+                    if(!isEmpty(document.getElementById('durationNetwork').value)) {
+                        duration = document.getElementById('durationNetwork').value + selectedDurationValue;
+                    }
+                }else if (fault === 'stressTest') {
+                    durationRadios =document.querySelectorAll('.durationStressRadio');
+                    durationRadios.forEach(radio => {
+                        if (radio.checked) {
+                            selectedDurationValue = radio.value;
+                        }
+                    });
+                    if(!isEmpty(document.getElementById('durationStress').value)) {
+                        duration = document.getElementById('durationStress').value + selectedDurationValue;
+                    }
                 }
-            }
-
             const latencyRadios = document.querySelectorAll('.latencyRadio');
             let selectedLatencyValue;
             latencyRadios.forEach(radio => {
@@ -650,13 +651,11 @@
                 }
             });
             let latency = document.getElementById('latency').value + selectedLatencyValue;
-
             let stressors = {};
             let cpu;
             let memory;
             let memorySize;
             let selectedMemorySizeValue;
-
             const memorySizeRadios = document.querySelectorAll('.memorySizeRadio');
             memorySizeRadios.forEach(radio => {
                 if (radio.checked) {
@@ -704,7 +703,6 @@
             let cluster = sessionStorage.getItem('cluster');
             let namespace = chaosNamespace;
 
-
             if(validCheck(fault)){
                 const podFault = {
                     kind: 'PodChaos',
@@ -743,7 +741,6 @@
                     duration,
                     stressors
                 }
-
 
                 let obj = fault === 'podFault' ? podFault : fault === 'networkAttack' ? networkAttack : stressTest;
                 func.saveData('POST', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaces}/experiments`, JSON.stringify(obj), true, 'application/json', saveComp);
