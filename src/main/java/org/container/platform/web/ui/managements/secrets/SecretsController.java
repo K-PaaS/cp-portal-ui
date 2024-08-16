@@ -43,4 +43,15 @@ public class SecretsController {
         return BASE_URL + "secretsDetail";
     }
 
+    /**
+     * Secrets 생성 페이지 이동(Go to the secrets create page)
+     *
+     * @return the view
+     */
+    @ApiOperation(value = "Secrets 생성 페이지 이동(Go to the secrets create page)", nickname = "createSecrets")
+    @GetMapping(value = ConstantsUrl.URI_CP_MANAGEMENTS_SECRETS + ConstantsUrl.URI_CP_CREATE)
+    public String createSecrets() {
+        return BASE_URL + "secretsCreate";
+    }
+
 }
