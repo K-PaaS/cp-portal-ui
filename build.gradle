@@ -65,9 +65,9 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-aop"
 	compile('org.springframework.boot:spring-boot-starter-freemarker')
 	compile "org.springframework.boot:spring-boot-starter-security"
-	compile "org.springframework.boot:spring-boot-starter-data-redis"
 	compile "org.springframework.boot:spring-boot-starter-validation"
 	compile "org.springframework.boot:spring-boot-devtools"
+	compile 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation("org.springframework.security.oauth:spring-security-oauth2:${springSecurityOauthVersion}")
 	compile "org.springframework.security:spring-security-taglibs:${springSecurityTagLibsVersion}"
 	compile group: 'org.json', name: 'json', version: '20210307'
@@ -79,8 +79,8 @@ dependencies {
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	testCompile "org.springframework.boot:spring-boot-starter-test"
 
-	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.9'
 	implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
