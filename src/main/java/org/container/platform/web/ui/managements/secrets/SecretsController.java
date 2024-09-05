@@ -26,7 +26,7 @@ public class SecretsController {
      * @return the view
      */
     @ApiOperation(value = "Secrets 목록 페이지 이동(Go to the secrets list page)", nickname = "getSecretsList")
-    @GetMapping(value = ConstantsUrl.URI_CP_MANAGEMENTS_SECRETS )
+    @GetMapping(value = ConstantsUrl.URI_CP_CONFIGS_SECRETS )
     public String getSecretsList() {
         return BASE_URL + "secrets";
     }
@@ -38,7 +38,7 @@ public class SecretsController {
      * @return the view
      */
     @ApiOperation(value = "Secrets 상세 페이지 이동(Go to the secrets details page)", nickname = "getSecretsDetails")
-    @GetMapping(value = ConstantsUrl.URI_CP_MANAGEMENTS_SECRETS + ConstantsUrl.URI_CP_DETAILS)
+    @GetMapping(value = ConstantsUrl.URI_CP_CONFIGS_SECRETS + ConstantsUrl.URI_CP_DETAILS)
     public String getSecretsDetails() {
         return BASE_URL + "secretsDetail";
     }
@@ -49,7 +49,7 @@ public class SecretsController {
      * @return the view
      */
     @ApiOperation(value = "Secrets 생성 페이지 이동(Go to the secrets create page)", nickname = "createSecrets")
-    @GetMapping(value = ConstantsUrl.URI_CP_MANAGEMENTS_SECRETS + ConstantsUrl.URI_CP_CREATE)
+    @GetMapping(value = ConstantsUrl.URI_CP_CONFIGS_SECRETS + ConstantsUrl.URI_CP_CREATE)
     public String createSecrets() {
         return BASE_URL + "secretsCreate";
     }

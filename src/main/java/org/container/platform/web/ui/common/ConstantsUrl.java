@@ -31,8 +31,8 @@ public class ConstantsUrl {
     public static final String URI_CP_MANAGEMENTS_USERS_ADMIN = "/container-platform/admin";
     public static final String URI_CP_MANAGEMENTS_USERS = "/container-platform/users";
     public static final String URI_CP_MANAGEMENTS_INACTIVE_USERS = "/container-platform/inactiveUsers";
-    public static final String URI_CP_MANAGEMENTS_CONFIGMAPS = "/container-platform/configMaps";
-    public static final String URI_CP_MANAGEMENTS_SECRETS = "/container-platform/secrets";
+    public static final String URI_CP_CONFIGS_CONFIGMAPS = "/container-platform/configMaps";
+    public static final String URI_CP_CONFIGS_SECRETS = "/container-platform/secrets";
 
     public static final String URI_CP_CHAOS_EXPERIMENTS = "/container-platform/experiments";
     public static final String URI_CP_CHAOS_EVENTS = "/container-platform/events";
