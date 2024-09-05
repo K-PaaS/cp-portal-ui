@@ -26,7 +26,7 @@ public class ConfigMapsController {
      * @return the view
      */
     @ApiOperation(value = "ConfigMaps 목록 페이지 이동(Go to the configmaps list page)", nickname = "getConfigMapsList")
-    @GetMapping(value = ConstantsUrl.URI_CP_MANAGEMENTS_CONFIGMAPS )
+    @GetMapping(value = ConstantsUrl.URI_CP_CONFIGS_CONFIGMAPS )
     public String getConfigMapsList() {
         return BASE_URL + "configMaps";
     }
@@ -38,7 +38,7 @@ public class ConfigMapsController {
      * @return the view
      */
     @ApiOperation(value = "ConfigMaps 상세 페이지 이동(Go to the configmaps details page)", nickname = "getConfigMapsDetails")
-    @GetMapping(value = ConstantsUrl.URI_CP_MANAGEMENTS_CONFIGMAPS + ConstantsUrl.URI_CP_DETAILS)
+    @GetMapping(value = ConstantsUrl.URI_CP_CONFIGS_CONFIGMAPS + ConstantsUrl.URI_CP_DETAILS)
     public String getConfigMapsDetails() {
         return BASE_URL + "configMapsDetail";
     }
