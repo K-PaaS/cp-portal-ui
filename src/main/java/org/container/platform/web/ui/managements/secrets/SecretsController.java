@@ -44,6 +44,17 @@ public class SecretsController {
     }
 
     /**
+     * Vault Secrets 상세 페이지 이동(Go to the vault secrets details page)
+     *
+     * @return the view
+     */
+    @ApiOperation(value = "Vault Secrets 상세 페이지 이동(Go to the vault secrets details page)", nickname = "getVaultSecretsDetails")
+    @GetMapping(value = ConstantsUrl.URI_CP_CONFIGS_SECRETS + ConstantsUrl.URI_CP_VAULT_DETAILS)
+    public String getVaultSecretsDetails() {
+        return BASE_URL + "vaultSecretsDetail";
+    }
+
+    /**
      * Secrets 생성 페이지 이동(Go to the secrets create page)
      *
      * @return the view

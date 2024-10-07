@@ -55,6 +55,7 @@ public class ConstantsUrl {
 
     public static final String URI_CP_LIST = "/list";
     public static final String URI_CP_DETAILS = "/details";
+    public static final String URI_CP_VAULT_DETAILS = "/vault/details";
     public static final String URI_CP_CREATE = "/create";
     public static final String URI_CP_UPDATE = "/update";
     public static final String URI_CP_POPUP = "/popup";
