@@ -222,11 +222,11 @@
                         experimentsDetail.drawChart();
 
                         // Resource usage by selected Pods during chaos
-                        // func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsage`, 'application/json', experimentsDetail.podChart);
+                         func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByPod/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.podChart);
                         // Resource usage by workload for selected Pods during chao
-                        // func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsage`, 'application/json', experimentsDetail.workloadChart);
+                        func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByWorkload/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.workloadChart);
                         // Resource usage by node during chaos
-                        // func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsage`, 'application/json', experimentsDetail.nodeChart);
+                        func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByNode/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.nodeChart);
 
 
 
@@ -321,7 +321,12 @@
                         <div class="chaosChart">
                             <h4>Resource usage by workload for selected Pods during chaos</h4>
                             <ol id="resourceUsageByWorkloadCharts">
-
+                                <li>
+                                    <canvas id="cpuUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                </li>
+                                 <li>
+                                    <canvas id="memoryUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                </li>
                             </ol>
                         </div>
                         <div class="chaosChart">
@@ -366,13 +371,13 @@
                     }
 
                     new Chart(
-                        cpuUsageByPodChart = {
-                            labels: timeList,
-                            datasets: cpuDataSets,
-                        },
-                        config = {
+                        document.getElementById('cpuUsageByPodChart'),
+                        {
                             type: 'line',
-                            data: dataSets,
+                            data: {
+                                labels: timeList,
+                                datasets: cpuDataSets,
+                            },
                             options: {
                                 responsive: true,
                                 scales: {
@@ -402,13 +407,13 @@
                         }
                     );
                     new Chart(
-                        memoryUsageByPodChart = {
-                            labels: timeList,
-                            datasets: memoryDataSets,
-                        },
-                        config = {
+                        document.getElementById('memoryUsageByPodChart'),
+                        {
                             type: 'line',
-                            data: dataSets,
+                            data: {
+                                labels: timeList,
+                                datasets: memoryDataSets,
+                            },
                             options: {
                                 responsive: true,
                                 scales: {
@@ -438,13 +443,13 @@
                         }
                     );
                     new Chart(
-                        appStatusUsageByPodChart = {
-                            labels: timeList,
-                            datasets: appStatusUsage,
-                        },
-                        config = {
+                        document.getElementById('appStatusUsageByPodChart'),
+                         {
                             type: 'line',
-                            data: dataSets,
+                            data: {
+                                labels: timeList,
+                                datasets: appStatusUsage,
+                            },
                             options: {
                                 responsive: true,
                                 scales: {
@@ -476,35 +481,25 @@
                 },
 
                 workloadChart(data) {
-                    let html = `<li>
-                                    <canvas id="resourceUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
-                                </li>`;
-                    html += `<li>
-                                    <canvas id="resourceUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
-                                </li>`;
-                    func.appendHtml(document.getElementById('resourceUsageByWorkloadCharts'), html, 'tbody');
-
-
                     const timeList = data.items[0].time;
-                    const podName = data.items[0].podName;
+                    const workloadName = data.items[0].workloadName;
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
-                    const appStatusUsage = data.items[0].appStatus;
 
-                    const dataId = ['cpuUsageByPodChart', 'memoryUsageByPodChart', 'appStatusUsageByPodChart'];
+                    const dataId = ['cpuUsageByWorkloadChart', 'memoryUsageByWorkloadChart'];
 
                     let cpuDataSets = [];
                     let memoryDataSets = [];
 
                     for(var j = 0; j < timeList.length; j++){
                         cpuDataSets.push({
-                            label: podName[j],
+                            label: workloadName[j],
                             data: cpuUsage[j],
                             borderColor: Utils.CHART_COLORS[j],
                             backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
                         });
                         memoryDataSets.push({
-                            label: podName[j],
+                            label: workloadName[j],
                             data: memoryUsage[j],
                             borderColor: Utils.CHART_COLORS[j],
                             backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
@@ -512,13 +507,13 @@
                     }
 
                     new Chart(
-                        cpuUsageByPodChart = {
-                            labels: timeList,
-                            datasets: cpuDataSets,
-                        },
-                        config = {
+                        document.getElementById('cpuUsageByWorkloadChart'),
+                        {
                             type: 'line',
-                            data: dataSets,
+                            data: {
+                                labels: timeList,
+                                datasets: cpuDataSets,
+                            },
                             options: {
                                 responsive: true,
                                 scales: {
@@ -548,49 +543,13 @@
                         }
                     );
                     new Chart(
-                        memoryUsageByPodChart = {
-                            labels: timeList,
-                            datasets: memoryDataSets,
-                        },
-                        config = {
+                        document.getElementById('memoryUsageByWorkloadChart'),
+                        {
                             type: 'line',
-                            data: dataSets,
-                            options: {
-                                responsive: true,
-                                scales: {
-                                    y: {
-                                        type: 'linear',
-                                        position: 'left',
-                                        stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 100,
-                                        ticks: {
-                                            stepSize: 1
-                                        }
-                                    }
-                                },
-                                plugins: {
-                                    title: {
-                                        display: true,
-                                        text: 'CPU',
-                                        padding: {
-                                            top: 10,
-                                            bottom: 30
-                                        }
-                                    }
-                                }
+                            data: {
+                                labels: timeList,
+                                datasets: memoryDataSets,
                             },
-                        }
-                    );
-                    new Chart(
-                        appStatusUsageByPodChart = {
-                            labels: timeList,
-                            datasets: appStatusUsage,
-                        },
-                        config = {
-                            type: 'line',
-                            data: dataSets,
                             options: {
                                 responsive: true,
                                 scales: {
@@ -622,245 +581,103 @@
                 },
 
                 nodeChart(data) {
-                    let labels = [];
-                    let cpuRatio = [];
-                    let memRatio = [];
-                    let appStatus = [];
+                    const timeList = data.items[0].time;
+                    const nodeName = data.items[0].nodeName;
+                    const cpuUsage = data.items[0].cpu;
+                    const memoryUsage = data.items[0].memory;
 
-                    for (let i = 0; i < data.items.length; i++) {
-                        labels.push(data.items[i].measurementTime.replace(/.*T(\d{2}:\d{2}:\d{2}).*/, '$1'));
-                        cpuRatio.push(data.items[i].cpuRatio)
-                        memRatio.push(data.items[i].memRatio)
-                        appStatus.push(data.items[i].appStatus === 1 ? '정상' : '비정상')
+                    const dataId = ['cpuUsageByNodeChart', 'memoryUsageByNodeChart'];
+
+                    let cpuDataSets = [];
+                    let memoryDataSets = [];
+
+                    for(var j = 0; j < timeList.length; j++){
+                        cpuDataSets.push({
+                            label: nodeName[j],
+                            data: cpuUsage[j],
+                            borderColor: Utils.CHART_COLORS[j],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                        });
+                        memoryDataSets.push({
+                            label: nodeName[j],
+                            data: memoryUsage[j],
+                            borderColor: Utils.CHART_COLORS[j],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                        });
                     }
 
-                    const dataId = ['cpuMemChart', 'appStatusChart'];
-
-                    let dataSets;
-                    let config;
-
-                    for (var i = 0; i < dataId.length; i++) {
-                        if (dataId[i] === 'cpuUsageByPodChart') {
-                            dataSets = {
-                                labels: labels,
-                                datasets: [
-                                    {
-                                        label: 'CPU(%)',
-                                        data: cpuRatio,
-                                        borderColor: 'RGB(255, 99, 132)',
-                                        backgroundColor: 'RGB(255, 177, 193)',
-                                    },
-                                    {
-                                        label: 'Memory(%)',
-                                        data: memRatio,
-                                        borderColor: 'RGB(54, 162, 235)',
-                                        backgroundColor: 'RGB(154, 208, 245)',
-                                    }
-                                ]
-                            };
-
-                            config = {
-                                type: 'line',
-                                data: dataSets,
-                                options: {
-                                    responsive: true,
-                                    scales: {
-                                        y: {
-                                            type: 'linear',
-                                            position: 'left',
-                                            stack: 'demo',
-                                            stackWeight: 1,
-                                            min: 0,
-                                            max: 100,
-                                            ticks: {
-                                                stepSize: 1
-                                            }
+                    new Chart(
+                        document.getElementById('cpuUsageByNodeChart'),
+                        {
+                            type: 'line',
+                            data: {
+                                labels: timeList,
+                                datasets: cpuDataSets,
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        type: 'linear',
+                                        position: 'left',
+                                        stack: 'demo',
+                                        stackWeight: 1,
+                                        min: 0,
+                                        max: 100,
+                                        ticks: {
+                                            stepSize: 1
                                         }
                                     }
                                 },
-                            };
-                            new Chart(
-                                document.getElementById(dataId[i]),
-                                config
-                            );
-                        } else if (dataId[i] === 'memoryUsageByPodChart') {
-                            dataSets = {
-                                labels: labels,
-                                datasets: [
-                                    {
-                                        label: 'APP Status',
-                                        data: appStatus,
-                                        borderColor: 'RGB(75, 192, 192)',
-                                        backgroundColor: 'RGB(165, 223, 223)',
-                                        stepped: true,
-                                    }
-                                ]
-                            };
-
-                            config = {
-                                type: 'line',
-                                data: dataSets,
-                                options: {
-                                    responsive: true,
-                                    scales: {
-                                        y: {
-                                            type: 'category',
-                                            labels: ['정상', '비정상'],
-                                            offset: true,
-                                            position: 'left',
-                                            stack: 'demo',
-                                            stackWeight: 1,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'CPU',
+                                        padding: {
+                                            top: 10,
+                                            bottom: 30
                                         }
                                     }
-                                },
-                            };
-                            new Chart(
-                                document.getElementById(dataId[i]),
-                                config
-                            );
-                        } else if (dataId[i] === 'appStatusUsageByPodChart') {
-                            dataSets = {
-                                labels: labels,
-                                datasets: [
-                                    {
-                                        label: 'APP Status',
-                                        data: appStatus,
-                                        borderColor: 'RGB(75, 192, 192)',
-                                        backgroundColor: 'RGB(165, 223, 223)',
-                                        stepped: true,
-                                    }
-                                ]
-                            };
-
-                            config = {
-                                type: 'line',
-                                data: dataSets,
-                                options: {
-                                    responsive: true,
-                                    scales: {
-                                        y: {
-                                            type: 'category',
-                                            labels: ['정상', '비정상'],
-                                            offset: true,
-                                            position: 'left',
-                                            stack: 'demo',
-                                            stackWeight: 1,
-                                        }
-                                    }
-                                },
-                            };
-                            new Chart(
-                                document.getElementById(dataId[i]),
-                                config
-                            );
-                        } else if (dataId[i] === 'resourceUsageByWorkloadChart') {
-                            dataSets = {
-                                labels: labels,
-                                datasets: [
-                                    {
-                                        label: 'APP Status',
-                                        data: appStatus,
-                                        borderColor: 'RGB(75, 192, 192)',
-                                        backgroundColor: 'RGB(165, 223, 223)',
-                                        stepped: true,
-                                    }
-                                ]
-                            };
-
-                            config = {
-                                type: 'line',
-                                data: dataSets,
-                                options: {
-                                    responsive: true,
-                                    scales: {
-                                        y: {
-                                            type: 'category',
-                                            labels: ['정상', '비정상'],
-                                            offset: true,
-                                            position: 'left',
-                                            stack: 'demo',
-                                            stackWeight: 1,
-                                        }
-                                    }
-                                },
-                            };
-                            new Chart(
-                                document.getElementById(dataId[i]),
-                                config
-                            );
-                        } else if (dataId[i] === 'cpuUsageByNodeChart') {
-                            dataSets = {
-                                labels: labels,
-                                datasets: [
-                                    {
-                                        label: 'APP Status',
-                                        data: appStatus,
-                                        borderColor: 'RGB(75, 192, 192)',
-                                        backgroundColor: 'RGB(165, 223, 223)',
-                                        stepped: true,
-                                    }
-                                ]
-                            };
-
-                            config = {
-                                type: 'line',
-                                data: dataSets,
-                                options: {
-                                    responsive: true,
-                                    scales: {
-                                        y: {
-                                            type: 'category',
-                                            labels: ['정상', '비정상'],
-                                            offset: true,
-                                            position: 'left',
-                                            stack: 'demo',
-                                            stackWeight: 1,
-                                        }
-                                    }
-                                },
-                            };
-                            new Chart(
-                                document.getElementById(dataId[i]),
-                                config
-                            );
-                        } else if (dataId[i] === 'memoryUsageByNodeChart') {
-                            dataSets = {
-                                labels: labels,
-                                datasets: [
-                                    {
-                                        label: 'APP Status',
-                                        data: appStatus,
-                                        borderColor: 'RGB(75, 192, 192)',
-                                        backgroundColor: 'RGB(165, 223, 223)',
-                                        stepped: true,
-                                    }
-                                ]
-                            };
-
-                            config = {
-                                type: 'line',
-                                data: dataSets,
-                                options: {
-                                    responsive: true,
-                                    scales: {
-                                        y: {
-                                            type: 'category',
-                                            labels: ['정상', '비정상'],
-                                            offset: true,
-                                            position: 'left',
-                                            stack: 'demo',
-                                            stackWeight: 1,
-                                        }
-                                    }
-                                },
-                            };
-                            new Chart(
-                                document.getElementById(dataId[i]),
-                                config
-                            );
+                                }
+                            },
                         }
-                    }
-
+                    );
+                    new Chart(
+                        document.getElementById('memoryUsageByNodeChart'),
+                        {
+                            type: 'line',
+                            data: {
+                                labels: timeList,
+                                datasets: memoryDataSets,
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        type: 'linear',
+                                        position: 'left',
+                                        stack: 'demo',
+                                        stackWeight: 1,
+                                        min: 0,
+                                        max: 100,
+                                        ticks: {
+                                            stepSize: 1
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'CPU',
+                                        padding: {
+                                            top: 10,
+                                            bottom: 30
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    );
                 },
 
                 event() {
