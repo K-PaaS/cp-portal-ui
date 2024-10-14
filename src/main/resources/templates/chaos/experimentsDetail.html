@@ -344,7 +344,7 @@
                 },
 
                 podChart(data) {
-                    const timeList = data.items[0].time;
+                    const timeList = data.items[0].time.map(time => time.split('T')[1]);
                     const podName = data.items[0].podName;
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
@@ -354,6 +354,7 @@
 
                     let cpuDataSets = [];
                     let memoryDataSets = [];
+                    let appStatusDataSets = [];
 
                     for(var j = 0; j < timeList.length; j++){
                         cpuDataSets.push({
@@ -368,6 +369,12 @@
                             borderColor: Utils.CHART_COLORS[j],
                             backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
                         });
+                        appStatusDataSets.push({
+                            label: podName[j],
+                            data: appStatusUsage[j],
+                            borderColor: Utils.CHART_COLORS[j],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                        })
                     }
 
                     new Chart(
@@ -387,7 +394,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 100,
+                                        max: 300,
                                         ticks: {
                                             stepSize: 1
                                         }
@@ -399,7 +406,7 @@
                                         text: 'CPU',
                                         padding: {
                                             top: 10,
-                                            bottom: 30
+                                            bottom: 10
                                         }
                                     }
                                 }
@@ -423,7 +430,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 100,
+                                        max: 10,
                                         ticks: {
                                             stepSize: 1
                                         }
@@ -432,10 +439,10 @@
                                 plugins: {
                                     title: {
                                         display: true,
-                                        text: 'CPU',
+                                        text: 'Memory',
                                         padding: {
                                             top: 10,
-                                            bottom: 30
+                                            bottom: 10
                                         }
                                     }
                                 }
@@ -448,7 +455,7 @@
                             type: 'line',
                             data: {
                                 labels: timeList,
-                                datasets: appStatusUsage,
+                                datasets: appStatusDataSets,
                             },
                             options: {
                                 responsive: true,
@@ -459,7 +466,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 100,
+                                        max: 1,
                                         ticks: {
                                             stepSize: 1
                                         }
@@ -468,10 +475,10 @@
                                 plugins: {
                                     title: {
                                         display: true,
-                                        text: 'CPU',
+                                        text: 'APP Status',
                                         padding: {
                                             top: 10,
-                                            bottom: 30
+                                            bottom: 10
                                         }
                                     }
                                 }
