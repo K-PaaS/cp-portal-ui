@@ -579,7 +579,7 @@
                     IS_VCHK = true;
                     return false;
                 }
-                if(!isEmpty(document.getElementById("memorySize").value) && (!regExpNum.test(document.getElementById('memorySize').value) || 0 > document.getElementById('memorySize').value || 100 < document.getElementById('memorySize').value)) {
+                if(!isEmpty(document.getElementById("memorySize").value) && (!regExpNum.test(document.getElementById('memorySize').value) || 0 > document.getElementById('memorySize').value )) {
                     func.alertPopup('ERROR', MSG_INVALID_MEMORY_SIZE, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;

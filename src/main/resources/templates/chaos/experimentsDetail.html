@@ -145,6 +145,9 @@
             CHART_COLORS: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
             transparentize(color, opacity) {
                 const alpha = opacity === undefined ? 0.5 : 1 - opacity;
+                if (typeof color !== 'string') {
+                    throw new Error('color must be a string');
+                }
                 return color.replace(/rgba?\((\d+), (\d+), (\d+),?\s*([\d\.]+)?\)/, (match, r, g, b) => {
                     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
                 });
@@ -305,15 +308,15 @@
                             <h4>Resource usage by selected Pods during chaos</h4>
                             <ol id="resourceUsageByPodCharts">
                                 <li>
-                                    <canvas id="cpuUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                    <canvas id="cpuUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
 
                                 </li>
                                 <li>
-                                    <canvas id="memoryUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                    <canvas id="memoryUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
 
                                 </li>
                                 <li>
-                                    <canvas id="appStatusUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                    <canvas id="appStatusUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
 
                                 </li>
                             </ol>
@@ -322,10 +325,10 @@
                             <h4>Resource usage by workload for selected Pods during chaos</h4>
                             <ol id="resourceUsageByWorkloadCharts">
                                 <li>
-                                    <canvas id="cpuUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                    <canvas id="cpuUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                                  <li>
-                                    <canvas id="memoryUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                    <canvas id="memoryUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                             </ol>
                         </div>
@@ -333,10 +336,10 @@
                             <h4>Resource usage by node during chaos</h4>
                             <ol id="resourceUsageByNodeCharts">
                                 <li>
-                                    <canvas id="cpuUsageByNodeChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                    <canvas id="cpuUsageByNodeChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                                  <li>
-                                    <canvas id="memoryUsageByNodeChart" style="height: 250px; max-width: 100%; max-height: 100%; outline-style: solid; outline-color: green; outline-width: 0.7px;"></canvas>
+                                    <canvas id="memoryUsageByNodeChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                             </ol>
                         </div>
@@ -345,7 +348,7 @@
 
                 podChart(data) {
                     const timeList = data.items[0].time.map(time => time.split('T')[1]);
-                    const podName = data.items[0].podName;
+                    const podName = data.items[0].resourceName;
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
                     const appStatusUsage = data.items[0].appStatus;
@@ -356,7 +359,7 @@
                     let memoryDataSets = [];
                     let appStatusDataSets = [];
 
-                    for(var j = 0; j < timeList.length; j++){
+                    for(var j = 0; j < podName.length; j++){
                         cpuDataSets.push({
                             label: podName[j],
                             data: cpuUsage[j],
@@ -394,13 +397,14 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 300,
+                                        max: 1000,
                                         ticks: {
                                             stepSize: 1
                                         }
                                     }
                                 },
                                 plugins: {
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'CPU',
@@ -430,13 +434,14 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 10,
+                                        max: 1000,
                                         ticks: {
                                             stepSize: 1
                                         }
                                     }
                                 },
                                 plugins: {
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'Memory',
@@ -473,6 +478,7 @@
                                     }
                                 },
                                 plugins: {
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'APP Status',
@@ -488,8 +494,8 @@
                 },
 
                 workloadChart(data) {
-                    const timeList = data.items[0].time;
-                    const workloadName = data.items[0].workloadName;
+                    const timeList = data.items[0].time.map(time => time.split('T')[1]);
+                    const workloadName = data.items[0].resourceName;
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
 
@@ -498,7 +504,7 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
 
-                    for(var j = 0; j < timeList.length; j++){
+                    for(var j = 0; j < workloadName.length; j++){
                         cpuDataSets.push({
                             label: workloadName[j],
                             data: cpuUsage[j],
@@ -530,19 +536,20 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 100,
+                                        max: 1000,
                                         ticks: {
                                             stepSize: 1
                                         }
                                     }
                                 },
                                 plugins: {
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'CPU',
                                         padding: {
                                             top: 10,
-                                            bottom: 30
+                                            bottom: 10
                                         }
                                     }
                                 }
@@ -566,19 +573,20 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 100,
+                                        max: 1000,
                                         ticks: {
                                             stepSize: 1
                                         }
                                     }
                                 },
                                 plugins: {
+                                    legend: false,
                                     title: {
                                         display: true,
-                                        text: 'CPU',
+                                        text: 'Memory',
                                         padding: {
                                             top: 10,
-                                            bottom: 30
+                                            bottom: 10
                                         }
                                     }
                                 }
@@ -588,8 +596,8 @@
                 },
 
                 nodeChart(data) {
-                    const timeList = data.items[0].time;
-                    const nodeName = data.items[0].nodeName;
+                    const timeList = data.items[0].time.map(time => time.split('T')[1]);
+                    const nodeName = data.items[0].resourceName;
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
 
@@ -598,7 +606,9 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
 
-                    for(var j = 0; j < timeList.length; j++){
+                    for(var j = 0; j < nodeName.length; j++){
+                        console.log("j : ", j, Utils.CHART_COLORS[j]);
+
                         cpuDataSets.push({
                             label: nodeName[j],
                             data: cpuUsage[j],
@@ -630,19 +640,20 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 100,
+                                        max: 1000,
                                         ticks: {
                                             stepSize: 1
                                         }
                                     }
                                 },
                                 plugins: {
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'CPU',
                                         padding: {
                                             top: 10,
-                                            bottom: 30
+                                            bottom: 10
                                         }
                                     }
                                 }
@@ -666,19 +677,20 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 100,
+                                        max: 1000,
                                         ticks: {
                                             stepSize: 1
                                         }
                                     }
                                 },
                                 plugins: {
+                                    legend: false,
                                     title: {
                                         display: true,
-                                        text: 'CPU',
+                                        text: 'Memory',
                                         padding: {
                                             top: 10,
-                                            bottom: 30
+                                            bottom: 10
                                         }
                                     }
                                 }
