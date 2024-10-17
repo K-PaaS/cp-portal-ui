@@ -191,6 +191,65 @@ const func = {
 		};
 	},
 
+	apply(title, url, btnName, name){
+		sessionStorage.setItem('vaultDbName' , name);
+		var html = `<div class="modal-wrap" id="modal">
+			<div class="modal midium">
+				<h5>${title}</h5>
+				<dl>
+					<dt>Application</dt>
+					<dd>
+						<fieldset>
+							<select id="createApp" class="createApp">
+							</select>
+						</fieldset>
+					</dd>
+				</dl>
+				<a class="confirm" href="javascript:;">${btnName}</a>
+				<a class="close" href="javascript:;">`+ MSG_CLOSE + `</a>
+			</div>
+		</div>`;
+
+		func.appendHtml(document.getElementById('wrap'), html, 'div');
+
+		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods`, 'application/json', applicationDraw);
+
+		function applicationDraw(data) {
+			for(var i=0; i<=data.items.length-1; i++){
+				var application = data.items[i].name;
+				var html = `<option value="${application}">${application}</option>`;
+				func.appendHtml(document.getElementById('createApp'), html, 'select');
+			};
+		}
+
+		if(sessionStorage.getItem('nameSpace') == NAMESPACE_ALL_VALUE) {
+			document.getElementById('createApp').selectedIndex = 0;}
+		else {
+			document.getElementById('createApp').value = sessionStorage.getItem('nameSpace');
+		}
+
+		document.getElementById('modal').querySelector('.close').addEventListener('click', (e) => {
+			document.getElementById('wrap').removeChild(document.getElementById('modal'));
+		}, false);
+
+
+		document.getElementById('modal').querySelector('.confirm').addEventListener('click', (e) => {
+
+			document.querySelector('.nameTop').innerHTML = sessionStorage.getItem('nameSpace');
+			sessionStorage.setItem('appName' , document.querySelector('#createApp > option:checked').value);
+			document.getElementById('wrap').removeChild(document.getElementById('modal'));
+
+			var sendData = JSON.stringify ({
+				cluster : sessionStorage.getItem('cluster'),
+				namespace : sessionStorage.getItem('nameSpace'),
+				resourceName : sessionStorage.getItem('appName'),
+				dbService : sessionStorage.getItem('vaultDbName')
+			});
+
+			func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${url}/vault/application`, sendData, true, 'application/json', func.refresh);
+		}, false);
+	},
+
 	create(title, url, name){
 		var html = `<div class="modal-wrap" id="modal">
 			<div class="modal midium">
