@@ -142,7 +142,7 @@
     <script src="/plugins/chart.js-3.8.0/package/dist/chart.min.js"></script>
     <script>
         const Utils = {
-            CHART_COLORS: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+            CHART_COLORS: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',  'rgb(75, 192, 192)', 'rgb(255, 159, 64)', 'rgb(153, 102, 255)', 'rgb(201, 203, 207)'],
             transparentize(color, opacity) {
                 const alpha = opacity === undefined ? 0.5 : 1 - opacity;
                 if (typeof color !== 'string') {
@@ -435,7 +435,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 150,
                                         ticks: {
                                             stepSize: 1
                                         }
@@ -537,7 +537,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 1500,
                                         ticks: {
                                             stepSize: 1
                                         }
@@ -574,7 +574,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 150,
                                         ticks: {
                                             stepSize: 1
                                         }
@@ -608,8 +608,7 @@
                     let memoryDataSets = [];
 
                     for(var j = 0; j < nodeName.length; j++){
-                        console.log("j : ", j, Utils.CHART_COLORS[j]);
-
+                        console.log("node : ", Utils.transparentize(typeof Utils.CHART_COLORS[j]));
                         cpuDataSets.push({
                             label: nodeName[j],
                             data: cpuUsage[j],
@@ -641,7 +640,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 1500,
                                         ticks: {
                                             stepSize: 1
                                         }
@@ -678,7 +677,7 @@
                                         stack: 'demo',
                                         stackWeight: 1,
                                         min: 0,
-                                        max: 1000,
+                                        max: 6500,
                                         ticks: {
                                             stepSize: 1
                                         }
