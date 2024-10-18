@@ -8,6 +8,8 @@ const func = {
 	nameLoad : new function(){},
 	clusterData:  new Object(),
 	nameData : new Object(),
+	appName: new Object(),
+	vaultDbName: new Object(),
 	createIm : '',
 	depth1 : '',
 	depth2 : '',
@@ -212,7 +214,7 @@ const func = {
 
 		func.appendHtml(document.getElementById('wrap'), html, 'div');
 
-		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods`, 'application/json', applicationDraw);
+		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/deployments`, 'application/json', applicationDraw);
 
 		function applicationDraw(data) {
 			for(var i=0; i<=data.items.length-1; i++){
