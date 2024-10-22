@@ -308,15 +308,15 @@
                             <h4>Resource usage by selected Pods during chaos</h4>
                             <ol id="resourceUsageByPodCharts">
                                 <li>
-                                    <canvas id="cpuUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="cpuUsageByPodChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
 
                                 </li>
                                 <li>
-                                    <canvas id="memoryUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="memoryUsageByPodChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
 
                                 </li>
                                 <li>
-                                    <canvas id="appStatusUsageByPodChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="appStatusUsageByPodChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
 
                                 </li>
                             </ol>
@@ -325,10 +325,10 @@
                             <h4>Resource usage by workload for selected Pods during chaos</h4>
                             <ol id="resourceUsageByWorkloadCharts">
                                 <li>
-                                    <canvas id="cpuUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="cpuUsageByWorkloadChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                                  <li>
-                                    <canvas id="memoryUsageByWorkloadChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="memoryUsageByWorkloadChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                             </ol>
                         </div>
@@ -336,10 +336,10 @@
                             <h4>Resource usage by node during chaos</h4>
                             <ol id="resourceUsageByNodeCharts">
                                 <li>
-                                    <canvas id="cpuUsageByNodeChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="cpuUsageByNodeChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                                  <li>
-                                    <canvas id="memoryUsageByNodeChart" style="height: 250px; max-width: 100%; max-height: 100%;"></canvas>
+                                    <canvas id="memoryUsageByNodeChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
                                 </li>
                             </ol>
                         </div>
@@ -358,25 +358,51 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
                     let appStatusDataSets = [];
+                    let skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
 
-                    for(var j = 0; j < podName.length; j++){
+                    for(var i = 0; i < podName.length; i++){
+                        for(var j = 0; j < timeList.length; j++) {
+                            if(cpuUsage[i][j] < 0){
+                                cpuUsage[i][j] = NaN;
+                            }
+                            if(memoryUsage[i][j] < 0){
+                                memoryUsage[i][j] = NaN;
+                            }
+                            if(appStatusUsage[i][j] < 0){
+                                appStatusUsage[i][j] = NaN;
+                            }
+                        }
                         cpuDataSets.push({
-                            label: podName[j],
-                            data: cpuUsage[j],
-                            borderColor: Utils.CHART_COLORS[j],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                            label: podName[i],
+                            data: cpuUsage[i],
+                            borderColor: Utils.CHART_COLORS[i],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            segment: {
+                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                borderDash: ctx => skipped(ctx, [6, 6]),
+                            },
+                            spanGaps: true
                         });
                         memoryDataSets.push({
-                            label: podName[j],
-                            data: memoryUsage[j],
-                            borderColor: Utils.CHART_COLORS[j],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                            label: podName[i],
+                            data: memoryUsage[i],
+                            borderColor: Utils.CHART_COLORS[i],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            segment: {
+                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                borderDash: ctx => skipped(ctx, [6, 6]),
+                            },
+                            spanGaps: true
                         });
                         appStatusDataSets.push({
-                            label: podName[j],
-                            data: appStatusUsage[j],
-                            borderColor: Utils.CHART_COLORS[j],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                            label: podName[i],
+                            data: appStatusUsage[i],
+                            borderColor: Utils.CHART_COLORS[i],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            segment: {
+                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                borderDash: ctx => skipped(ctx, [6, 6]),
+                            },
                             stepped: true,
                         })
                     }
@@ -405,7 +431,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: false,
+                                    legend: true,
                                     title: {
                                         display: true,
                                         text: 'CPU',
@@ -442,7 +468,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: false,
+                                    legend: true,
                                     title: {
                                         display: true,
                                         text: 'Memory',
@@ -479,7 +505,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: false,
+                                    legend: true,
                                     title: {
                                         display: true,
                                         text: 'APP Status',
@@ -505,18 +531,38 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
 
-                    for(var j = 0; j < workloadName.length; j++){
+                    let skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
+
+                    for(var i = 0; i < workloadName.length; i++){
+                        for(var j = 0; j < timeList.length; j++) {
+                            if(cpuUsage[i][j] < 0){
+                                cpuUsage[i][j] = NaN;
+                            }
+                            if(memoryUsage[i][j] < 0){
+                                memoryUsage[i][j] = NaN;
+                            }
+                        }
                         cpuDataSets.push({
-                            label: workloadName[j],
-                            data: cpuUsage[j],
-                            borderColor: Utils.CHART_COLORS[j],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                            label: workloadName[i],
+                            data: cpuUsage[i],
+                            borderColor: Utils.CHART_COLORS[i],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            segment: {
+                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                borderDash: ctx => skipped(ctx, [6, 6]),
+                            },
+                            spanGaps: true
                         });
                         memoryDataSets.push({
-                            label: workloadName[j],
-                            data: memoryUsage[j],
-                            borderColor: Utils.CHART_COLORS[j],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                            label: workloadName[i],
+                            data: memoryUsage[i],
+                            borderColor: Utils.CHART_COLORS[i],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            segment: {
+                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                borderDash: ctx => skipped(ctx, [6, 6]),
+                            },
+                            spanGaps: true
                         });
                     }
 
@@ -544,7 +590,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: false,
+                                    legend: true,
                                     title: {
                                         display: true,
                                         text: 'CPU',
@@ -581,7 +627,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: false,
+                                    legend: true,
                                     title: {
                                         display: true,
                                         text: 'Memory',
@@ -607,19 +653,38 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
 
-                    for(var j = 0; j < nodeName.length; j++){
-                        console.log("node : ", Utils.transparentize(typeof Utils.CHART_COLORS[j]));
+                    let skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
+
+                    for(var i = 0; i < nodeName.length; i++){
+                        for(var j = 0; j < timeList.length; j++) {
+                            if(cpuUsage[i][j] < 0){
+                                cpuUsage[i][j] = NaN;
+                            }
+                            if(memoryUsage[i][j] < 0){
+                                memoryUsage[i][j] = NaN;
+                            }
+                        }
                         cpuDataSets.push({
-                            label: nodeName[j],
-                            data: cpuUsage[j],
-                            borderColor: Utils.CHART_COLORS[j],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                            label: nodeName[i],
+                            data: cpuUsage[i],
+                            borderColor: Utils.CHART_COLORS[i],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            segment: {
+                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                borderDash: ctx => skipped(ctx, [6, 6]),
+                            },
+                            spanGaps: true
                         });
                         memoryDataSets.push({
-                            label: nodeName[j],
-                            data: memoryUsage[j],
-                            borderColor: Utils.CHART_COLORS[j],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[j], 0.5),
+                            label: nodeName[i],
+                            data: memoryUsage[i],
+                            borderColor: Utils.CHART_COLORS[i],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            segment: {
+                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
+                                borderDash: ctx => skipped(ctx, [6, 6]),
+                            },
+                            spanGaps: true
                         });
                     }
 
@@ -647,7 +712,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: false,
+                                    legend: true,
                                     title: {
                                         display: true,
                                         text: 'CPU',
@@ -684,7 +749,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: false,
+                                    legend: true,
                                     title: {
                                         display: true,
                                         text: 'Memory',
