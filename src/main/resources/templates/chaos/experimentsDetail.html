@@ -358,6 +358,16 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
                     let appStatusDataSets = [];
+
+                    const cpuMinValue = getMinY(Math.min(...cpuUsage.flat()));
+                    const cpuMaxValue = getMaxY(Math.max(...cpuUsage.flat()));
+                    let cpuStepSize = cpuMaxValue <= 10 ? 1 : 10;
+
+
+                    const memoryMinValue = getMinY(Math.min(...memoryUsage.flat()));
+                    const memoryMaxValue = getMaxY(Math.max(...memoryUsage.flat()));
+                    let memoryStepSize = memoryMaxValue <= 10 ? 1 : 10;
+
                     let skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
 
                     for(var i = 0; i < podName.length; i++){
@@ -422,11 +432,10 @@
                                         type: 'linear',
                                         position: 'left',
                                         stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 1000,
+                                        min: cpuMinValue,
+                                        max: cpuMaxValue,
                                         ticks: {
-                                            stepSize: 1
+                                            stepSize: cpuStepSize
                                         }
                                     }
                                 },
@@ -459,11 +468,10 @@
                                         type: 'linear',
                                         position: 'left',
                                         stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 150,
+                                        min: memoryMinValue,
+                                        max: memoryMaxValue,
                                         ticks: {
-                                            stepSize: 1
+                                            stepSize: memoryStepSize
                                         }
                                     }
                                 },
@@ -531,6 +539,14 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
 
+                    const cpuMinValue = getMinY(Math.min(...cpuUsage.flat()));
+                    const cpuMaxValue = getMaxY(Math.max(...cpuUsage.flat()));
+                    let cpuStepSize = cpuMaxValue <= 10 ? 1 : 10;
+
+                    const memoryMinValue = getMinY(Math.min(...memoryUsage.flat()));
+                    const memoryMaxValue = getMaxY(Math.max(...memoryUsage.flat()));
+                    let memoryStepSize = memoryMaxValue <= 10 ? 1 : 10;
+
                     let skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
 
                     for(var i = 0; i < workloadName.length; i++){
@@ -581,11 +597,10 @@
                                         type: 'linear',
                                         position: 'left',
                                         stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 1500,
+                                        min: cpuMinValue,
+                                        max: cpuMaxValue,
                                         ticks: {
-                                            stepSize: 1
+                                            stepSize: cpuStepSize
                                         }
                                     }
                                 },
@@ -618,11 +633,10 @@
                                         type: 'linear',
                                         position: 'left',
                                         stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 150,
+                                        min: memoryMinValue,
+                                        max: memoryMaxValue,
                                         ticks: {
-                                            stepSize: 1
+                                            stepSize: memoryStepSize
                                         }
                                     }
                                 },
@@ -653,6 +667,11 @@
                     let cpuDataSets = [];
                     let memoryDataSets = [];
 
+                    const cpuMinValue = getMinY(Math.min(...cpuUsage.flat()));
+                    const cpuMaxValue = getMaxY(Math.max(...cpuUsage.flat()));
+
+                    const memoryMinValue = getMinY(Math.min(...memoryUsage.flat()));
+                    const memoryMaxValue = getMaxY(Math.max(...memoryUsage.flat()));
                     let skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
 
                     for(var i = 0; i < nodeName.length; i++){
@@ -703,11 +722,10 @@
                                         type: 'linear',
                                         position: 'left',
                                         stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 1500,
+                                        min: cpuMinValue,
+                                        max: cpuMaxValue,
                                         ticks: {
-                                            stepSize: 1
+                                            stepSize: 100
                                         }
                                     }
                                 },
@@ -740,11 +758,10 @@
                                         type: 'linear',
                                         position: 'left',
                                         stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 6500,
+                                        min: memoryMinValue,
+                                        max: memoryMaxValue,
                                         ticks: {
-                                            stepSize: 1
+                                            stepSize: 100
                                         }
                                     }
                                 },
@@ -797,6 +814,70 @@
                 },
             }
             experimentsDetail.init();
+
+            function getMaxY(value) {
+                if (value <= 0) {
+                    return 0;
+                } else if (value <= 10) {
+                    return 10;
+                } else if (value <= 50) {
+                    return 50;
+                } else if (value <= 100) {
+                    return 100;
+                } else if (value <= 500) {
+                    return 500;
+                } else if (value <= 1000) {
+                    return 1000;
+                } else if (value <= 1500) {
+                    return 1500;
+                } else if (value <= 2000) {
+                    return 2000;
+                } else if (value <= 2500) {
+                    return 2500;
+                } else if (value <= 3000) {
+                    return 3000;
+                } else if (value <= 5000) {
+                    return 5000;
+                } else if (value <= 7500) {
+                    return 7500;
+                } else {
+                    return Math.floor(value / 1000) * 1000;
+                }
+
+            };
+
+            function getMinY(value) {
+                if (value >= 10000) {
+                    return Math.floor(value / 1000) * 1000;
+                } else if (value >= 7500) {
+                    return 7500;
+                } else if (value >= 5000) {
+                    return 5000;
+                } else if (value >= 3000) {
+                    return 3000;
+                } else if (value >= 2500) {
+                    return 2500;
+                } else if (value >= 2000) {
+                    return 2000;
+                } else if (value >= 1500) {
+                    return 1500;
+                } else if (value >= 1000) {
+                    return 1000;
+                } else if (value >= 500) {
+                    return 500;
+                } else if (value >= 100) {
+                    return 100;
+                } else if (value >= 50) {
+                    return 50;
+                } else if (value >= 10) {
+                    return 10;
+                } else if (value >= 0) {
+                    return 0;
+                } else {
+                    return 0;
+                }
+
+            };
         }
     </script>
 </th:block>
