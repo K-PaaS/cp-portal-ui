@@ -363,7 +363,6 @@
                     const cpuMaxValue = getMaxY(Math.max(...cpuUsage.flat()));
                     let cpuStepSize = cpuMaxValue <= 10 ? 1 : 10;
 
-
                     const memoryMinValue = getMinY(Math.min(...memoryUsage.flat()));
                     const memoryMaxValue = getMaxY(Math.max(...memoryUsage.flat()));
                     let memoryStepSize = memoryMaxValue <= 10 ? 1 : 10;
@@ -428,6 +427,13 @@
                             options: {
                                 responsive: true,
                                 scales: {
+                                    x: {
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            }
+                                        }
+                                    },
                                     y: {
                                         type: 'linear',
                                         position: 'left',
@@ -464,6 +470,13 @@
                             options: {
                                 responsive: true,
                                 scales: {
+                                    x: {
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            }
+                                        }
+                                    },
                                     y: {
                                         type: 'linear',
                                         position: 'left',
@@ -500,6 +513,13 @@
                             options: {
                                 responsive: true,
                                 scales: {
+                                    x: {
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            }
+                                        }
+                                    },
                                     y: {
                                         type: 'linear',
                                         position: 'left',
@@ -593,6 +613,13 @@
                             options: {
                                 responsive: true,
                                 scales: {
+                                    x: {
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            }
+                                        }
+                                    },
                                     y: {
                                         type: 'linear',
                                         position: 'left',
@@ -629,6 +656,13 @@
                             options: {
                                 responsive: true,
                                 scales: {
+                                    x: {
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            }
+                                        }
+                                    },
                                     y: {
                                         type: 'linear',
                                         position: 'left',
@@ -718,6 +752,13 @@
                             options: {
                                 responsive: true,
                                 scales: {
+                                    x: {
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            }
+                                        }
+                                    },
                                     y: {
                                         type: 'linear',
                                         position: 'left',
@@ -754,6 +795,13 @@
                             options: {
                                 responsive: true,
                                 scales: {
+                                    x: {
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            }
+                                        }
+                                    },
                                     y: {
                                         type: 'linear',
                                         position: 'left',
