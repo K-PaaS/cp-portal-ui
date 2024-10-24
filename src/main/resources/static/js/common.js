@@ -8,8 +8,6 @@ const func = {
 	nameLoad : new function(){},
 	clusterData:  new Object(),
 	nameData : new Object(),
-	appName: new Object(),
-	vaultDbName: new Object(),
 	createIm : '',
 	depth1 : '',
 	depth2 : '',
