@@ -142,7 +142,7 @@
     <script src="/plugins/chart.js-3.8.0/package/dist/chart.min.js"></script>
     <script>
         const Utils = {
-            CHART_COLORS: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',  'rgb(75, 192, 192)', 'rgb(255, 159, 64)', 'rgb(153, 102, 255)', 'rgb(201, 203, 207)'],
+            CHART_COLORS: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',  'rgba(75, 192, 192, 1)', 'rgba(255, 159, 64, 1)', 'rgba(153, 102, 255, 1)', 'rgba(201, 203, 207, 1)'],
             transparentize(color, opacity) {
                 const alpha = opacity === undefined ? 0.5 : 1 - opacity;
                 if (typeof color !== 'string') {
@@ -159,6 +159,9 @@
                     result.push(Math.floor(Math.random() * (max - min + 1)) + min);
                 }
                 return result;
+            },
+            parseISODate(str) {
+                return new Date(str);
             }
         };
 
@@ -347,11 +350,11 @@
                 },
 
                 podChart(data) {
-                    const timeList = data.items[0].time.map(time => time.split('T')[1]);
-                    const podName = data.items[0].resourceName;
-                    const cpuUsage = data.items[0].cpu;
-                    const memoryUsage = data.items[0].memory;
-                    const appStatusUsage = data.items[0].appStatus;
+                    const timeList = data.items[0].time;
+                    const podNameList = data.items[0].resourceName;
+                    const cpuUsageLists = data.items[0].cpu;
+                    const memoryUsageLists = data.items[0].memory;
+                    const appStatusUsageList = data.items[0].appStatus;
 
                     const dataId = ['cpuUsageByPodChart', 'memoryUsageByPodChart', 'appStatusUsageByPodChart'];
 
@@ -359,31 +362,31 @@
                     let memoryDataSets = [];
                     let appStatusDataSets = [];
 
-                    const cpuMinValue = getMinY(Math.min(...cpuUsage.flat()));
-                    const cpuMaxValue = getMaxY(Math.max(...cpuUsage.flat()));
+                    const cpuMinValue = getMinY(Math.min(...cpuUsageLists.flat()));
+                    const cpuMaxValue = getMaxY(Math.max(...cpuUsageLists.flat()));
                     let cpuStepSize = cpuMaxValue <= 10 ? 1 : 10;
 
-                    const memoryMinValue = getMinY(Math.min(...memoryUsage.flat()));
-                    const memoryMaxValue = getMaxY(Math.max(...memoryUsage.flat()));
+                    const memoryMinValue = getMinY(Math.min(...memoryUsageLists.flat()));
+                    const memoryMaxValue = getMaxY(Math.max(...memoryUsageLists.flat()));
                     let memoryStepSize = memoryMaxValue <= 10 ? 1 : 10;
 
-                    let skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
+                    const skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
 
-                    for(var i = 0; i < podName.length; i++){
+                    for(var i = 0; i < podNameList.length; i++){
                         for(var j = 0; j < timeList.length; j++) {
-                            if(cpuUsage[i][j] < 0){
-                                cpuUsage[i][j] = NaN;
+                            if(cpuUsageLists[i][j] < 0){
+                                cpuUsageLists[i][j] = NaN;
                             }
-                            if(memoryUsage[i][j] < 0){
-                                memoryUsage[i][j] = NaN;
+                            if(memoryUsageLists[i][j] < 0){
+                                memoryUsageLists[i][j] = NaN;
                             }
-                            if(appStatusUsage[i][j] < 0){
-                                appStatusUsage[i][j] = NaN;
+                            if(appStatusUsageList[i][j] < 0){
+                                appStatusUsageList[i][j] = NaN;
                             }
                         }
                         cpuDataSets.push({
-                            label: podName[i],
-                            data: cpuUsage[i],
+                            label: podNameList[i],
+                            data: cpuUsageLists[i],
                             borderColor: Utils.CHART_COLORS[i],
                             backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
                             segment: {
@@ -393,8 +396,8 @@
                             spanGaps: true
                         });
                         memoryDataSets.push({
-                            label: podName[i],
-                            data: memoryUsage[i],
+                            label: podNameList[i],
+                            data: memoryUsageLists[i],
                             borderColor: Utils.CHART_COLORS[i],
                             backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
                             segment: {
@@ -404,17 +407,56 @@
                             spanGaps: true
                         });
                         appStatusDataSets.push({
-                            label: podName[i],
-                            data: appStatusUsage[i],
+                            label: podNameList[i],
+                            data: [...appStatusUsageList[i]].fill(1),
                             borderColor: Utils.CHART_COLORS[i],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
-                            segment: {
-                                borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
-                                borderDash: ctx => skipped(ctx, [6, 6]),
-                            },
-                            stepped: true,
+                            backgroundColor: appStatusUsageList[i].map(value => {
+                                return value === 1 ? Utils.transparentize(Utils.CHART_COLORS[i], 0.5) : 'rgb(0,0,0,0.0)' ;
+                            }),
+                            borderWidth: 2,
+                            spanGaps: true,
+                            yAxisID: `y${i+1}`
+
                         })
                     }
+
+                    const scalesY = {};
+
+                    for (let i = 1; i <= podNameList.length; i++) {
+                        scalesY[`y${i}`] = {
+                            type: 'linear',
+                            position: 'left',
+                            stack: 'demo',
+                            ticks: {
+                                display: false
+                            },
+                        };
+                    }
+
+
+                    const appStatusOptions = {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                ticks: {
+                                    autoSkip: false,
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    callback: function (index) {
+                                        const visibleMaxCount = 5;
+
+                                        if (index === 0 || index % Math.ceil(timeList.length / visibleMaxCount) === 0) {
+                                            return this.getLabelForValue(index).split('T')[1];
+                                        }
+
+                                        return '';
+                                    }
+                                }
+                            },
+                            ...scalesY
+                        }
+                    };
 
                     new Chart(
                         document.getElementById('cpuUsageByPodChart'),
@@ -429,8 +471,17 @@
                                 scales: {
                                     x: {
                                         ticks: {
-                                            callback: function(value, index) {
-                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            autoSkip: false,
+                                            maxRotation: 0,
+                                            minRotation: 0,
+                                            callback: function(index) {
+                                                const visibleMaxCount = 5;
+
+                                                if (index === 0 || index % Math.ceil(timeList.length / visibleMaxCount) === 0) {
+                                                    return this.getLabelForValue(index).split('T')[1];
+                                                }
+
+                                                return '';
                                             }
                                         }
                                     },
@@ -472,8 +523,17 @@
                                 scales: {
                                     x: {
                                         ticks: {
-                                            callback: function(value, index) {
-                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            autoSkip: false,
+                                            maxRotation: 0,
+                                            minRotation: 0,
+                                            callback: function(index) {
+                                                const visibleMaxCount = 5;
+
+                                                if (index === 0 || index % Math.ceil(timeList.length / visibleMaxCount) === 0) {
+                                                    return this.getLabelForValue(index).split('T')[1];
+                                                }
+
+                                                return '';
                                             }
                                         }
                                     },
@@ -505,51 +565,18 @@
                     new Chart(
                         document.getElementById('appStatusUsageByPodChart'),
                          {
-                            type: 'line',
+                            type: 'bar',
                             data: {
                                 labels: timeList,
                                 datasets: appStatusDataSets,
                             },
-                            options: {
-                                responsive: true,
-                                scales: {
-                                    x: {
-                                        ticks: {
-                                            callback: function(value, index) {
-                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
-                                            }
-                                        }
-                                    },
-                                    y: {
-                                        type: 'linear',
-                                        position: 'left',
-                                        stack: 'demo',
-                                        stackWeight: 1,
-                                        min: 0,
-                                        max: 1,
-                                        ticks: {
-                                            stepSize: 1
-                                        }
-                                    }
-                                },
-                                plugins: {
-                                    legend: true,
-                                    title: {
-                                        display: true,
-                                        text: 'APP Status',
-                                        padding: {
-                                            top: 10,
-                                            bottom: 10
-                                        }
-                                    }
-                                }
-                            },
+                            options: appStatusOptions
                         }
                     );
                 },
 
                 workloadChart(data) {
-                    const timeList = data.items[0].time.map(time => time.split('T')[1]);
+                    const timeList = data.items[0].time;
                     const workloadName = data.items[0].resourceName;
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
@@ -615,8 +642,17 @@
                                 scales: {
                                     x: {
                                         ticks: {
-                                            callback: function(value, index) {
-                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            autoSkip: false,
+                                            maxRotation: 0,
+                                            minRotation: 0,
+                                            callback: function(index) {
+                                                const visibleMaxCount = 6;
+
+                                                if (index === 0 || index % Math.ceil(timeList.length / visibleMaxCount) === 0) {
+                                                    return this.getLabelForValue(index).split('T')[1];
+                                                }
+
+                                                return '';
                                             }
                                         }
                                     },
@@ -658,8 +694,17 @@
                                 scales: {
                                     x: {
                                         ticks: {
-                                            callback: function(value, index) {
-                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            autoSkip: false,
+                                            maxRotation: 0,
+                                            minRotation: 0,
+                                            callback: function(index) {
+                                                const visibleMaxCount = 6;
+
+                                                if (index === 0 || index % Math.ceil(timeList.length / visibleMaxCount) === 0) {
+                                                    return this.getLabelForValue(index).split('T')[1];
+                                                }
+
+                                                return '';
                                             }
                                         }
                                     },
@@ -691,7 +736,7 @@
                 },
 
                 nodeChart(data) {
-                    const timeList = data.items[0].time.map(time => time.split('T')[1]);
+                    const timeList = data.items[0].time;
                     const nodeName = data.items[0].resourceName;
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
@@ -754,8 +799,17 @@
                                 scales: {
                                     x: {
                                         ticks: {
-                                            callback: function(value, index) {
-                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            autoSkip: false,
+                                            maxRotation: 0,
+                                            minRotation: 0,
+                                            callback: function(index) {
+                                                const visibleMaxCount = 6;
+
+                                                if (index === 0 || index % Math.ceil(timeList.length / visibleMaxCount) === 0) {
+                                                    return this.getLabelForValue(index).split('T')[1];
+                                                }
+
+                                                return '';
                                             }
                                         }
                                     },
@@ -797,8 +851,17 @@
                                 scales: {
                                     x: {
                                         ticks: {
-                                            callback: function(value, index) {
-                                                return (index % 3 === 0) || (index === timeList.length - 1) ? this.getLabelForValue(value) : '';
+                                            autoSkip: false,
+                                            maxRotation: 0,
+                                            minRotation: 0,
+                                            callback: function(index) {
+                                                const visibleMaxCount = 6;
+
+                                                if (index === 0 || index % Math.ceil(timeList.length / visibleMaxCount) === 0) {
+                                                    return this.getLabelForValue(index).split('T')[1];
+                                                }
+
+                                                return '';
                                             }
                                         }
                                     },
