@@ -308,7 +308,9 @@
                 drawChart() {
                     document.getElementById('chaosCharts').innerHTML = `
                         <div class="chaosChart">
-                            <h4>Resource usage by selected Pods during chaos</h4>
+                            <h4>Metrics</h4>
+                            <h5>▶ Resource usage by selected Pods during chaos</h5>
+                            <div class="chaosResourceList" id="chaosPodList"></div>
                             <ol id="resourceUsageByPodCharts">
                                 <li>
                                     <canvas id="cpuUsageByPodChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
@@ -325,7 +327,8 @@
                             </ol>
                         </div>
                         <div class="chaosChart">
-                            <h4>Resource usage by workload for selected Pods during chaos</h4>
+                            <h5>▶ Resource usage by workload for selected Pods during chaos</h5>
+                            <div class="chaosResourceList" id="chaosWorkloadList"></div>
                             <ol id="resourceUsageByWorkloadCharts">
                                 <li>
                                     <canvas id="cpuUsageByWorkloadChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
@@ -336,7 +339,8 @@
                             </ol>
                         </div>
                         <div class="chaosChart">
-                            <h4>Resource usage by node during chaos</h4>
+                            <h5>▶ Resource usage by node during chaos</h5>
+                            <div class="chaosResourceList" id="chaosNodeList"></div>
                             <ol id="resourceUsageByNodeCharts">
                                 <li>
                                     <canvas id="cpuUsageByNodeChart" style="height: 300px; max-width: 100%; max-height: 100%;"></canvas>
@@ -455,9 +459,21 @@
                                 }
                             },
                             ...scalesY
+                        },
+                        plugins: {
+                            legend: false,
+                            title: {
+                                display: true,
+                                text: 'APP Status',
+                                padding: {
+                                    top: 10,
+                                    bottom: 10
+                                }
+                            }
                         }
                     };
 
+                    const charts = [
                     new Chart(
                         document.getElementById('cpuUsageByPodChart'),
                         {
@@ -497,7 +513,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: true,
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'CPU',
@@ -509,7 +525,7 @@
                                 }
                             },
                         }
-                    );
+                    ),
                     new Chart(
                         document.getElementById('memoryUsageByPodChart'),
                         {
@@ -549,7 +565,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: true,
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'Memory',
@@ -561,7 +577,7 @@
                                 }
                             },
                         }
-                    );
+                    ),
                     new Chart(
                         document.getElementById('appStatusUsageByPodChart'),
                          {
@@ -570,9 +586,44 @@
                                 labels: timeList,
                                 datasets: appStatusDataSets,
                             },
-                            options: appStatusOptions
-                        }
-                    );
+                            options: appStatusOptions,
+                         }
+                    )];
+
+                    const chaosResourceContainer = document.getElementById('chaosPodList');
+                    cpuDataSets.forEach((dataset, index) => {
+                        const item = document.createElement('div');
+                        item.classList.add('chaosResourceListItem');
+                        item.style.cursor = 'pointer';
+                        item.style.color = '#818894';
+
+                        item.addEventListener('click', () => {
+                            dataset.hidden = !dataset.hidden;
+
+                            charts.forEach((chart) => {
+                                chart.data.datasets[index].hidden = dataset.hidden;
+                                chart.update();
+                            });
+
+                            if (dataset.hidden) {
+                                item.style.textDecoration = 'line-through';
+                            } else {
+                                item.style.textDecoration = 'none';
+                            }
+
+                        });
+
+                        const colorBox = document.createElement('div');
+                        colorBox.classList.add('chaosResourceListColor');
+                        colorBox.style.backgroundColor = Utils.transparentize(dataset.borderColor, 0.5);
+
+                        const label = document.createElement('span');
+                        label.textContent = dataset.label;
+
+                        item.appendChild(colorBox);
+                        item.appendChild(label);
+                        chaosResourceContainer.appendChild(item);
+                    });
                 },
 
                 workloadChart(data) {
@@ -629,6 +680,7 @@
                         });
                     }
 
+                    const charts = [
                     new Chart(
                         document.getElementById('cpuUsageByWorkloadChart'),
                         {
@@ -668,7 +720,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: true,
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'CPU',
@@ -680,7 +732,7 @@
                                 }
                             },
                         }
-                    );
+                    ),
                     new Chart(
                         document.getElementById('memoryUsageByWorkloadChart'),
                         {
@@ -720,7 +772,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: true,
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'Memory',
@@ -732,7 +784,42 @@
                                 }
                             },
                         }
-                    );
+                    )];
+
+                    const chaosResourceContainer = document.getElementById('chaosWorkloadList');
+                    cpuDataSets.forEach((dataset, index) => {
+                        const item = document.createElement('div');
+                        item.classList.add('chaosResourceListItem');
+                        item.style.cursor = 'pointer';
+                        item.style.color = '#818894';
+
+                        item.addEventListener('click', () => {
+                            dataset.hidden = !dataset.hidden;
+
+                            charts.forEach((chart) => {
+                                chart.data.datasets[index].hidden = dataset.hidden;
+                                chart.update();
+                            });
+
+                            if (dataset.hidden) {
+                                item.style.textDecoration = 'line-through';
+                            } else {
+                                item.style.textDecoration = 'none';
+                            }
+
+                        });
+
+                        const colorBox = document.createElement('div');
+                        colorBox.classList.add('chaosResourceListColor');
+                        colorBox.style.backgroundColor = Utils.transparentize(dataset.borderColor, 0.5);
+
+                        const label = document.createElement('span');
+                        label.textContent = dataset.label;
+
+                        item.appendChild(colorBox);
+                        item.appendChild(label);
+                        chaosResourceContainer.appendChild(item);
+                    });
                 },
 
                 nodeChart(data) {
@@ -786,6 +873,7 @@
                         });
                     }
 
+                    const charts = [
                     new Chart(
                         document.getElementById('cpuUsageByNodeChart'),
                         {
@@ -825,7 +913,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: true,
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'CPU',
@@ -837,7 +925,7 @@
                                 }
                             },
                         }
-                    );
+                    ),
                     new Chart(
                         document.getElementById('memoryUsageByNodeChart'),
                         {
@@ -877,7 +965,7 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: true,
+                                    legend: false,
                                     title: {
                                         display: true,
                                         text: 'Memory',
@@ -889,7 +977,42 @@
                                 }
                             },
                         }
-                    );
+                    )];
+
+                    const chaosResourceContainer = document.getElementById('chaosNodeList');
+                    cpuDataSets.forEach((dataset, index) => {
+                        const item = document.createElement('div');
+                        item.classList.add('chaosResourceListItem');
+                        item.style.cursor = 'pointer';
+                        item.style.color = '#818894';
+
+                        item.addEventListener('click', () => {
+                            dataset.hidden = !dataset.hidden;
+
+                            charts.forEach((chart) => {
+                                chart.data.datasets[index].hidden = dataset.hidden;
+                                chart.update();
+                            });
+
+                            if (dataset.hidden) {
+                                item.style.textDecoration = 'line-through';
+                            } else {
+                                item.style.textDecoration = 'none';
+                            }
+
+                        });
+
+                        const colorBox = document.createElement('div');
+                        colorBox.classList.add('chaosResourceListColor');
+                        colorBox.style.backgroundColor = Utils.transparentize(dataset.borderColor, 0.5);
+
+                        const label = document.createElement('span');
+                        label.textContent = dataset.label;
+
+                        item.appendChild(colorBox);
+                        item.appendChild(label);
+                        chaosResourceContainer.appendChild(item);
+                    });
                 },
 
                 event() {

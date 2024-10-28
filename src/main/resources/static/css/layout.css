@@ -343,10 +343,12 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 /* chaos chart */
 .chaosChart {display:flex; flex-direction: column; flex-wrap: nowrap; max-height: 1068px; margin-bottom: 5px;}
 .chaosChart h4 {text-align:left; font-size:22px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; margin-bottom:6px;}
-.chaosChart > ol {flex: 1; display:flex; flex-direction: row; flex-wrap: nowrap; margin-bottom: 20px; max-height: 300px; padding:0 2px; background-color:#ffffff;  box-shadow:2px 5px 5px 1px rgba(204, 204, 204, 0.096);}
-.chaosChart > ol > li {flex: 1; max-width: 100%; height: 300px;}
-.chaosChart ol li h5 {font-size:26px; line-height:30px; font-weight:500; margin-bottom:40px; font-family:'Apple SD Gothic Neo B', sans-serif;}
-
+.chaosChart h5 {text-align:left; font-size:20px; line-height:25px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; margin-bottom:4px; margin-top:5px;}
+.chaosChart > ol {flex: 1; display:flex; flex-direction: row; flex-wrap: nowrap; margin-bottom: 20px; max-height: 230px; padding:0 2px; background-color:#ffffff;  box-shadow:2px 5px 5px 1px rgba(0, 0, 0, 0.12);}
+.chaosChart > ol > li {flex: 1; max-width: 100%; height: 230px;}
+.chaosResourceList {display: flex; margin-top: 5px;}
+.chaosResourceListItem {display: flex; align-items: center; margin-right: 10px;}
+.chaosResourceListColor {width: 20px; height: 20px; margin-right: 5px;}
 
 /* more btn */
 .more {position:relative; display:block; width:58px; height:30px; line-height:30px; margin:0 auto; color:#47494d; font-size:17px; padding-right:15px; margin-top:20px; opacity:.3; cursor:default;}
