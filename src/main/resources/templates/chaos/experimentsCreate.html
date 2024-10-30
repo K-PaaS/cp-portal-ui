@@ -365,8 +365,8 @@
         }
 
         function init() {
-            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', chaosNamespaces);
-            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', namespaceSelector);
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/nonOperationalNamespacesList`, 'application/json', chaosNamespaces);
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/nonOperationalNamespacesList`, 'application/json', namespaceSelector);
         }
 
         function chaosNamespaces(data) {
@@ -394,23 +394,28 @@
             func.removeHtml(document.getElementsByClassName('labelSelect')[tabIndex]);
             func.removeHtml(document.getElementsByClassName('podList')[tabIndex]);
             let namespaceSelect = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
-            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods`, 'application/json', labelSelector);
+            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods/labels`, 'application/json', labelSelector);
         }
 
         function labelSelector(data) {
-            let labelSelectors = {};
-            for (let i = 0; i < data.items.length; i++) {
-                const labels = data.items[i].labels
-                for (let key in data.items[i].labels) {
-                    labelSelectors[key] = labels[key];
+            const labels = data.items[0].labels
+            let labelSelect = null;
+            if (Object.keys(labels).length !== 0){
+                labelSelect += `<option selected hidden value='' >${LABELSELECT}</option><option value='all' >All</option>`;
+            }else {
+                labelSelect += `<option selected hidden value='' >${LABELSELECT}</option><option value='' disabled selected>해당 Namespace에 Pod 없음</option>`;
+
+            }
+
+            for (let key in labels) {
+                if (labels.hasOwnProperty(key)) {
+                    const values = labels[key];
+                    values.forEach(value => {
+                        labelSelect += `<option value="${key}:${value}">${key}:${value}</option>`;
+                    })
                 }
             }
-            let labelSelect = `<option selected hidden value='' >${LABELSELECT}</option><option value='all' >All</option>`;
-            for (let key in labelSelectors) {
-                labelSelect += `<option value="${key}:${labelSelectors[key]}">${key}:${labelSelectors[key]}</option>`;
-            }
             func.appendHtml(document.getElementsByClassName('labelSelect')[tabIndex], labelSelect);
-
         }
 
         let labelSelectValue;
@@ -418,9 +423,16 @@
         function changeLabelSelect() {
             func.removeHtml(document.getElementsByClassName('podList')[tabIndex]);
 
-            let podName = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
+            let namespaceSelect = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
+
             labelSelectValue = document.getElementsByClassName('labelSelect')[tabIndex].value;
-            func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${podName}/pods`, 'application/json', podList);
+            const selector = labelSelectValue.replace(':',"=");
+
+            if(labelSelectValue !== 'all'){
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods/resources?selector=${selector}`, 'application/json', podList);
+            }else {
+                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods`, 'application/json', podList);
+            }
         }
 
         function podList(data) {
@@ -428,31 +440,34 @@
             labelSelectValue = labelSelectValue.split(':')[0]
 
             for (let i = 0; i < data.items.length; i++) {
-                const dataLabels = data.items[i].labels;
-                if (Object.keys(dataLabels).includes(labelSelectValue)) {
-                    html += `<tr>
-                                      <td>
-                                        <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
-                                        <label for="check_${data.items[i].name}"></label>
-                                      </td>
-                                      <td id=${data.items[i].name}>${data.items[i].name}</td>
-                                      <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
-                                      <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
-                                    </tr>`;
-                }
-                if (labelSelectValue === 'all') {
-                    html += `<tr>
-                                      <td>
-                                        <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
-                                        <label for="check_${data.items[i].name}"></label>
-                                      </td>
-                                      <td id=${data.items[i].name}>${data.items[i].name}</td>
-                                      <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
-                                      <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
-                                    </tr>`;
+                if(data.items[i].podStatus === 'Running') {
+                    const dataLabels = data.items[i].labels;
+                    if (Object.keys(dataLabels).includes(labelSelectValue)) {
+                        html += `<tr>
+                                          <td>
+                                            <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
+                                            <label for="check_${data.items[i].name}"></label>
+                                          </td>
+                                          <td id=${data.items[i].name}>${data.items[i].name}</td>
+                                          <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
+                                          <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
+                                        </tr>`;
+                    }
+                    if (labelSelectValue === 'all') {
+                        html += `<tr>
+                                          <td>
+                                            <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
+                                            <label for="check_${data.items[i].name}"></label>
+                                          </td>
+                                          <td id=${data.items[i].name}>${data.items[i].name}</td>
+                                          <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
+                                          <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
+                                        </tr>`;
+                    }
                 }
             }
             func.appendHtml(document.getElementsByClassName("podList")[tabIndex], html, "tbody",);
+            selectPod();
         }
 
         document.querySelector('.save').addEventListener('click', () => {
@@ -603,6 +618,22 @@
                 cnt++;
             }
         }
+
+        function selectPod() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const checkedCount = Array.from(checkboxes).filter(i => i.checked).length;
+
+                    if (checkedCount > 6) {
+                        checkbox.checked = false;
+                        func.alertPopup('ERROR', MSG_OVER_SELECTED_PODS, true, MSG_CONFIRM, selectPod);
+                    }
+                });
+            });
+        }
+
 
         function save() {
             let fault = document.querySelector('.tab-btn li.active').getAttribute('type');
