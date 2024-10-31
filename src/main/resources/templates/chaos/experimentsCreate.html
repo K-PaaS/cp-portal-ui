@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{layouts/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <div layout:fragment="content">
-    <div id="content" class="sub-page clusters">
+    <div class="sub-page clusters" id="content">
         <article class="location">
             <ul>
                 <li><a onclick="movePage(URI_CP_CHAOS_EXPERIMENTS)">Chaos</a></li>
@@ -15,9 +15,10 @@
             <!-- tab btn -->
             <ul class="tab-btn">
                 <!-- 활성화시 active 클래스 추가 -->
-                <li type="podFault" class="experiments" id="podFault"><a href="javascript:">Pod Fault</a></li>
-                <li type="networkAttack" class="experiments" id="networkAttack"><a href="javascript:">Network Attack</a></li>
-                <li type="stressTest" class="experiments" id="stressTest"><a href="javascript:">Stress Test</a></li>
+                <li class="experiments" id="podFault" type="podFault"><a href="javascript:">Pod Fault</a></li>
+                <li class="experiments" id="networkAttack" type="networkAttack"><a href="javascript:">Network Attack</a>
+                </li>
+                <li class="experiments" id="stressTest" type="stressTest"><a href="javascript:">Stress Test</a></li>
             </ul>
             <!-- // tab btn -->
             <!-- tab content -->
@@ -27,7 +28,7 @@
                     <dl>
                         <dt><label for="namePod">Name</label></dt>
                         <dd>
-                            <input class="name" id="namePod" type="text" th:placeholder="#{M0872}"/>
+                            <input class="name" id="namePod" th:placeholder="#{M0872}" type="text"/>
                         </dd>
                     </dl>
                     <dl>
@@ -35,7 +36,7 @@
                         <dd>
                             <fieldset>
                                 <select class="chaosNamespace" id="chaosNamespacePod">
-                                    <option selected disabled hidden value='' th:text="#{M0874}"></option>
+                                    <option disabled hidden selected th:text="#{M0874}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -43,7 +44,7 @@
                     <dl>
                         <dt><label for="gracePeriod">Grace period</label></dt>
                         <dd>
-                            <input id="gracePeriod" type="text" th:placeholder="#{M0873}"/>
+                            <input id="gracePeriod" th:placeholder="#{M0873}" type="text"/>
                         </dd>
                     </dl>
                     <dl>
@@ -52,7 +53,7 @@
                             <fieldset>
                                 <select class="namespaceSelect" id="namespaceSelectPod"
                                         onchange="changeNamespaceSelect()">
-                                    <option selected disabled hidden value='' th:text="#{M0869}"></option>
+                                    <option disabled hidden selected th:text="#{M0869}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -62,7 +63,7 @@
                         <dd>
                             <fieldset>
                                 <select class="labelSelect" id="labelSelectPod" onchange="changeLabelSelect()">
-                                    <option selected value='' th:text="#{M0870}"></option>
+                                    <option selected th:text="#{M0870}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -99,7 +100,7 @@
                     <dl>
                         <dt><label for="nameNetwork">Name</label></dt>
                         <dd>
-                            <input class="name" id="nameNetwork" type="text" th:placeholder="#{M0872}"/>
+                            <input class="name" id="nameNetwork" th:placeholder="#{M0872}" type="text"/>
                         </dd>
                     </dl>
                     <dl>
@@ -107,7 +108,7 @@
                         <dd>
                             <fieldset>
                                 <select class="chaosNamespace" id="chaosNamespaceNetwork">
-                                    <option selected disabled hidden value='' th:text="#{M0874}"></option>
+                                    <option disabled hidden selected th:text="#{M0874}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -115,31 +116,35 @@
                     <dl>
                         <dt><label for="latency">Latency</label></dt>
                         <dd>
-                            <input id="latency" class="latency" type="text" th:placeholder="#{M0871}"/>
+                            <input class="latency" id="latency" th:placeholder="#{M0871}" type="text"/>
 
-                            <input id="msLatency" class="latencyRadio" type="radio" name="latency" value="ms"/>
-                            <label for="msLatency" class="latencyRadioLabel" >ms</label>
-                            <input id="sLatency" class="latencyRadio" type="radio" name="latency" value="s"/>
-                            <label for="sLatency" class="latencyRadioLabel">s</label>
-                            <input id="mLatency" class="latencyRadio" type="radio" name="latency" value="m"/>
-                            <label for="mLatency" class="latencyRadioLabel">m</label>
-                            <input id="hLatency" class="latencyRadio" type="radio" name="latency" value="h"/>
-                            <label for="hLatency" class="latencyRadioLabel">h</label>
+                            <input class="latencyRadio" id="msLatency" name="latency" type="radio" value="ms"/>
+                            <label class="latencyRadioLabel" for="msLatency">ms</label>
+                            <input class="latencyRadio" id="sLatency" name="latency" type="radio" value="s"/>
+                            <label class="latencyRadioLabel" for="sLatency">s</label>
+                            <input class="latencyRadio" id="mLatency" name="latency" type="radio" value="m"/>
+                            <label class="latencyRadioLabel" for="mLatency">m</label>
+                            <input class="latencyRadio" id="hLatency" name="latency" type="radio" value="h"/>
+                            <label class="latencyRadioLabel" for="hLatency">h</label>
 
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="durationNetwork">Duration</label></dt>
                         <dd>
-                            <input class="duration" id="durationNetwork" type="text" th:placeholder="#{M0890}"/>
-                            <input id="msDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="ms"/>
-                            <label for="msDurationNetwork" class="durationNetworkRadioLabel">ms</label>
-                            <input id="sDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="s"/>
-                            <label for="sDurationNetwork" class="durationNetworkRadioLabel">s</label>
-                            <input id="mDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="m"/>
-                            <label for="mDurationNetwork" class="durationNetworkRadioLabel">m</label>
-                            <input id="hDurationNetwork" class="durationNetworkRadio" type="radio" name="durationNetwork" value="h"/>
-                            <label for="hDurationNetwork" class="durationNetworkRadioLabel">h</label>
+                            <input class="duration" id="durationNetwork" th:placeholder="#{M0890}" type="text"/>
+                            <input class="durationNetworkRadio" id="msDurationNetwork" name="durationNetwork"
+                                   type="radio" value="ms"/>
+                            <label class="durationNetworkRadioLabel" for="msDurationNetwork">ms</label>
+                            <input class="durationNetworkRadio" id="sDurationNetwork" name="durationNetwork"
+                                   type="radio" value="s"/>
+                            <label class="durationNetworkRadioLabel" for="sDurationNetwork">s</label>
+                            <input class="durationNetworkRadio" id="mDurationNetwork" name="durationNetwork"
+                                   type="radio" value="m"/>
+                            <label class="durationNetworkRadioLabel" for="mDurationNetwork">m</label>
+                            <input class="durationNetworkRadio" id="hDurationNetwork" name="durationNetwork"
+                                   type="radio" value="h"/>
+                            <label class="durationNetworkRadioLabel" for="hDurationNetwork">h</label>
                         </dd>
                     </dl>
                     <dl>
@@ -148,7 +153,7 @@
                             <fieldset>
                                 <select class="namespaceSelect" id="namespaceSelectNetwork"
                                         onchange="changeNamespaceSelect()">
-                                    <option selected disabled hidden value='' th:text="#{M0869}"></option>
+                                    <option disabled hidden selected th:text="#{M0869}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -158,7 +163,7 @@
                         <dd>
                             <fieldset>
                                 <select class="labelSelect" id="labelSelectNetwork" onchange="changeLabelSelect()">
-                                    <option selected value='' th:text="#{M0870}"></option>
+                                    <option selected th:text="#{M0870}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -195,7 +200,7 @@
                     <dl>
                         <dt><label for="nameStress">Name</label></dt>
                         <dd>
-                            <input class="name" id="nameStress" type="text" th:placeholder="#{M0872}"/>
+                            <input class="name" id="nameStress" th:placeholder="#{M0872}" type="text"/>
                         </dd>
                     </dl>
                     <dl>
@@ -203,7 +208,7 @@
                         <dd>
                             <fieldset>
                                 <select class="chaosNamespace" id="chaosNamespaceStress">
-                                    <option selected disabled hidden value='' th:text="#{M0874}"></option>
+                                    <option disabled hidden selected th:text="#{M0874}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -211,50 +216,54 @@
                     <dl>
                         <dt><label for="cpuWorkers">CPU Workers</label></dt>
                         <dd>
-                            <input id="cpuWorkers" type="text" th:placeholder="#{M0875}"/>
+                            <input id="cpuWorkers" th:placeholder="#{M0875}" type="text"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="cpuLoad">CPU Load</label></dt>
                         <dd>
-                            <input id="cpuLoad" type="text" th:placeholder="#{M0876}"/>
+                            <input id="cpuLoad" th:placeholder="#{M0876}" type="text"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="memoryWorkers">Memory Workers</label></dt>
                         <dd>
-                            <input id="memoryWorkers" type="text" th:placeholder="#{M0877}"/>
+                            <input id="memoryWorkers" th:placeholder="#{M0877}" type="text"/>
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="memorySize">Memory Size</label></dt>
                         <dd>
-                            <input class="memorySize" id="memorySize"  type="text" th:placeholder="#{M0878}"/>
-                            <input id="bMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="B"/>
-                            <label for="bMemorySize" class="memorySizeRadioLabel">B</label>
-                            <input id="kbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="KB"/>
-                            <label for="kbMemorySize" class="memorySizeRadioLabel">KB</label>
-                            <input id="mbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="MB"/>
-                            <label for="mbMemorySize" class="memorySizeRadioLabel">MB</label>
-                            <input id="gbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="GB"/>
-                            <label for="gbMemorySize" class="memorySizeRadioLabel">GB</label>
-                            <input id="tbMemorySize" class="memorySizeRadio" type="radio" name="memorySize" value="TB"/>
-                            <label for="tbMemorySize" class="memorySizeRadioLabel">TB</label>
+                            <input class="memorySize" id="memorySize" th:placeholder="#{M0878}" type="text"/>
+                            <input class="memorySizeRadio" id="bMemorySize" name="memorySize" type="radio" value="B"/>
+                            <label class="memorySizeRadioLabel" for="bMemorySize">B</label>
+                            <input class="memorySizeRadio" id="kbMemorySize" name="memorySize" type="radio" value="KB"/>
+                            <label class="memorySizeRadioLabel" for="kbMemorySize">KB</label>
+                            <input class="memorySizeRadio" id="mbMemorySize" name="memorySize" type="radio" value="MB"/>
+                            <label class="memorySizeRadioLabel" for="mbMemorySize">MB</label>
+                            <input class="memorySizeRadio" id="gbMemorySize" name="memorySize" type="radio" value="GB"/>
+                            <label class="memorySizeRadioLabel" for="gbMemorySize">GB</label>
+                            <input class="memorySizeRadio" id="tbMemorySize" name="memorySize" type="radio" value="TB"/>
+                            <label class="memorySizeRadioLabel" for="tbMemorySize">TB</label>
 
                         </dd>
                     </dl>
                     <dl>
                         <dt><label for="durationStress">Duration</label></dt>
                         <dd>
-                            <input class="duration" id="durationStress" type="text" th:placeholder="#{M0890}"/>
-                            <input id="msDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="ms"/>
-                            <label for="msDurationStress" class="durationStressRadioLabel">ms</label>
-                            <input id="sDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="s"/>
-                            <label for="sDurationStress" class="durationStressRadioLabel">s</label>
-                            <input id="mDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="m"/>
-                            <label for="mDurationStress" class="durationStressRadioLabel">m</label>
-                            <input id="hDurationStress" class="durationStressRadio" type="radio" name="durationStress" value="h"/>
-                            <label for="hDurationStress" class="durationStressRadioLabel">h</label>
+                            <input class="duration" id="durationStress" th:placeholder="#{M0890}" type="text"/>
+                            <input class="durationStressRadio" id="msDurationStress" name="durationStress" type="radio"
+                                   value="ms"/>
+                            <label class="durationStressRadioLabel" for="msDurationStress">ms</label>
+                            <input class="durationStressRadio" id="sDurationStress" name="durationStress" type="radio"
+                                   value="s"/>
+                            <label class="durationStressRadioLabel" for="sDurationStress">s</label>
+                            <input class="durationStressRadio" id="mDurationStress" name="durationStress" type="radio"
+                                   value="m"/>
+                            <label class="durationStressRadioLabel" for="mDurationStress">m</label>
+                            <input class="durationStressRadio" id="hDurationStress" name="durationStress" type="radio"
+                                   value="h"/>
+                            <label class="durationStressRadioLabel" for="hDurationStress">h</label>
                         </dd>
                     </dl>
                     <dl>
@@ -263,7 +272,7 @@
                             <fieldset>
                                 <select class="namespaceSelect" id="namespaceSelectStress"
                                         onchange="changeNamespaceSelect()">
-                                    <option selected disabled hidden value='' th:text="#{M0869}"></option>
+                                    <option disabled hidden selected th:text="#{M0869}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -273,7 +282,7 @@
                         <dd>
                             <fieldset>
                                 <select class="labelSelect" id="labelSelectStress" onchange="changeLabelSelect()">
-                                    <option selected value='' th:text="#{M0870}"></option>
+                                    <option selected th:text="#{M0870}" value=''></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -307,7 +316,7 @@
                 </div>
                 <div class="btn02">
                     <div>
-                        <button type="submit" class="save" th:text="#{M0030}"></button>
+                        <button class="save" th:text="#{M0030}" type="submit"></button>
                         <button onclick="movePage(URI_CP_GLOBAL_CLUSTER);" th:text="#{M0028}"></button>
                     </div>
                 </div>
@@ -329,7 +338,6 @@
         let tabContent = document.querySelectorAll('.tab-content > div');
         let tabIndex = 0;
         let gracePeriod;
-        let podsList = [];
 
         tabBtns[0].classList.add('active');
 
@@ -344,16 +352,16 @@
                         func.removeHtml(document.getElementsByClassName('namespaceSelect')[j]);
                         func.removeHtml(document.getElementsByClassName('labelSelect')[j]);
                         func.removeHtml(document.getElementsByClassName('podList')[j]);
-                        document.getElementsByClassName('name')[j].value='';
+                        document.getElementsByClassName('name')[j].value = '';
                     }
-                    document.getElementById('gracePeriod').value='';
-                    document.getElementById('latency').value='';
-                    document.getElementById('durationNetwork').value='';
-                    document.getElementById('durationStress').value='';
-                    document.getElementById('cpuWorkers').value='';
-                    document.getElementById('cpuLoad').value='';
-                    document.getElementById('memoryWorkers').value='';
-                    document.getElementById('memorySize').value='';
+                    document.getElementById('gracePeriod').value = '';
+                    document.getElementById('latency').value = '';
+                    document.getElementById('durationNetwork').value = '';
+                    document.getElementById('durationStress').value = '';
+                    document.getElementById('cpuWorkers').value = '';
+                    document.getElementById('cpuLoad').value = '';
+                    document.getElementById('memoryWorkers').value = '';
+                    document.getElementById('memorySize').value = '';
 
                     tabBtns[idx].classList.add('active');
                     tabContent[idx].style.display = '';
@@ -400,9 +408,9 @@
         function labelSelector(data) {
             const labels = data.items[0].labels
             let labelSelect = null;
-            if (Object.keys(labels).length !== 0){
+            if (Object.keys(labels).length !== 0) {
                 labelSelect += `<option selected hidden value='' >${LABELSELECT}</option><option value='all' >All</option>`;
-            }else {
+            } else {
                 labelSelect += `<option selected hidden value='' >${LABELSELECT}</option><option value='' disabled selected>해당 Namespace에 Pod 없음</option>`;
 
             }
@@ -426,11 +434,11 @@
             let namespaceSelect = document.getElementsByClassName('namespaceSelect')[tabIndex].value;
 
             labelSelectValue = document.getElementsByClassName('labelSelect')[tabIndex].value;
-            const selector = labelSelectValue.replace(':',"=");
+            const selector = labelSelectValue.replace(':', "=");
 
-            if(labelSelectValue !== 'all'){
+            if (labelSelectValue !== 'all') {
                 func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods/resources?selector=${selector}`, 'application/json', podList);
-            }else {
+            } else {
                 func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelect}/pods`, 'application/json', podList);
             }
         }
@@ -440,32 +448,33 @@
             labelSelectValue = labelSelectValue.split(':')[0]
 
             for (let i = 0; i < data.items.length; i++) {
-                if(data.items[i].podStatus === 'Running') {
+                if (data.items[i].podStatus === 'Running') {
                     const dataLabels = data.items[i].labels;
                     if (Object.keys(dataLabels).includes(labelSelectValue)) {
                         html += `<tr>
-                                          <td>
-                                            <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
-                                            <label for="check_${data.items[i].name}"></label>
-                                          </td>
-                                          <td id=${data.items[i].name}>${data.items[i].name}</td>
-                                          <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
-                                          <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
-                                        </tr>`;
+                                   <td>
+                                     <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
+                                     <label for="check_${data.items[i].name}"></label>
+                                   </td>
+                                   <td id=${data.items[i].name}>${data.items[i].name}</td>
+                                   <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
+                                   <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
+                                 </tr>`;
                     }
                     if (labelSelectValue === 'all') {
                         html += `<tr>
-                                          <td>
-                                            <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
-                                            <label for="check_${data.items[i].name}"></label>
-                                          </td>
-                                          <td id=${data.items[i].name}>${data.items[i].name}</td>
-                                          <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
-                                          <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
-                                        </tr>`;
+                                   <td>
+                                     <input type="checkbox" class="pods" id="check_${data.items[i].name}" name="checkboxPod" value=${data.items[i].name} />
+                                     <label for="check_${data.items[i].name}"></label>
+                                   </td>
+                                   <td id=${data.items[i].name}>${data.items[i].name}</td>
+                                   <td id=${data.items[i].namespace}>${data.items[i].namespace}</td>
+                                   <td id=${data.items[i].podStatus}>${data.items[i].podStatus}</td>
+                                 </tr>`;
                     }
                 }
             }
+
             func.appendHtml(document.getElementsByClassName("podList")[tabIndex], html, "tbody",);
             selectPod();
         }
@@ -477,6 +486,7 @@
         function validReset() {
             IS_VCHK = false;
         }
+
         function validCheck(fault) {
             const regExp = /^[0-9a-z]+$/;
             const regExpNum = /^[0-9]+$/;
@@ -506,17 +516,20 @@
                 IS_VCHK = true;
                 return false;
             }
-            if (podsList.length === 0) {
+            const isCheck = document.querySelectorAll('input[name="checkboxPod"]');
+            const isAnyChecked = Array.from(isCheck).some(checkbox => checkbox.checked);
+
+            if (!isAnyChecked) {
                 func.alertPopup('ERROR', MSG_SELECT_TARGET_POD, true, MSG_CLOSE, validReset);
                 IS_VCHK = true;
                 return false;
             }
-            if(fault === 'podFault') {
+            if (fault === 'podFault') {
                 if (isEmpty(document.getElementById('gracePeriod').value)) {
                     gracePeriod = 0;
                 }
             }
-            if(fault === 'networkAttack') {
+            if (fault === 'networkAttack') {
                 if (isEmpty(document.getElementById('latency').value)) {
                     func.alertPopup('ERROR', MSG_EMPTY_LATENCY, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
@@ -547,13 +560,13 @@
                     IS_VCHK = true;
                     return false;
                 }
-               if(document.getElementsByClassName('durationNetworkRadio')[radioCheck('durationNetwork')].value === 'h' && document.getElementById('durationNetwork').value > 12) {
-                   func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
-                   IS_VCHK = true;
-                   return false;
-               }
+                if (document.getElementsByClassName('durationNetworkRadio')[radioCheck('durationNetwork')].value === 'h' && document.getElementById('durationNetwork').value > 12) {
+                    func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
+                    IS_VCHK = true;
+                    return false;
+                }
             }
-            if(fault === 'stressTest') {
+            if (fault === 'stressTest') {
                 if (isEmpty(document.getElementById('durationStress').value)) {
                     func.alertPopup('ERROR', MSG_EMPTY_DURATION, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
@@ -569,12 +582,12 @@
                     IS_VCHK = true;
                     return false;
                 }
-                if(document.getElementsByClassName('durationStressRadio')[radioCheck('durationStress')].value === 'h' && document.getElementById('durationStress').value > 12) {
+                if (document.getElementsByClassName('durationStressRadio')[radioCheck('durationStress')].value === 'h' && document.getElementById('durationStress').value > 12) {
                     func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
                 }
-                if(isEmpty(document.getElementById("cpuWorkers").value) && isEmpty(document.getElementById("memoryWorkers").value)) {
+                if (isEmpty(document.getElementById("cpuWorkers").value) && isEmpty(document.getElementById("memoryWorkers").value)) {
                     func.alertPopup('ERROR', MSG_ENTER_STRESSORS, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
@@ -584,7 +597,7 @@
                     IS_VCHK = true;
                     return false;
                 }
-                if(!isEmpty(document.getElementById("cpuLoad").value) && (!regExpNum.test(document.getElementById('cpuLoad').value) || 0 > document.getElementById('cpuLoad').value || 100 < document.getElementById('cpuLoad').value)) {
+                if (!isEmpty(document.getElementById("cpuLoad").value) && (!regExpNum.test(document.getElementById('cpuLoad').value) || 0 > document.getElementById('cpuLoad').value || 100 < document.getElementById('cpuLoad').value)) {
                     func.alertPopup('ERROR', MSG_INVALID_CPU_LOAD, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
@@ -594,7 +607,7 @@
                     IS_VCHK = true;
                     return false;
                 }
-                if(!isEmpty(document.getElementById("memorySize").value) && (!regExpNum.test(document.getElementById('memorySize').value) || 0 > document.getElementById('memorySize').value )) {
+                if (!isEmpty(document.getElementById("memorySize").value) && (!regExpNum.test(document.getElementById('memorySize').value) || 0 > document.getElementById('memorySize').value)) {
                     func.alertPopup('ERROR', MSG_INVALID_MEMORY_SIZE, true, MSG_CLOSE, validReset);
                     IS_VCHK = true;
                     return false;
@@ -611,8 +624,8 @@
         function radioCheck(name) {
             let checkRadio = document.getElementsByName(name);
             let cnt = 0;
-            for(let i = 0; i < checkRadio.length; i++){
-                if(checkRadio[i].checked){
+            for (let i = 0; i < checkRadio.length; i++) {
+                if (checkRadio[i].checked) {
                     return cnt;
                 }
                 cnt++;
@@ -653,27 +666,27 @@
             let durationRadios;
             let selectedDurationValue;
             let duration;
-                if(fault === 'networkAttack') {
-                    durationRadios =document.querySelectorAll('.durationNetworkRadio');
-                    durationRadios.forEach(radio => {
-                        if (radio.checked) {
-                            selectedDurationValue = radio.value;
-                        }
-                    });
-                    if(!isEmpty(document.getElementById('durationNetwork').value)) {
-                        duration = document.getElementById('durationNetwork').value + selectedDurationValue;
+            if (fault === 'networkAttack') {
+                durationRadios = document.querySelectorAll('.durationNetworkRadio');
+                durationRadios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedDurationValue = radio.value;
                     }
-                }else if (fault === 'stressTest') {
-                    durationRadios =document.querySelectorAll('.durationStressRadio');
-                    durationRadios.forEach(radio => {
-                        if (radio.checked) {
-                            selectedDurationValue = radio.value;
-                        }
-                    });
-                    if(!isEmpty(document.getElementById('durationStress').value)) {
-                        duration = document.getElementById('durationStress').value + selectedDurationValue;
-                    }
+                });
+                if (!isEmpty(document.getElementById('durationNetwork').value)) {
+                    duration = document.getElementById('durationNetwork').value + selectedDurationValue;
                 }
+            } else if (fault === 'stressTest') {
+                durationRadios = document.querySelectorAll('.durationStressRadio');
+                durationRadios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedDurationValue = radio.value;
+                    }
+                });
+                if (!isEmpty(document.getElementById('durationStress').value)) {
+                    duration = document.getElementById('durationStress').value + selectedDurationValue;
+                }
+            }
             const latencyRadios = document.querySelectorAll('.latencyRadio');
             let selectedLatencyValue;
             latencyRadios.forEach(radio => {
@@ -695,26 +708,26 @@
             });
             memorySize = document.getElementById('memorySize').value + selectedMemorySizeValue;
 
-            if(!isEmpty(document.getElementById("cpuWorkers").value)){
-                if(!isEmpty(document.getElementById("cpuLoad").value)) {
+            if (!isEmpty(document.getElementById("cpuWorkers").value)) {
+                if (!isEmpty(document.getElementById("cpuLoad").value)) {
                     cpu = {
                         "workers": document.getElementById("cpuWorkers").value,
                         "load": document.getElementById("cpuLoad").value
                     }
-                }else{
+                } else {
                     cpu = {
                         "workers": document.getElementById("cpuWorkers").value
                     }
                 }
                 stressors.cpu = cpu;
             }
-            if(!isEmpty(document.getElementById("memoryWorkers").value)){
-                if(!isEmpty(document.getElementById("memorySize").value)) {
+            if (!isEmpty(document.getElementById("memoryWorkers").value)) {
+                if (!isEmpty(document.getElementById("memorySize").value)) {
                     memory = {
                         "workers": document.getElementById("memoryWorkers").value,
                         "size": memorySize
                     }
-                }else{
+                } else {
                     memory = {
                         "workers": document.getElementById("memoryWorkers").value
                     }
@@ -722,19 +735,15 @@
                 stressors.memory = memory;
             }
 
-            const checkbox = 'input[name="checkboxPod"]:checked';
-            const checkedPod = document.querySelectorAll(checkbox);
-            let pods = {};
-
-            checkedPod.forEach((el) => {
-                podsList.push(el.value);
-            });
-            pods[namespaces[0]] = podsList;
-
             let cluster = sessionStorage.getItem('cluster');
             let namespace = chaosNamespace;
 
-            if(validCheck(fault)){
+            if (validCheck(fault)) {
+                const checkedPod = document.querySelectorAll('input[name="checkboxPod"]:checked');
+                const pods = {
+                    [namespaces[0]]: Array.from(checkedPod).map(pod => pod.value)
+                };
+
                 const podFault = {
                     kind: 'PodChaos',
                     action: 'pod-kill',
@@ -742,6 +751,7 @@
                     namespace,
                     name,
                     chaosNamespace,
+
                     namespaces,
                     labelSelectors,
                     pods,
