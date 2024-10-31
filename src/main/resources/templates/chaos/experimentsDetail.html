@@ -23,26 +23,26 @@
                             <col width="80%"/>
                         </colgroup>
                         <tbody class="listTable">
-                        <tr>
-                            <th class="left" scope="row">Name</th>
-                            <td class="left" id="name"></td>
-                        </tr>
-                        <tr>
-                            <th class="left" scope="row">Status</th>
-                            <td class="left" id="status"></td>
-                        </tr>
-                        <tr>
-                            <th class="left" scope="row">UUID</th>
-                            <td class="left" id="uid"></td>
-                        </tr>
-                        <tr>
-                            <th class="left" scope="row">Namespaces</th>
-                            <td class="left" id="namespace"></td>
-                        </tr>
-                        <tr>
-                            <th class="left" scope="row">Created time</th>
-                            <td class="left" id="createdTime"></td>
-                        </tr>
+                            <tr>
+                                <th class="left" scope="row">Name</th>
+                                <td class="left" id="name"></td>
+                            </tr>
+                            <tr>
+                                <th class="left" scope="row">Status</th>
+                                <td class="left" id="status"></td>
+                            </tr>
+                            <tr>
+                                <th class="left" scope="row">UUID</th>
+                                <td class="left" id="uid"></td>
+                            </tr>
+                            <tr>
+                                <th class="left" scope="row">Namespaces</th>
+                                <td class="left" id="namespace"></td>
+                            </tr>
+                            <tr>
+                                <th class="left" scope="row">Created time</th>
+                                <td class="left" id="createdTime"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -62,6 +62,10 @@
                         <tr>
                             <th class="left" scope="row">Label Selectors</th>
                             <td class="left box" id="labelSelectors"></td>
+                        </tr>
+                        <tr>
+                            <th class="left" scope="row">Selected Pods</th>
+                            <td class="left box" id="selectedPods"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -160,12 +164,7 @@
                 }
                 return result;
             },
-            parseISODate(str) {
-                return new Date(str);
-            }
         };
-
-        const NUMBER_CFG = { min: 0, max: 100, count: 10 };
     </script>
     <script type="text/javascript">
         window.onload = () => {
@@ -178,7 +177,6 @@
                 },
 
                 draw(data) {
-
                     // Details data
                     document.getElementById('name').innerText = sessionStorage.getItem('name');
                     document.getElementById('uid').innerText = sessionStorage.getItem('uid');
@@ -208,6 +206,24 @@
                         func.appendHtml(document.getElementById('labelSelectors'), html, 'dl');
                     }
 
+                    const selectedPods = data.items[0].spec.selector.pods;
+                    const pods = [];
+                    if(selectedPods !== null) {
+                        Object.keys(selectedPods).forEach(namespace => {
+                            selectedPods[namespace].forEach(pod => {
+                                if(isEmpty(pods)){
+                                    pods.push(pod);
+                                }else {
+                                    pods.push("\n" + pod);
+                                }
+                            })
+                        })
+                        document.getElementById('selectedPods').innerText = pods;
+
+                    } else {
+                        document.getElementById('selectedPods').innerText = '-';
+                    }
+
                     // Experiment
                     document.getElementById('kind').innerHTML = data.items[0].kind;
 
@@ -216,7 +232,11 @@
                         const gracePeriod = data.items[0].spec.gracePeriod;
 
                         let html = `<tr><th scope="row" class="left">Action</th><td class="left" id="action">${action}</td></tr>`;
-                        html += `<tr><th scope="row" class="left">Grace Period</th><td class="left" id="gracePeriod">${gracePeriod}</td></tr>`;
+                        if(gracePeriod !== null){
+                            html += `<tr><th scope="row" class="left">Grace Period</th><td class="left" id="gracePeriod">${gracePeriod}</td></tr>`;
+                        }else {
+                            html += `<tr><th scope="row" class="left">Grace Period</th><td class="left" id="gracePeriod">-</td></tr>`;
+                        }
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
                     } else if (data.items[0].kind === 'NetworkChaos') {
                         const action = data.items[0].spec.action;
@@ -225,15 +245,16 @@
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
                     } else if (data.items[0].kind === 'StressChaos') {
                         // draw chart
-                        experimentsDetail.drawChart();
+                        if(data.items[0].experimentTime >= 60000) {
+                            experimentsDetail.drawChart();
 
-                        // Resource usage by selected Pods during chaos
-                         func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByPod/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.podChart);
-                        // Resource usage by workload for selected Pods during chao
-                        func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByWorkload/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.workloadChart);
-                        // Resource usage by node during chaos
-                        func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByNode/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.nodeChart);
-
+                            // Resource usage by selected Pods during chaos
+                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByPod/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.podChart);
+                            // Resource usage by workload for selected Pods during chao
+                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByWorkload/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.workloadChart);
+                            // Resource usage by node during chaos
+                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByNode/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.nodeChart);
+                        }
 
 
                         if (data.items[0].spec.stressors.memory != null) {
@@ -307,9 +328,19 @@
 
                 drawChart() {
                     document.getElementById('chaosCharts').innerHTML = `
-                        <div class="chaosChart">
-                            <h4>Metrics</h4>
-                            <h5>▶ Resource usage by selected Pods during chaos</h5>
+                        <h4>Metrics (* )</h4>
+                        <div class="chaosChart table_style01">
+                            <table>
+                                <caption>Metrics</caption>
+                                <colgroup>
+                                    <col width="100%"/>
+                                </colgroup>
+                                <tbody class="listTable">
+                                    <tr>
+                                        <th class="left" scope="row">Resource usage by selected Pods during chaos</th>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <div class="chaosResourceList" id="chaosPodList"></div>
                             <ol id="resourceUsageByPodCharts">
                                 <li>
@@ -326,8 +357,18 @@
                                 </li>
                             </ol>
                         </div>
-                        <div class="chaosChart">
-                            <h5>▶ Resource usage by workload for selected Pods during chaos</h5>
+                        <div class="chaosChart table_style01">
+                            <table>
+                                <caption>Metrics</caption>
+                                <colgroup>
+                                    <col width="100%"/>
+                                </colgroup>
+                                <tbody class="listTable">
+                                    <tr>
+                                        <th class="left" scope="row">Resource usage by workload for selected Pods during chaos</th>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <div class="chaosResourceList" id="chaosWorkloadList"></div>
                             <ol id="resourceUsageByWorkloadCharts">
                                 <li>
@@ -338,8 +379,18 @@
                                 </li>
                             </ol>
                         </div>
-                        <div class="chaosChart">
-                            <h5>▶ Resource usage by node during chaos</h5>
+                        <div class="chaosChart table_style01">
+                            <table>
+                                <caption>Metrics</caption>
+                                <colgroup>
+                                    <col width="100%"/>
+                                </colgroup>
+                                <tbody class="listTable">
+                                    <tr>
+                                        <th class="left" scope="row">Resource usage by node during chaos</th>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <div class="chaosResourceList" id="chaosNodeList"></div>
                             <ol id="resourceUsageByNodeCharts">
                                 <li>
