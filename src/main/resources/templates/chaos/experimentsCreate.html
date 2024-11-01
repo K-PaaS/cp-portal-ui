@@ -133,17 +133,13 @@
                         <dt><label for="durationNetwork">Duration</label></dt>
                         <dd>
                             <input class="duration" id="durationNetwork" th:placeholder="#{M0890}" type="text"/>
-                            <input class="durationNetworkRadio" id="msDurationNetwork" name="durationNetwork"
-                                   type="radio" value="ms"/>
+                            <input class="durationNetworkRadio" id="msDurationNetwork" name="durationNetwork" type="radio" value="ms"/>
                             <label class="durationNetworkRadioLabel" for="msDurationNetwork">ms</label>
-                            <input class="durationNetworkRadio" id="sDurationNetwork" name="durationNetwork"
-                                   type="radio" value="s"/>
+                            <input class="durationNetworkRadio" id="sDurationNetwork" name="durationNetwork" type="radio" value="s"/>
                             <label class="durationNetworkRadioLabel" for="sDurationNetwork">s</label>
-                            <input class="durationNetworkRadio" id="mDurationNetwork" name="durationNetwork"
-                                   type="radio" value="m"/>
+                            <input class="durationNetworkRadio" id="mDurationNetwork" name="durationNetwork" type="radio" value="m"/>
                             <label class="durationNetworkRadioLabel" for="mDurationNetwork">m</label>
-                            <input class="durationNetworkRadio" id="hDurationNetwork" name="durationNetwork"
-                                   type="radio" value="h"/>
+                            <input class="durationNetworkRadio" id="hDurationNetwork" name="durationNetwork" type="radio" value="h"/>
                             <label class="durationNetworkRadioLabel" for="hDurationNetwork">h</label>
                         </dd>
                     </dl>
@@ -252,17 +248,13 @@
                         <dt><label for="durationStress">Duration</label></dt>
                         <dd>
                             <input class="duration" id="durationStress" th:placeholder="#{M0890}" type="text"/>
-                            <input class="durationStressRadio" id="msDurationStress" name="durationStress" type="radio"
-                                   value="ms"/>
+                            <input class="durationStressRadio" id="msDurationStress" name="durationStress" type="radio" value="ms"/>
                             <label class="durationStressRadioLabel" for="msDurationStress">ms</label>
-                            <input class="durationStressRadio" id="sDurationStress" name="durationStress" type="radio"
-                                   value="s"/>
+                            <input class="durationStressRadio" id="sDurationStress" name="durationStress" type="radio" value="s"/>
                             <label class="durationStressRadioLabel" for="sDurationStress">s</label>
-                            <input class="durationStressRadio" id="mDurationStress" name="durationStress" type="radio"
-                                   value="m"/>
+                            <input class="durationStressRadio" id="mDurationStress" name="durationStress" type="radio" value="m"/>
                             <label class="durationStressRadioLabel" for="mDurationStress">m</label>
-                            <input class="durationStressRadio" id="hDurationStress" name="durationStress" type="radio"
-                                   value="h"/>
+                            <input class="durationStressRadio" id="hDurationStress" name="durationStress" type="radio" value="h"/>
                             <label class="durationStressRadioLabel" for="hDurationStress">h</label>
                         </dd>
                     </dl>
@@ -362,6 +354,17 @@
                     document.getElementById('cpuLoad').value = '';
                     document.getElementById('memoryWorkers').value = '';
                     document.getElementById('memorySize').value = '';
+
+                    const latencyRadio = document.querySelectorAll('input[name="latency"]');
+                    latencyRadio.forEach(radio => radio.checked = false);
+                    const memorySizeRadio = document.querySelectorAll('input[name="memorySize"]');
+                    memorySizeRadio.forEach(radio => radio.checked = false);
+
+                    const durationNetworkRadio = document.querySelectorAll('input[name="durationNetwork"]');
+                    durationNetworkRadio.forEach(radio => radio.checked = false);
+                    const durationStressRadio = document.querySelectorAll('input[name="durationStress"]');
+                    durationStressRadio.forEach(radio => radio.checked = false);
+
 
                     tabBtns[idx].classList.add('active');
                     tabContent[idx].style.display = '';
@@ -621,6 +624,37 @@
             return true;
         }
 
+
+        const radios = document.getElementsByName('durationStress');
+        radios.forEach(radio => {
+            radio.addEventListener('change', noMetricsForShortRun);
+        });
+        function noMetricsForShortRun() {
+            let selectedValue = null;
+            for (const radio of radios) {
+                if (radio.checked) {
+                    selectedValue = radio.value;
+                    break;
+                }
+            }
+            const durationValue = document.getElementById('durationStress').value;
+
+            if(selectedValue === 's') {
+                if(durationValue < 30){
+                    console.log("durationValue : ", durationValue);
+                    func.alertPopup('WARN', MSG_NO_METRIC_LESS_30SECONDS, true, MSG_CONFIRM, noMetricsForShortRun);
+                }
+            }
+            if(selectedValue === 'ms') {
+                if(durationValue < 30000){
+                    console.log("durationValue : ", durationValue);
+                    func.alertPopup('WARN', MSG_NO_METRIC_LESS_30SECONDS, true, MSG_CONFIRM, noMetricsForShortRun);
+                }
+
+            }
+
+        }
+
         function radioCheck(name) {
             let checkRadio = document.getElementsByName(name);
             let cnt = 0;
@@ -751,7 +785,6 @@
                     namespace,
                     name,
                     chaosNamespace,
-
                     namespaces,
                     labelSelectors,
                     pods,
