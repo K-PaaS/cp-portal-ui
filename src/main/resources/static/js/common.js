@@ -129,13 +129,13 @@ const func = {
 		for(var i=0 ; i<name.length; i++){
 			name[i].addEventListener('click', (e) => {
 				sessionStorage.setItem('cluster' , e.target.getAttribute('data-name'));
-			sessionStorage.setItem('clusterName', e.target.innerText);
-			document.querySelector('.clusterTop').innerText = e.target.innerText;
-			sessionStorage.removeItem('nameSpace');
-			func.setUserAuthority(sessionStorage.getItem('cluster'), data.items);
-			IS_RELOAD = true;
-			func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', func.namespaces);
-		}, false);
+				sessionStorage.setItem('clusterName', e.target.innerText);
+				document.querySelector('.clusterTop').innerText = e.target.innerText;
+				sessionStorage.removeItem('nameSpace');
+				func.setUserAuthority(sessionStorage.getItem('cluster'), data.items);
+				IS_RELOAD = true;
+				func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', func.namespaces);
+			}, false);
 		};
 
 		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', func.namespaces);
@@ -544,6 +544,64 @@ const func = {
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////
+	// 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
+	// (전송타입, url, 콜백함수)
+	/////////////////////////////////////////////////////////////////////////////////////
+	statusLoadData(method, url, header, callbackFunction, list){
+		if(sessionStorage.getItem('token') == null){
+			func.loginCheck();
+		};
+
+		if(url == null) {
+			callbackFunction();
+			return false;
+		}
+
+		var request = new XMLHttpRequest();
+
+		setTimeout(function() {
+			request.open(method, url, false);
+			request.setRequestHeader('Content-type', header);
+			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
+			request.onreadystatechange = () => {
+				if (request.readyState === XMLHttpRequest.DONE){
+					if(request.status === 200 && request.responseText != ''){
+						var resultMessage = JSON.parse(request.responseText).resultMessage;
+						var resultCode =  JSON.parse(request.responseText).resultCode;
+						var detailMessage = JSON.parse(request.responseText).detailMessage;
+						//토큰 만료 검사
+						if( resultMessage == 'TOKEN_EXPIRED') {
+							func.refreshToken();
+							return func.loadData(method, url, header, callbackFunction, list);
+						}
+						else if(resultMessage == 'TOKEN_FAILED') {
+							func.loginCheck();
+							return func.loadData(method, url, header, callbackFunction, list);
+						}
+						else if(resultCode != RESULT_STATUS_SUCCESS) {
+							if(document.getElementById('loading')){
+								document.getElementById('wrap').removeChild(document.getElementById('loading'));
+							};
+							func.alertPopup('ERROR', detailMessage, true, MSG_CONFIRM, 'historyBack');
+						}
+						else {
+							callbackFunction(JSON.parse(request.responseText), list);
+						}
+					} else if(JSON.parse(request.responseText).httpStatusCode === 500){
+						sessionStorage.clear();
+						func.loginCheck();
+					};
+				};
+			};
+
+			request.send(); },0);
+
+	},
+
+	/////////////////////////////////////////////////////////////////////////////////////
 	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
 	// (전송타입, url, 데이터, 분기, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -688,17 +746,22 @@ const func = {
 
 		document.getElementById('alertModal').querySelector('.close').addEventListener('click', (e) => {
 			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
-	}, false);
+		}, false);
 
 		if(callback){
 			document.getElementById('alertModal').querySelector('.confirm').addEventListener('click', (e) => {
+				if(callback == 'historyBack'){
+					historyBack();
+				};
+
 				if(callback != 'closed'){
 				callback();
-			};
+				};
 
-			if(!IS_VCHK) {
-			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));}
-		}, false);
+				if(!IS_VCHK) {
+				document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
+				}
+			}, false);
 		};
 	},
 

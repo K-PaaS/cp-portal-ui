@@ -245,7 +245,7 @@
                         func.appendHtml(document.getElementById('experiment'), html, 'tbody');
                     } else if (data.items[0].kind === 'StressChaos') {
                         // draw chart
-                        if(data.items[0].experimentTime >= 60000) {
+                        if(data.items[0].experimentTime >= 30000) {
                             experimentsDetail.drawChart();
 
                             // Resource usage by selected Pods during chaos
@@ -406,7 +406,11 @@
 
                 podChart(data) {
                     const timeList = data.items[0].time;
-                    const podNameList = data.items[0].resourceName;
+                    const podNameList = data.items[0].resourceName.sort((a,b) => {
+                        if ( a < b) return -1;
+                        if(a > b) return 1;
+                        return 0;
+                    });
                     const cpuUsageLists = data.items[0].cpu;
                     const memoryUsageLists = data.items[0].memory;
                     const appStatusUsageList = data.items[0].appStatus;
@@ -679,7 +683,11 @@
 
                 workloadChart(data) {
                     const timeList = data.items[0].time;
-                    const workloadName = data.items[0].resourceName;
+                    const workloadName = data.items[0].resourceName.sort((a,b) => {
+                        if ( a < b) return -1;
+                        if(a > b) return 1;
+                        return 0;
+                    });
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
 
@@ -875,7 +883,11 @@
 
                 nodeChart(data) {
                     const timeList = data.items[0].time;
-                    const nodeName = data.items[0].resourceName;
+                    const nodeName = data.items[0].resourceName.sort((a,b) => {
+                        if ( a < b) return -1;
+                        if(a > b) return 1;
+                        return 0;
+                    });
                     const cpuUsage = data.items[0].cpu;
                     const memoryUsage = data.items[0].memory;
 
@@ -1076,7 +1088,7 @@
 
                 statusInterval() {
                     // detail status 정보 조회
-                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status/${sessionStorage.getItem('uid')}`, 'application/json', experimentsDetail.status);
+                    func.statusLoadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status/${sessionStorage.getItem('uid')}`, 'application/json', experimentsDetail.status);
                 },
 
                 status(data) {
