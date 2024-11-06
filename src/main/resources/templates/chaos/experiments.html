@@ -136,7 +136,7 @@
 
             statusInterval(){
                 // status 정보 조회
-                func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}&limit=${experiments.limit}&offset=${experiments.offset}`, 'application/json', experiments.status);
+                func.statusLoadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}&limit=${experiments.limit}&offset=${experiments.offset}`, 'application/json', experiments.status);
             },
 
             status(data){
