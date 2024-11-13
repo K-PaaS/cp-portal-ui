@@ -212,7 +212,7 @@ const func = {
 
 		func.appendHtml(document.getElementById('wrap'), html, 'div');
 
-		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/deployments`, 'application/json', applicationDraw);
+		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/deployments/vaultSecret`, 'application/json', applicationDraw);
 
 		function applicationDraw(data) {
 			for(var i=0; i<=data.items.length-1; i++){
@@ -246,7 +246,7 @@ const func = {
 				dbService : sessionStorage.getItem('vaultDbName')
 			});
 
-			func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${url}/vault/application`, sendData, true, 'application/json', func.refresh);
+			func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${url}/vault/application`, sendData, true, 'application/json', func.historyBack);
 		}, false);
 	},
 
@@ -370,7 +370,7 @@ const func = {
 		});
 
 
-		func.saveData('PUT', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${document.getElementById('modify').getAttribute('data-role')}/${sessionStorage.getItem('commonName')}`, sendData, true, 'application/json', func.refresh);
+		func.saveData('PUT', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${document.getElementById('modify').getAttribute('data-role')}/${sessionStorage.getItem('commonName')}`, sendData, true, 'application/json', func.history);
 	}, false);
 	},
 
