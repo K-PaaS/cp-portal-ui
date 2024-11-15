@@ -152,11 +152,17 @@
      var MSG_INVALID_FORMAT = "형식이 올바르지 않습니다.";
      var MSG_SELECTED_NAMESPACE_ALL = [[#{M0843}]];
      var MSG_REQUEST_VALUE_IS_MISSING = [[#{M0844}]];
-     var MSG_POSTGRESQL_HELM_INSTALL = [[#{M0923}]]
+     var MSG_POSTGRESQL_HELM_INSTALL = [[#{M0923}]];
 
      var MSG_SIGN_OUT = [[#{M0809}]];
 
      // catalog
+    const DEFAULT_CHART_REPO_NAME = [[${@environment.getProperty('catalog.default.repo.name')}]];
+    const DEFAULT_CHART_REPO_URL = [[${@environment.getProperty('catalog.default.repo.url')}]];
+    const DEFAULT_CHART_REPO_USERNAME = [[${@environment.getProperty('catalog.default.repo.username')}]];
+    const DEFAULT_CHART_REPO_PASSWORD = [[${@environment.getProperty('catalog.default.repo.password')}]];
+    const DEFAULT_CHART_REPO_CRT = [[${@environment.getProperty('catalog.default.repo.cert')}]];
+
      var MSG_REQUIRED_RELEASE_NAME = [[#{M0859}]];
      var MSG_REPO_CHART_UPDATE = [[#{M0856}]];
      var MSG_REPO_CHART_ROLLBACK = [[#{M0862}]];
@@ -165,6 +171,9 @@
      var MSG_COMPLETED_CLEAR_CACHE = [[#{M0916}]];
      var MSG_FAILED_TO_UPDATE_REPO = [[#{M0917}]];
      var MSG_CHART_NOT_FOUND = [[#{M0918}]];
+     var MSG_DEFAULT_REPO_ADD = [[#{M0924}]];
+     var MSG_DONT_DSPL_DEFAULT_REPO_CHK = [[#{M0925}]];
+     var MSG_DONT_DSPL_DEFAULT_REPO_CHK_DETAIL = [[#{M0926}]];
 
      var CURRENT_LOCALE_LANGUAGE = '';
 
@@ -370,6 +379,12 @@
      mergeView.editor().setSize(null, height);
      mergeView.wrap.style.height = height + "px";
 
+ }
+ function setLocalStorageItem(key,value){
+     localStorage.setItem(key,value);
+ }
+ function getLocalStorageItem(key){
+     return localStorage.getItem(key);
  }
 </script>
 </span>

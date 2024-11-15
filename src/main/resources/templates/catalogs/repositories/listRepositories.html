@@ -41,7 +41,11 @@
                         <a class="more" href="javascript:;">more</a>
                     </div>
                     <!-- btn -->
-                    <a id="clearCache" th:text="#{M0913}" sec:authorize="hasAnyAuthority('SUPER_ADMIN','CLUSTER_ADMIN')" style="right:105px; background-color:#bdbfc4;"></a>
+
+                    <a id="addDfRepo" sec:authorize="hasAnyAuthority('SUPER_ADMIN','CLUSTER_ADMIN')" style="display:none;right:202px;border:1px solid rgba(248,88,18,0.9);padding:9px 8px 7px 8px;background:transparent;">
+                        <i class="fa-regular fa-plus fa-xl" style="color:rgba(248,88,18,0.9)"></i>
+                    </a>
+                    <a id="clearCache" th:text="#{M0913}" sec:authorize="hasAnyAuthority('SUPER_ADMIN','CLUSTER_ADMIN')" style="right:105px;text-align:center;background-color:#bdbfc4;"></a>
                     <a href="javascript:;" class="add" th:text="#{M0223}"></a>
                 </div>
         </article>
@@ -50,7 +54,8 @@
 <th:block layout:fragment="script">
     <script type="text/javascript">
     window.onload = () => {
-
+        let incldDfRepo = false;
+        let dntDsplDfRepoAddBtn = false;
         func.init(ASIDE_DP1.CATALOGS, ASIDE_DP2.CATALOG_REPOSITORIES);
         callbackFuncNameLoad();
 
@@ -91,6 +96,12 @@
                     repos.allItems = data.items;
                     repos.allItemsOrig = data.items;
                     repos.allItemCount =  data.items.length;
+                    for(let i=data.items.length-1; i>=0; i--) {
+                        if(data.items[i].url == DEFAULT_CHART_REPO_URL) {
+                            incldDfRepo = true;
+                            break;
+                        }
+                    }
                     repos.draw();
                 } else {
                     let html = '<tr><td colspan="2">No Data.</td></tr>';
@@ -119,6 +130,12 @@
                 }
                 func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
 
+                if(document.getElementById('addDfRepo') && !incldDfRepo && isEmpty(getLocalStorageItem("dntDsplDfRepoAddBtn"))) {
+                    let currentLoc = "[[${#locale}]]";
+                    if( currentLoc.toLowerCase().indexOf('en') !== -1) {
+                        document.getElementById("addDfRepo").style.right = "221px";}
+                        document.getElementById("addDfRepo").style.display = "";
+                }
                 repos.listEvent();
                 // more 버튼 활성, 비활성
                 if(document.querySelector('.listTable').querySelectorAll('tr').length < repos.allItemCount){
@@ -146,11 +163,43 @@
                     document.location.href = URI_CP_CATALOG_REPOSITORIES + URI_CP_ADD;
             }, false);
 
+
                 // cache clear 버튼 event
-                document.getElementById('clearCache').addEventListener('click', (e) => {
-                let html = `${MSG_CHECK_TO_CLEAR_CACHE}<div class="modal-detail">${MSG_CHECK_TO_CLEAR_CACHE_REPO_UPDATE}</div>`;
-                    func.alertPopup('CLEAR CACHE', html, true, MSG_CONFIRM, repos.clearCache);
-                }, false);
+                if(document.getElementById('clearCache')) {
+                    document.getElementById('clearCache').addEventListener('click', (e) => {
+                        let html = `${MSG_CHECK_TO_CLEAR_CACHE}<div class="modal-detail">${MSG_CHECK_TO_CLEAR_CACHE_REPO_UPDATE}</div>`;
+                        func.alertPopup('CLEAR CACHE', html, true, MSG_CONFIRM, repos.clearCache);
+                    }, false);
+                }
+                // default chart repository 추가 버튼 event
+                if(document.getElementById('addDfRepo')) {
+                    document.getElementById('addDfRepo').addEventListener('click', (e) => {
+                        let html = `${MSG_DEFAULT_REPO_ADD}<div class="modal-detail" style="max-height:150px;margin-bottom:-20px;">
+                            <span class="header-label2">${DEFAULT_CHART_REPO_URL}</span>
+                            <div style="width:100%;height:90px;margin-top:15px;">
+                            <label class="container" style="display:inline;font-size:14px;">${MSG_DONT_DSPL_DEFAULT_REPO_CHK}
+                            <input type="checkbox" id="dntDsplDfRepoChk">
+                            <span class="checkmark"></span></label>
+                            <div style="margin-top:5px;font-size:13px;color:#7b7b7b">${MSG_DONT_DSPL_DEFAULT_REPO_CHK_DETAIL}</div>
+                            </div></div>`;
+                        func.alertPopup('ADD', html, true, MSG_CONFIRM, repos.addDfRepo);
+
+                        document.getElementById('dntDsplDfRepoChk').addEventListener('change', (e) => {
+                            if (document.getElementById('dntDsplDfRepoChk').checked) {
+                                dntDsplDfRepoAddBtn = true;
+                            } else {
+                                dntDsplDfRepoAddBtn = false;
+                            }
+                        }, false);
+
+                        document.querySelector('.close').addEventListener('click', (e) => {
+                            if (dntDsplDfRepoAddBtn) {
+                                setLocalStorageItem("dntDsplDfRepoAddBtn", true);
+                                document.getElementById("addDfRepo").style.display = "none";
+                            }
+                        }, false);
+                    }, false);
+                }
             },
             clearCache(){
                 func.dryRun('DELETE', `${func.catalogUrl}/api/repositories/cache/clear`, '', true, 'application/json', repos.finishedClearCache);
@@ -163,6 +212,16 @@
                     html += `<div class="modal-detail" style="background-color:#f5f5f5;">${failedList.join('<br/>')}</div>`;
                 }
                 func.alertPopup('SUCCESS', html , true, MSG_CONFIRM, func.none);
+            },
+            addDfRepo(){
+                let sendData = {
+                    "name" :DEFAULT_CHART_REPO_NAME,
+                    "url" : DEFAULT_CHART_REPO_URL,
+                    "username" : DEFAULT_CHART_REPO_USERNAME,
+                    "password" : DEFAULT_CHART_REPO_PASSWORD,
+                    "ca_base64" : DEFAULT_CHART_REPO_CRT,
+                };
+                func.saveData('POST', `${func.catalogUrl}/api/repositories`, JSON.stringify(sendData), true, 'application/json', func.refresh);
             },
             listEvent(){
                 let listAll = document.querySelector('.listTable').querySelectorAll('a');
