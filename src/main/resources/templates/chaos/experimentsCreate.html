@@ -69,7 +69,7 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label>Preview of Pods to be injected</label></dt>
+                        <dt><label >Preview of Pods to be injected</label></dt>
                         <dd>
                             <div class="table_style01">
                                 <table>
@@ -280,7 +280,7 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt><label>Preview of Pods to be injected</label></dt>
+                        <dt><label>Preview of Pods to be injected([[#{M0927}]])</label></dt>
                         <dd>
                             <div class="table_style01">
                                 <table>
@@ -495,27 +495,27 @@
             const regExpNum = /^[0-9]+$/;
 
             if (isEmpty(document.getElementsByClassName('name')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_ENTER_NAME, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_ENTER_NAME, true, MSG_CONFIRM, validReset);
                 IS_VCHK = true;
                 return false;
             }
             if (!regExp.test(document.getElementsByClassName('name')[tabIndex].value) || regExpNum.test(document.getElementsByClassName('name')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_INVALID_NAME_, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_INVALID_NAME_, true, MSG_CONFIRM, validReset);
                 IS_VCHK = true;
                 return false;
             }
             if (isEmpty(document.getElementsByClassName('chaosNamespace')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_SELECT_NAMESPACE, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_NAMESPACE, true, MSG_CONFIRM, validReset);
                 IS_VCHK = true;
                 return false;
             }
             if (isEmpty(document.getElementsByClassName('namespaceSelect')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_SELECT_NAMESPACESELECTOR, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_NAMESPACESELECTOR, true, MSG_CONFIRM, validReset);
                 IS_VCHK = true;
                 return false;
             }
             if (isEmpty(document.getElementsByClassName('labelSelect')[tabIndex].value)) {
-                func.alertPopup('ERROR', MSG_SELECT_LABELSELECTOR, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_LABELSELECTOR, true, MSG_CONFIRM, validReset);
                 IS_VCHK = true;
                 return false;
             }
@@ -523,7 +523,7 @@
             const isAnyChecked = Array.from(isCheck).some(checkbox => checkbox.checked);
 
             if (!isAnyChecked) {
-                func.alertPopup('ERROR', MSG_SELECT_TARGET_POD, true, MSG_CLOSE, validReset);
+                func.alertPopup('ERROR', MSG_SELECT_TARGET_POD, true, MSG_CONFIRM, validReset);
                 IS_VCHK = true;
                 return false;
             }
@@ -534,89 +534,89 @@
             }
             if (fault === 'networkAttack') {
                 if (isEmpty(document.getElementById('latency').value)) {
-                    func.alertPopup('ERROR', MSG_EMPTY_LATENCY, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_EMPTY_LATENCY, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (!regExpNum.test(document.getElementById('latency').value)) {
-                    func.alertPopup('ERROR', MSG_INVALID_LATENCY, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_INVALID_LATENCY, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (radioCheck('latency') === undefined) {
-                    func.alertPopup('ERROR', MSG_SELECT_LATENCY_UNIT, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_SELECT_LATENCY_UNIT, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (isEmpty(document.getElementById('durationNetwork').value)) {
-                    func.alertPopup('ERROR', MSG_EMPTY_DURATION, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_EMPTY_DURATION, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (!regExpNum.test(document.getElementById('durationNetwork').value)) {
-                    func.alertPopup('ERROR', MSG_INVALID_DURATION, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_INVALID_DURATION, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (radioCheck('durationNetwork') === undefined) {
-                    func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (document.getElementsByClassName('durationNetworkRadio')[radioCheck('durationNetwork')].value === 'h' && document.getElementById('durationNetwork').value > 12) {
-                    func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
             }
             if (fault === 'stressTest') {
                 if (isEmpty(document.getElementById('durationStress').value)) {
-                    func.alertPopup('ERROR', MSG_EMPTY_DURATION, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_EMPTY_DURATION, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (!regExpNum.test(document.getElementById('durationStress').value)) {
-                    func.alertPopup('ERROR', MSG_INVALID_DURATION, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_INVALID_DURATION, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (radioCheck('durationStress') === undefined) {
-                    func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_SELECT_DURATION_UNIT, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (document.getElementsByClassName('durationStressRadio')[radioCheck('durationStress')].value === 'h' && document.getElementById('durationStress').value > 12) {
-                    func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_SELECT_DURATION_HOUR_LIMIT, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (isEmpty(document.getElementById("cpuWorkers").value) && isEmpty(document.getElementById("memoryWorkers").value)) {
-                    func.alertPopup('ERROR', MSG_ENTER_STRESSORS, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_ENTER_STRESSORS, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if ((isEmpty(document.getElementById("cpuWorkers").value) && !isEmpty(document.getElementById("cpuLoad").value)) || (!isEmpty(document.getElementById("cpuWorkers").value) && (!regExpNum.test(document.getElementById('cpuWorkers').value) || 1 > document.getElementById("cpuWorkers").value || 8192 < document.getElementById("cpuWorkers").value))) {
-                    func.alertPopup('ERROR', MSG_INVALID_CPU_WORKERS, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_INVALID_CPU_WORKERS, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (!isEmpty(document.getElementById("cpuLoad").value) && (!regExpNum.test(document.getElementById('cpuLoad').value) || 0 > document.getElementById('cpuLoad').value || 100 < document.getElementById('cpuLoad').value)) {
-                    func.alertPopup('ERROR', MSG_INVALID_CPU_LOAD, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_INVALID_CPU_LOAD, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if ((isEmpty(document.getElementById("memoryWorkers").value) && !isEmpty(document.getElementById("memorySize").value)) || (!isEmpty(document.getElementById("memoryWorkers").value) && (!regExpNum.test(document.getElementById('memoryWorkers').value) || 1 > document.getElementById("memoryWorkers").value || 8192 < document.getElementById("memoryWorkers").value))) {
-                    func.alertPopup('ERROR', MSG_INVALID_MEMORY_WORKERS, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_INVALID_MEMORY_WORKERS, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (!isEmpty(document.getElementById("memorySize").value) && (!regExpNum.test(document.getElementById('memorySize').value) || 0 > document.getElementById('memorySize').value)) {
-                    func.alertPopup('ERROR', MSG_INVALID_MEMORY_SIZE, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_INVALID_MEMORY_SIZE, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
                 if (!isEmpty(document.getElementById("memorySize").value) && radioCheck('memorySize') === undefined) {
-                    func.alertPopup('ERROR', MSG_SELECT_MEMORY_SIZE_UNIT, true, MSG_CLOSE, validReset);
+                    func.alertPopup('ERROR', MSG_SELECT_MEMORY_SIZE_UNIT, true, MSG_CONFIRM, validReset);
                     IS_VCHK = true;
                     return false;
                 }
@@ -641,14 +641,12 @@
 
             if(selectedValue === 's') {
                 if(durationValue < 30){
-                    console.log("durationValue : ", durationValue);
-                    func.alertPopup('WARN', MSG_NO_METRIC_LESS_30SECONDS, true, MSG_CONFIRM, noMetricsForShortRun);
+                    func.alertPopup('NOTE', MSG_NO_METRIC_LESS_30SECONDS, true, MSG_CONFIRM, noMetricsForShortRun);
                 }
             }
             if(selectedValue === 'ms') {
                 if(durationValue < 30000){
-                    console.log("durationValue : ", durationValue);
-                    func.alertPopup('WARN', MSG_NO_METRIC_LESS_30SECONDS, true, MSG_CONFIRM, noMetricsForShortRun);
+                    func.alertPopup('NOTE', MSG_NO_METRIC_LESS_30SECONDS, true, MSG_CONFIRM, noMetricsForShortRun);
                 }
 
             }
