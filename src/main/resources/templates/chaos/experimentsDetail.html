@@ -247,13 +247,15 @@
                         // draw chart
                         if(data.items[0].experimentTime >= 30000) {
                             experimentsDetail.drawChart();
+                            const namespaceSelector = data.items[0].spec.selector.namespaces[0];
+                            const podNames = data.items[0].spec.selector.pods[namespaceSelector];
 
                             // Resource usage by selected Pods during chaos
-                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByPod/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.podChart);
+                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelector}/experiments/resourceUsageByPod/${sessionStorage.getItem('name')}?podList=${podNames}`, 'application/json', experimentsDetail.podChart);
                             // Resource usage by workload for selected Pods during chao
-                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByWorkload/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.workloadChart);
+                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelector}/experiments/resourceUsageByWorkload/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.workloadChart);
                             // Resource usage by node during chaos
-                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/resourceUsageByNode/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.nodeChart);
+                            func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespaceSelector}/experiments/resourceUsageByNode/${sessionStorage.getItem('name')}`, 'application/json', experimentsDetail.nodeChart);
                         }
 
 
