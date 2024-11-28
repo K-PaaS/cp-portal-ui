@@ -120,6 +120,7 @@ const func = {
 			document.querySelector('.clusterTop').innerText = data.items[0].clusterName;
 			sessionStorage.setItem('cluster', data.items[0].clusterId);
 			sessionStorage.setItem('clusterName', data.items[0].clusterName);
+			sessionStorage.setItem('clusterType', data.items[0].clusterType);
 		};
 
 		var name = document.querySelector('.clusterUl').querySelectorAll('a');
