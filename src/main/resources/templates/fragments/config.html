@@ -244,17 +244,7 @@
      const GUIDE_URL = [[${@environment.getProperty('guide.url')}]];
      const GUIDE_URL_ENG = [[${@environment.getProperty('guide.url-eng')}]];
      const GUIDE_URL_PLAYPARK = [[${@environment.getProperty('guide.url-playpark')}]];
-
-     const GUIDE_LIST = {
-         global: [[${@environment.getProperty('guide.list.global')}]],
-         clusters: [[${@environment.getProperty('guide.list.clusters')}]],
-         workloads: [[${@environment.getProperty('guide.list.workloads')}]],
-         services: [[${@environment.getProperty('guide.list.services')}]],
-         storages: [[${@environment.getProperty('guide.list.storages')}]],
-         configmaps: [[${@environment.getProperty('guide.list.configmaps')}]],
-         managements: [[${@environment.getProperty('guide.list.managements')}]],
-         info: [[${@environment.getProperty('guide.list.info')}]]
-     }
+     const GUIDE_NAME = [[${@environment.getProperty('guide.name')}]];
 
      /*]]>*/
      const TIMES = {
@@ -389,6 +379,14 @@
  function getLocalStorageItem(key){
      return localStorage.getItem(key);
  }
+
+ function generatedGuideLink(lang,name){
+     if(lang === 'ko') {
+         return GUIDE_URL + GUIDE_NAME.replace('{}',name);
+     }
+     else return GUIDE_URL_ENG + GUIDE_NAME.replace('{}',name);
+ }
+
 </script>
 </span>
 
