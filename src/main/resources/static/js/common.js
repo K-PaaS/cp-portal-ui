@@ -107,8 +107,9 @@ const func = {
 
 	clusters(data){
 		var html ='';
-		for(var i=0; i<=data.items.length-1; i++){
-			html += `<li><a href="javascript:;" data-name="${data.items[i].clusterId}">${data.items[i].clusterName}</a></li>`;
+		for(
+			var i=0; i<=data.items.length-1; i++){
+			html += `<li><a href="javascript:;" data-name="${data.items[i].clusterId}" data-type="${data.items[i].clusterType}">${data.items[i].clusterName}</a></li>`;
 		};
 
 		document.getElementById("clusterListUl").innerHTML = html;
@@ -130,6 +131,7 @@ const func = {
 		for(var i=0 ; i<name.length; i++){
 			name[i].addEventListener('click', (e) => {
 				sessionStorage.setItem('cluster' , e.target.getAttribute('data-name'));
+				sessionStorage.setItem('clusterType' , e.target.getAttribute('data-type'));
 				sessionStorage.setItem('clusterName', e.target.innerText);
 				document.querySelector('.clusterTop').innerText = e.target.innerText;
 				sessionStorage.removeItem('nameSpace');
