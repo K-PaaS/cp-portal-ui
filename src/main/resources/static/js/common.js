@@ -882,18 +882,18 @@ const func = {
 				}
 				if(e.target.getAttribute('data-name') === 'playparkusageguide') {
 					func.moveToPlayprkUsageGuideLink();
-				}lo
+				}
 			}, false);
 		}
 	},
 	moveToUserGuideLink(){
-	   window.open('about:blank').location.href = GUIDE_URL + GUIDE_LIST[func.depth1];
+	   window.open('about:blank').location.href = generatedGuideLink('ko', func.depth1);
+	},
+	moveToEngUserGuideLink(){
+		window.open('about:blank').location.href = generatedGuideLink('en', func.depth1);
 	},
 	moveToPlayprkUsageGuideLink() {
 		window.open('about:blank').location.href = GUIDE_URL_PLAYPARK;
-	},
-	moveToEngUserGuideLink(){
-		window.open('about:blank').location.href = GUIDE_URL_ENG + GUIDE_LIST[func.depth1];
 	},
 	isCollapse(id, collapse) {
 		let el =  document.getElementById(id);

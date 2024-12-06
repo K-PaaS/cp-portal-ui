@@ -106,7 +106,7 @@ header > div > div h3 ul li a.on {background-color:#ff7a0f; color:#ffffff;}
 
 /*member-menu*/
 header > div > div > div:not(.g-select-wrap) { padding-top:3px; margin-left: auto; margin-right: 0; !important; }
-header > div > div > div > a {float:left; color:rgba(255, 255, 255, 0.568); padding-left:37px; background:url("../img/logout_icon.png") no-repeat 0 0; background-position:left 3px; transition:.3s; line-height:30px; margin-top: 3px;}
+header > div > div > div > a {float:left; color:rgba(255, 255, 255, 0.568); padding-left:37px; background:url("../img/logout_icon.svg") no-repeat 0 0; background-position:left 3px; transition:.3s; line-height:31px; margin-top: 3.5px; background-size: 23px;}
 header > div > div > div > a:hover {color:#fff;}
 header > div > div > div > div {float:left; margin-left:26px;}
 header > div > div > div > div > a {text-indent:-9999px; display:inline-block; width:25px; height:30px; background:url("../img/set_icon.png") no-repeat 0 0;}
@@ -694,9 +694,9 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 #localeLangDiv fieldset select {height: 40px; line-height:40px; width:100%; padding-left:18px; font-size:18px; color:#47494d; cursor:pointer;}
 #u_locale_lang{width : 115px;height: 40px;}
 
-.guideButtonDiv{margin: 4px 14px 0 0 !important; cursor : pointer;}
+.guideButtonDiv{margin: 3px 14px 0 0 !important; cursor:pointer; width:25px;height:25px;}
 .guideButtonSelect{display: flex; justify-content : center; weight: 25px; height: 60px;}
-.guideButtonI {color: #ffffff; font-size: 22px;}
+.guideButtonI {color: #ffffff; font-size:23px !important;}
 
 header > div > div > div > div > div {width: 25px; position:relative; padding-bottom:34px; padding-top:3px; color:#ffffff; font-size:27px; line-height:30px;}
 header > div > div > div > div > div > a {color:#ffffff; font-size:27px; display:block; line-height:30px; padding-right:30px; background:url("../img/arrowtop_icon.png") no-repeat 0 0; background-position:right 50%; transition:.3s; white-space: nowrap;  text-overflow: ellipsis; overflow: hidden;}

@@ -52,18 +52,10 @@ keycloak:
       superAdminRole: cp-cluster-admin-role
 
 guide:
-  url: https://github.com/K-PaaS/container-platform/blob/master/use-guide/portal/container-platform-portal-guide.md#
-  url-eng: https://github.com/K-PaaS/cp-guide-eng/blob/master/use-guide/portal/container-platform-portal-guide-en.md#
+  url: https://github.com/K-PaaS/container-platform/tree/master/use-guide/portal/
+  url-eng: https://github.com/K-PaaS/cp-guide-eng/tree/master/use-guide/portal/
   url-playpark: https://github.com/K-PaaS/container-platform/blob/playpark/use-guide/portal/container-platform-portal-deploy-guide.md#
-  list:
-    global: 5-1
-    clusters: 5-2
-    workloads: 5-3
-    services: 5-4
-    storages: 5-5
-    configmaps: 5-6
-    managements: 5-7
-    info: 5-8
+  name: cp-portal-use-guide-{}.md
 
 catalog:
   default:
