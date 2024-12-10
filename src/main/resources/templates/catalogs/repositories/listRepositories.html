@@ -42,10 +42,10 @@
                     </div>
                     <!-- btn -->
 
-                    <a id="addDfRepo" sec:authorize="hasAnyAuthority('SUPER_ADMIN','CLUSTER_ADMIN')" style="display:none;right:202px;border:1px solid rgba(248,88,18,0.9);padding:9px 8px 7px 8px;background:transparent;">
+                    <a id="addDfRepo" sec:authorize="hasAnyAuthority('SUPER_ADMIN')" style="display:none;right:202px;border:1px solid rgba(248,88,18,0.9);padding:9px 8px 7px 8px;background:transparent;">
                         <i class="fa-regular fa-plus fa-xl" style="color:rgba(248,88,18,0.9)"></i>
                     </a>
-                    <a id="clearCache" th:text="#{M0913}" sec:authorize="hasAnyAuthority('SUPER_ADMIN','CLUSTER_ADMIN')" style="right:105px;text-align:center;background-color:#bdbfc4;"></a>
+                    <a id="clearCache" th:text="#{M0913}" sec:authorize="hasAnyAuthority('SUPER_ADMIN')" style="right:105px;text-align:center;background-color:#bdbfc4;"></a>
                     <a href="javascript:;" class="add" th:text="#{M0223}"></a>
                 </div>
         </article>
@@ -167,7 +167,7 @@
                 // cache clear 버튼 event
                 if(document.getElementById('clearCache')) {
                     document.getElementById('clearCache').addEventListener('click', (e) => {
-                        let html = `${MSG_CHECK_TO_CLEAR_CACHE}<div class="modal-detail">${MSG_CHECK_TO_CLEAR_CACHE_REPO_UPDATE}</div>`;
+                        let html = `${MSG_CHECK_TO_CLEAR_CACHE}<div class="modal-detail" style="font-size:13px !important;">${MSG_CHECK_TO_CLEAR_CACHE_REPO_UPDATE}</div>`;
                         func.alertPopup('CLEAR CACHE', html, true, MSG_CONFIRM, repos.clearCache);
                     }, false);
                 }

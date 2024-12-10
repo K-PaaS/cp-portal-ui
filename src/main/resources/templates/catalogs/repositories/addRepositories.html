@@ -107,9 +107,12 @@
                             "password" : password,
                             "ca_base64" : ca_base64,
                         };
-                      func.saveData('POST', `${func.catalogUrl}/api/repositories`, JSON.stringify(sendData), true, 'application/json', func.historyBack);
+                      func.saveData('POST', `${func.catalogUrl}/api/repositories`, JSON.stringify(sendData), true, 'application/json', addRepo.moveRepoList);
                     }, false);
                 },
+                moveRepoList() {
+                    movePage(URI_CP_CATALOG_REPOSITORIES);
+                }
 
             }
 
