@@ -230,11 +230,11 @@
                 },
 
                 delete(){
-                    func.saveData('DELETE', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}`, '', true, 'application/json', func.historyBack);
+                    func.saveData('DELETE', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}`, '', true, 'application/json', releases.moveReleaseList);
                 },
                 rollback(){
                     let target_revision = releases.historiesList[revision_target_index].revision;
-                    func.saveData('PUT', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}/versions/${target_revision}`, '', true, 'application/json', releases.returnPage);
+                    func.saveData('PUT', `${func.catalogUrl}/api/clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/releases/${releases.name}/versions/${target_revision}`, '', true, 'application/json', releases.moveReleaseDetails);
                 },
                 setTabList(){
                     let tabBtns = document.querySelectorAll('.tab-btn2 li');
@@ -338,8 +338,11 @@
                     }
                     ;
                 },
-                returnPage() {
-                    document.location.href = URI_CP_CATALOG_RELEASES + URI_CP_DETAILS;
+                moveReleaseList() {
+                    movePage(URI_CP_CATALOG_RELEASES);
+                },
+                moveReleaseDetails(){
+                    movePage(URI_CP_CATALOG_RELEASES + URI_CP_DETAILS);
                 }
             }
 

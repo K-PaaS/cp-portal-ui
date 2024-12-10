@@ -178,16 +178,21 @@
             },
 
             delete(){
-                func.saveData('DELETE', `${func.catalogUrl}/api/repositories/${charts.repoName}`, '', true, 'application/json', func.historyBack);
+                func.saveData('DELETE', `${func.catalogUrl}/api/repositories/${charts.repoName}`, '', true, 'application/json', charts.moveRepoList);
             },
 
             update(){
-                func.saveData('PUT', `${func.catalogUrl}/api/repositories/${charts.repoName}`, '', true, 'application/json', charts.returnPage);
+                func.saveData('PUT', `${func.catalogUrl}/api/repositories/${charts.repoName}`, '', true, 'application/json', charts.moveChartList);
             },
 
-            returnPage() {
-                document.location.href = URI_CP_CATALOG_REPOSITORIES+URI_CP_CATALOG_CHARTS;
+            moveChartList() {
+                movePage(URI_CP_CATALOG_REPOSITORIES+URI_CP_CATALOG_CHARTS);
             },
+
+            moveRepoList() {
+                movePage(URI_CP_CATALOG_REPOSITORIES);
+            },
+
             searchKeyword() {
                 func.loading();
 
