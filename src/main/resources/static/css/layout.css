@@ -322,6 +322,7 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 
 /* experiments status color*/
 .experiment-completed {color:#0ca583;}
+.experiment-,
 .experiment-deleting,
 .experiment-running,
 .experiment-injecting {color:#376bcd;}
