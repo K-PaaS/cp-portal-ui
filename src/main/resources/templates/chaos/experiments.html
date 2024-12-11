@@ -79,8 +79,14 @@
 
             load(){
                 func.loading();
-                // experimentsList 정보 조회
-                func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.draw);
+
+                if (sessionStorage.getItem('clusterType') !== 'host') {
+                    func.alertPopup('NOTE', MSG_UNABLE_CHAOS, true, MSG_CLOSE, func.moveToMain);
+                }else {
+                    // experimentsList 정보 조회
+                    func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments?limit=${experiments.limit}&offset=${experiments.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', experiments.draw);
+                    setInterval(experiments.statusInterval, 1200);
+                }
             },
             draw(data){
                 experiments.statusList = [];
@@ -131,12 +137,14 @@
                 document.querySelector('.create').addEventListener('click', () => {
                     document.location.href = URI_CP_CHAOS_EXPERIMENTS + URI_CP_CREATE;
                 }, false);
-                setInterval(experiments.statusInterval, 1200);
+
             },
 
             statusInterval(){
-                // status 정보 조회
-               func.statusLoadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}&limit=${experiments.limit}&offset=${experiments.offset}`, 'application/json', experiments.status);
+                if (sessionStorage.getItem('clusterType') === 'host') {
+                    // status 정보 조회
+                    func.statusLoadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/status?statusList=${experiments.statusList}&limit=${experiments.limit}&offset=${experiments.offset}`, 'application/json', experiments.status);
+                }
             },
 
             status(data){
