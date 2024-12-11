@@ -588,7 +588,7 @@ const func = {
 							if(document.getElementById('loading')){
 								document.getElementById('wrap').removeChild(document.getElementById('loading'));
 							};
-							func.alertPopup('ERROR', detailMessage, true, MSG_CONFIRM, 'historyBack');
+							func.alertPopup('ERROR', detailMessage, true, MSG_CONFIRM, func.moveToMain);
 						}
 						else {
 							callbackFunction(JSON.parse(request.responseText), list);
@@ -753,10 +753,6 @@ const func = {
 
 		if(callback){
 			document.getElementById('alertModal').querySelector('.confirm').addEventListener('click', (e) => {
-				if(callback == 'historyBack'){
-					historyBack();
-				};
-
 				if(callback != 'closed'){
 				callback();
 				};
@@ -767,6 +763,10 @@ const func = {
 			}, false);
 		};
 	},
+
+    moveToMain() {
+	location.href = URI_CP_BASE_URL;
+    },
 
 	historyBack(){
 		window.history.back();
