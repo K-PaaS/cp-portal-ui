@@ -1081,11 +1081,12 @@
                 },
 
                 event() {
+                    let interval = setInterval(experimentsDetail.statusInterval, 1200);
+
                     document.getElementById('delete').addEventListener('click', (e) => {
                         func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, experimentsDetail.delete);
+                        clearInterval(interval);
                     }, false);
-
-                    setInterval(experimentsDetail.statusInterval, 1200);
                 },
 
                 statusInterval() {
