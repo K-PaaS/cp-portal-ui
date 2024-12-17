@@ -82,10 +82,12 @@
 
             load(){
                 func.loading();
-
+                if (sessionStorage.getItem('clusterType') !== 'host') {
+                    func.alertPopup('NOTE', MSG_UNABLE_CHAOS, true, MSG_CLOSE, func.moveToMain);
+                }else {
                 // event 정보 조회
                 func.loadData('GET', `${func.chaosUrl}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/experiments/events?event=True&limit=${events.limit}&offset=${events.offset}&searchName=${document.getElementById('searchText').value}`, 'application/json', events.draw);
-
+                }
             },
 
             draw(data){
