@@ -1,7 +1,5 @@
 package org.container.platform.web.ui.privateRepositoryInfo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.container.platform.web.ui.common.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @since 2022.07.13
  */
 
-@Api(value = "PrivateRepositoryInfoController v1")
 @Controller
 public class PrivateRepositoryInfoController {
     private static final String BASE_URL = "privateRepositoryInfo/";
@@ -34,7 +31,6 @@ public class PrivateRepositoryInfoController {
      *
      * @return the view
      */
-    @ApiOperation(value = "Private Repository Info 페이지 이동(Go to the Private Repository Info page)", nickname = "getPrivateRepositoryInfo")
     @GetMapping(value = ConstantsUrl.URI_CP_INFO_PRIVATE_REPOSITORY)
     public String getPrivateRepositoryInfo(Model model) {
         model.addAttribute("privateRepositoryUrl", propertyService.getPrivateRepositoryUrl());

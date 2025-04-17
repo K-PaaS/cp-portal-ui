@@ -117,6 +117,8 @@
      var MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE = [[#{M0016}]];
      var MSG_ENTER_SEARCH_WORD = [[#{M0017}]];
      var MSG_CHECK_TO_DELETE =  [[#{M0018}]];
+     var MSG_VAULT_TO_DELETE =  [[#{M0934}]];
+     var MSG_CHECK_TO_REMOVE =  [[#{M0931}]];
      var MSG_CHECK_TO_SAVE =  [[#{M0020}]];
      var MSG_CHECK_TO_ROLLBACK =  [[#{M0863}]];
      var MSG_CHECK_TO_INSTALL_CHART =  [[#{M0864}]];
@@ -154,6 +156,7 @@
      var MSG_SELECTED_NAMESPACE_ALL = [[#{M0843}]];
      var MSG_REQUEST_VALUE_IS_MISSING = [[#{M0844}]];
      var MSG_POSTGRESQL_HELM_INSTALL = [[#{M0923}]];
+     var MSG_APPLICATION_MAPPING = [[#{M0935}]];
 
      var MSG_SIGN_OUT = [[#{M0809}]];
 
@@ -184,6 +187,7 @@
      var IS_INDEX = false;
      var IS_VCHK = false;
      var IS_SEARCH = false;
+     var IS_TRAFFIC_POLICY_MANAGED = false;
 
      // COPY PROPERTIES
      var COPY_TEXT = [[#{M0071}]];
@@ -233,9 +237,11 @@
      const MSG_NO_METRIC_OVER_6PODS = [[#{M0927}]];
      const MSG_UNABLE_CHAOS = [[#{M0928}]];
 
+    // Create Resources
+    const MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_CHK =  [[#{M0936}]];
+    const MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_DETAILS =  [[#{M0937}]];
 
-
-
+    const ALLOW_TRAFFIC_RESOURCES = ["deployments", "replicaSets", "pods"];
 
      // GUIDE LINK
      /*<![CDATA[*/
@@ -387,6 +393,16 @@
          return GUIDE_URL + GUIDE_NAME.replace('{}',name);
      }
      else return GUIDE_URL_ENG + GUIDE_NAME.replace('{}',name);
+ }
+
+function createWorkloadResources(resources) {
+     func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/checkTrafficPolicyManaged`, 'application/json', isTrafficPolicyManaged);
+     function isTrafficPolicyManaged(data) {
+         if(data.resultMessage === "true") {
+             IS_TRAFFIC_POLICY_MANAGED = true;
+         }
+         func.create('Create', resources, MSG_SAVE);
+     }
  }
 
 </script>

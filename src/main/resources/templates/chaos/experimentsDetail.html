@@ -448,8 +448,8 @@
                         cpuDataSets.push({
                             label: podNameList[i],
                             data: cpuUsageLists[i],
-                            borderColor: Utils.CHART_COLORS[i],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            borderColor: Utils.CHART_COLORS[i % Utils.CHART_COLORS.length],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i % Utils.CHART_COLORS.length], 0.5),
                             segment: {
                                 borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
                                 borderDash: ctx => skipped(ctx, [6, 6]),
@@ -459,8 +459,8 @@
                         memoryDataSets.push({
                             label: podNameList[i],
                             data: memoryUsageLists[i],
-                            borderColor: Utils.CHART_COLORS[i],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            borderColor: Utils.CHART_COLORS[i % Utils.CHART_COLORS.length],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i % Utils.CHART_COLORS.length], 0.5),
                             segment: {
                                 borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
                                 borderDash: ctx => skipped(ctx, [6, 6]),
@@ -470,9 +470,9 @@
                         appStatusDataSets.push({
                             label: podNameList[i],
                             data: [...appStatusUsageList[i]].fill(1),
-                            borderColor: Utils.CHART_COLORS[i],
+                            borderColor: Utils.CHART_COLORS[i % Utils.CHART_COLORS.length],
                             backgroundColor: appStatusUsageList[i].map(value => {
-                                return value === 1 ? Utils.transparentize(Utils.CHART_COLORS[i], 0.5) : 'rgb(0,0,0,0.0)' ;
+                                return value === 1 ? Utils.transparentize(Utils.CHART_COLORS[i % Utils.CHART_COLORS.length], 0.5) : 'rgb(0,0,0,0.0)' ;
                             }),
                             borderWidth: 2,
                             spanGaps: true,
@@ -720,8 +720,8 @@
                         cpuDataSets.push({
                             label: workloadName[i],
                             data: cpuUsage[i],
-                            borderColor: Utils.CHART_COLORS[i],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            borderColor: Utils.CHART_COLORS[i % Utils.CHART_COLORS.length],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i % Utils.CHART_COLORS.length], 0.5),
                             segment: {
                                 borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
                                 borderDash: ctx => skipped(ctx, [6, 6]),
@@ -731,8 +731,8 @@
                         memoryDataSets.push({
                             label: workloadName[i],
                             data: memoryUsage[i],
-                            borderColor: Utils.CHART_COLORS[i],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            borderColor: Utils.CHART_COLORS[i % Utils.CHART_COLORS.length],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i % Utils.CHART_COLORS.length], 0.5),
                             segment: {
                                 borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
                                 borderDash: ctx => skipped(ctx, [6, 6]),
@@ -917,8 +917,8 @@
                         cpuDataSets.push({
                             label: nodeName[i],
                             data: cpuUsage[i],
-                            borderColor: Utils.CHART_COLORS[i],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            borderColor: Utils.CHART_COLORS[i % Utils.CHART_COLORS.length],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i % Utils.CHART_COLORS.length], 0.5),
                             segment: {
                                 borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
                                 borderDash: ctx => skipped(ctx, [6, 6]),
@@ -928,8 +928,8 @@
                         memoryDataSets.push({
                             label: nodeName[i],
                             data: memoryUsage[i],
-                            borderColor: Utils.CHART_COLORS[i],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i], 0.5),
+                            borderColor: Utils.CHART_COLORS[i % Utils.CHART_COLORS.length],
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS[i % Utils.CHART_COLORS.length], 0.5),
                             segment: {
                                 borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)'),
                                 borderDash: ctx => skipped(ctx, [6, 6]),

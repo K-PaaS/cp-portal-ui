@@ -147,13 +147,13 @@
 				<div class="table_style01">
 					<table>
 						<caption>Events</caption>
-						<colgroup >
-							<col width="20%" />
-							<col width="20%" />
-							<col width="16%" />
+						<colgroup>
+							<col width="26%" />
+							<col width="17%" />
+							<col width="15%" />
 							<col width="8%" />
-							<col width="18%" />
-							<col width="18%" />
+							<col width="17%" />
+							<col width="17%" />
 						</colgroup>
 						<thead>
 							<tr>
@@ -306,7 +306,7 @@
 					if(data.items.length > 0){
 						for(var i=0; i<=data.items.length-1; i++){
 							var html = `<tr>
-								<td class="left">${data.items[i].message}</td>
+								<td class="left box"><div class="labels">${data.items[i].message}</div></td>
 								<td class="left">${data.items[i].source.component} ${data.items[i].source.host}</td>
 								<td>${data.items[i].filePath}</td>
 								<td>${data.items[i].count}</td>

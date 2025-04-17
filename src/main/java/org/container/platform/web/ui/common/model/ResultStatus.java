@@ -42,6 +42,7 @@ public class ResultStatus {
         this.detailMessage = detailMessage;
         this.nextActionUrl = nextActionUrl;
     }
+
     public ResultStatus(String resultCode, String resultMessage, int httpStatusCode, String detailMessage, String nextActionUrl, String userId, String token, List loginMetaData, String clusterName) {
         this.resultCode = resultCode;
         this.resultMessage = resultMessage;
@@ -53,6 +54,4 @@ public class ResultStatus {
         this.loginMetaData = loginMetaData;
         this.clusterName = clusterName;
     }
-
-
 }

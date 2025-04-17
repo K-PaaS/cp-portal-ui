@@ -1,8 +1,5 @@
 package org.container.platform.web.ui.storages.storageClasses;
 
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @version 1.0
  * @since 2021.05.06
  */
-@Api(value = "StorageClassesController v1")
 @PreAuthorize("@authSecurity.checkIsClusterAdmin()")
 @Controller
 public class StorageClassesController {
@@ -27,7 +23,6 @@ public class StorageClassesController {
      *
      * @return the view
      */
-    @ApiOperation(value = "StorageClasses 목록 페이지 이동(Go to the storageClasses list page)", nickname = "getStorageClassesList")
     @GetMapping(value = ConstantsUrl.URI_CP_STORAGES_STORAGECLASSES )
     public String getStorageClassesList() {
         return BASE_URL + "storageClasses";
@@ -38,7 +33,6 @@ public class StorageClassesController {
      *
      * @return the view
      */
-    @ApiOperation(value = "StorageClasses 상세 페이지 이동(Go to the storageClasses details page)", nickname = "getStorageClassesDetails")
     @GetMapping(value = ConstantsUrl.URI_CP_STORAGES_STORAGECLASSES + ConstantsUrl.URI_CP_DETAILS)
     public String getStorageClassesDetails() {
         return BASE_URL + "storageClassesDetail";

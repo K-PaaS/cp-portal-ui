@@ -1,8 +1,7 @@
 package org.container.platform.web.ui.common;
 
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 /**
  * RequestWrapper 클래스
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
 
-    public RequestWrapper(HttpServletRequest servletRequest)  {
+    public RequestWrapper(HttpServletRequest servletRequest) {
         super(servletRequest);
     }
 
@@ -52,7 +51,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
     private String cleanXSS(String value) {
 
-        if(!value.contains("\"id\":\"WriteScript\"")) {
+        if (!value.contains("\"id\":\"WriteScript\"")) {
             value = value.replaceAll("<", "& lt;").replaceAll(">", "& gt;");
             value = value.replaceAll("\\(", "& #40;").replaceAll("\\)", "& #41;");
             value = value.replaceAll("'", "& #39;");

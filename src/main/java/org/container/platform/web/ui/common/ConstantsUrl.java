@@ -78,6 +78,8 @@ public class ConstantsUrl {
     public static final String URL_API_LOGIN = "/login";
     public static final String URL_API_SIGNUP = "/signUp";
 
+    public static final String URI_API_REFRESH_TOKEN = "/refreshtoken";
+
     //LOCALE LANGUAGE
     public static final String URL_API_LOCALE_LANGUAGE = "/localeLanguage";
     public static final String URL_API_CHANGE_LOCALE_PARAM = "language";

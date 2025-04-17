@@ -1,7 +1,5 @@
 package org.container.platform.web.ui.workloads.replicaSets;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @version 1.0
  * @since 2021.05.06
  */
-@Api(value = "ReplicaSetsController v1")
 @Controller
 public class ReplicaSetsController {
 
@@ -24,7 +21,6 @@ public class ReplicaSetsController {
      *
      * @return the view
      */
-    @ApiOperation(value = "ReplicaSets 목록 페이지 이동(Go to the replicaSets list page)", nickname = "getReplicaSetsList")
     @GetMapping(value = ConstantsUrl.URI_CP_WORKLOADS_REPLICASETS )
     public String getReplicaSetsList() {
         return BASE_URL + "replicaSets";
@@ -35,7 +31,6 @@ public class ReplicaSetsController {
      *
      * @return the view
      */
-    @ApiOperation(value = "ReplicaSets 상세 페이지 이동(Go to the replicaSets details page)", nickname = "getReplicaSetsDetails")
     @GetMapping(value = ConstantsUrl.URI_CP_WORKLOADS_REPLICASETS + ConstantsUrl.URI_CP_DETAILS)
     public String getReplicaSetsDetails() {
         return BASE_URL + "replicaSetsDetail";

@@ -12,7 +12,7 @@
 *, :before, :after {margin:0; padding:0; border:0; font-style:normal; vertical-align:top; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; outline:none;}
 
 html {-webkit-font-smoothing:antialiased;}
-table {width:100%; border-collapse:collapse; border-spacing:0; table-layout:fixed;}
+table {width:100%; border-spacing:0; table-layout:fixed;}
 th, td {vertical-align:middle; word-break:break-word; white-space:nowrap;}
 ul, ol, dl {list-style:none; word-break:keep-all; word-break:break-word;}
 hr {display:none;}
@@ -276,6 +276,9 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .tooltip .tooltiptext::after {content: "";position: absolute;top: 50%;right: 100%;margin-top: -5px;border-width: 5px;border-style: solid;border-color: transparent black transparent transparent;}
 .tooltip:hover .tooltiptext {visibility: visible;opacity: 1;}
 
+.tooltip .tooltiptext_modal {font-size: 12px;visibility: hidden;width: 250px;background-color: black;color: #fff;text-align: center;border-radius: 6px;padding: 5px 10px;position: absolute;z-index: 1;top: -25px;left: 32px;}
+.tooltip .tooltiptext_modal::after {content: "";position: absolute;top: 50%;right: 100%;margin-top: -5px;border-width: 5px;border-style: solid;border-color: transparent black transparent transparent;}
+.tooltip:hover .tooltiptext_modal {visibility: visible;}
 /* table */
 .table_style01 {margin-bottom:57px; border-top:2px solid #333333;}
 .notice h4 {text-align:left; font-size:22px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; margin-bottom:6px;}
@@ -402,6 +405,7 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .modal-wrap {display:flex; position:fixed; top:0; left:0; align-items:center; justify-content:center; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.11); z-index:100;}
 .modal {position:relative; width:360px; background-color:#fff; padding:30px 39px 40px 39px; text-align:center; border:1px solid #d9d9d9;}
 .modal.midium {width:800px;}
+.modal.large {width:850px; height:650px;}
 .modal.wide {width:1200px;}
 .modal h5 {font-size:21px; font-weight:400; margin-bottom:15px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; letter-spacing:-0.2px;}
 .modal p {scrollbar-width: thin;max-height: 200px;width: 100%;font-size: 16px;line-height: 25px;letter-spacing: -0.8px;overflow: auto;}
@@ -788,7 +792,7 @@ header > div > div > div > div > div ul li a.on {background-color:#ff7a0f; color
 .labels{
 	overflow:auto;
 	width:100%;
-	max-height:150px;
+	max-height:130px;
 }
 
 

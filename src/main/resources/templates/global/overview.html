@@ -121,7 +121,7 @@
                             for(var i=0; i<=data.items.length-1; i++){
                                 var item = data.items[i];
                                 if(item.resultCode == RESULT_STATUS_SUCCESS) {
-                                    clusterListTableHTML += `<tr><td class="left" style=" white-space: normal;"><a data-id="${item.clusterId}" data-name="${item.clusterName}">${item.clusterName}</a></td>` +
+                                    clusterListTableHTML += `<tr><td class="left" style=" white-space: normal;"><a data-id="${item.clusterId}" data-type="${item.clusterType}" data-name="${item.clusterName}">${item.clusterName}</a></td>` +
                                         `<td class="center"><span class="slabel">${item.clusterProviderType}</span></td>`+
                                         `<td class="center"><span class="slabel">${item.version}</span></td>`+
                                         `<td class="center">${item.nodeCount.count} / ${item.nodeCount.all}</td>`+
@@ -319,7 +319,8 @@
 
                     for (var i = 0; i <= listAll.length - 1; i++) {
                         listAll[i].addEventListener('click', (e) => {
-                            sessionStorage.setItem('cluster', e.target.getAttribute('data-id'));
+                        sessionStorage.setItem('cluster', e.target.getAttribute('data-id'));
+                        sessionStorage.setItem('clusterType', e.target.getAttribute('data-type'));
                         sessionStorage.setItem('clusterName', e.target.getAttribute('data-name'));
                         sessionStorage.removeItem('nameSpace');
                         movePage(URI_CP_INDEX_URL);

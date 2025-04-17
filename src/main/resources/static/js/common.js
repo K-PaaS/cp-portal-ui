@@ -60,26 +60,26 @@ const func = {
 			nav[i].addEventListener('click', (e) => {
 				e.stopPropagation();
 
-			for(var j=0; j<=nav.length-1; j++){
-				nav[j].parentNode.classList.toggle('on', false);
-			};
+				for(var j=0; j<=nav.length-1; j++){
+					nav[j].parentNode.classList.toggle('on', false);
+				};
 
-			e.target.parentNode.classList.toggle('on', true);
-		}, false);
+				e.target.parentNode.classList.toggle('on', true);
+			}, false);
 		};
 
 		// search
 		if(document.getElementById('search') != null){
 			document.getElementById('search').addEventListener('click', (e) => {
 				if(e.target.parentNode.classList != 'on'){
-				e.target.parentNode.classList.toggle('on');
-			} else {
-				if(document.getElementById('searchText').value != ''){
-					IS_SEARCH = true;
-					func.nameLoad();
-				};
-			}
-		}, false);
+					e.target.parentNode.classList.toggle('on');
+				} else {
+					if(document.getElementById('searchText').value != ''){
+						IS_SEARCH = true;
+						func.nameLoad();
+					};
+				}
+			}, false);
 
 			document.getElementById('searchText').onkeydown = function(event) {
 				if(event.keyCode === 13){
@@ -96,7 +96,7 @@ const func = {
 		// logout event
 		document.getElementById('logout').addEventListener('click', (e) => {
 			func.alertPopup('Sign Out', MSG_WANT_TO_SIGN_OUT + '<br><p id="logout-sub">' + MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE + '</p>', true, MSG_CONFIRM, func.logout);
-	}, false);
+		}, false);
 
 	},
 
@@ -162,6 +162,7 @@ const func = {
 			} else {
 				document.querySelector('.nameTop').innerText =  data.items[0].cpNamespace;
 				sessionStorage.setItem('nameSpace', data.items[0].cpNamespace);
+				sessionStorage.setItem('roleSetCode', data.items[0].roleSetCode);
 			};
 
 			var name = document.querySelector('.nameSpace').querySelectorAll('a');
@@ -169,14 +170,14 @@ const func = {
 			for(var i=0 ; i<name.length; i++){
 				name[i].addEventListener('click', (e) => {
 					sessionStorage.setItem('nameSpace' , e.target.getAttribute('data-name'));
-				document.querySelector('.nameTop').innerText = e.target.innerText;
-				if(IS_NAMELOAD) {
-					func.loadData('GET', null, 'application/json', func.nameLoad);
-				}
-				else {
-					movePage(URI_CP_INDEX_URL);
-				}
-			}, false);
+					document.querySelector('.nameTop').innerText = e.target.innerText;
+					if(IS_NAMELOAD) {
+						func.loadData('GET', null, 'application/json', func.nameLoad);
+					}
+					else {
+						movePage(URI_CP_INDEX_URL);
+					}
+				}, false);
 
 			};
 
@@ -197,17 +198,26 @@ const func = {
 	apply(title, url, btnName, name){
 		sessionStorage.setItem('vaultDbName' , name);
 		var html = `<div class="modal-wrap" id="modal">
-			<div class="modal midium">
+			<div class="modal midium" style="width: 600px">
 				<h5>${title}</h5>
-				<dl>
-					<dt>Application</dt>
-					<dd>
-						<fieldset>
-							<select id="createApp" class="createApp">
-							</select>
-						</fieldset>
-					</dd>
-				</dl>
+					<dl>
+						<dt>Namespace</dt>
+						<dd>
+							<fieldset>
+								<select id="namespaceList" class="namespaceList">
+								</select>
+							</fieldset>
+						</dd>
+					</dl>
+					<dl>			
+						<dt style="line-height: 50px">Application</dt>
+						<dd>
+							<fieldset>
+								<select id="createApp" class="createApp" disabled>
+								</select>
+							</fieldset>
+						</dd>
+					</dl>
 				<a class="confirm" href="javascript:;">${btnName}</a>
 				<a class="close" href="javascript:;">`+ MSG_CLOSE + `</a>
 			</div>
@@ -215,21 +225,39 @@ const func = {
 
 		func.appendHtml(document.getElementById('wrap'), html, 'div');
 
-		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/deployments/vaultSecret`, 'application/json', applicationDraw);
+		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', namespaceDraw);
 
-		function applicationDraw(data) {
+		function namespaceDraw(data) {
 			for(var i=0; i<=data.items.length-1; i++){
-				var application = data.items[i].name;
-				var html = `<option value="${application}">${application}</option>`;
-				func.appendHtml(document.getElementById('createApp'), html, 'select');
+				var namespace = data.items[i].cpNamespace;
+				var html = `<option value="${namespace}">${namespace}</option>`;
+				func.appendHtml(document.getElementById('namespaceList'), html, 'select');
 			};
 		}
 
-		if(sessionStorage.getItem('nameSpace') == NAMESPACE_ALL_VALUE) {
+
+		/*if(sessionStorage.getItem('nameSpace') === NAMESPACE_ALL_VALUE) {
 			document.getElementById('createApp').selectedIndex = 0;}
 		else {
 			document.getElementById('createApp').value = sessionStorage.getItem('nameSpace');
-		}
+		}*/
+
+		document.getElementById('namespaceList').addEventListener('click', (e) => {
+
+			func.removeHtml(document.querySelector('#createApp'))
+			document.querySelector('#createApp').disabled = false;
+			let namespace = document.getElementById('namespaceList').value;
+			func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespace}/deployments/vaultSecret`, 'application/json', applicationDraw);
+
+			function applicationDraw(data) {
+				for(var i=0; i<=data.items.length-1; i++){
+					var application = data.items[i].name;
+					var html = `<option value="${application}">${application}</option>`;
+					func.appendHtml(document.getElementById('createApp'), html, 'select');
+				};
+			}
+
+		}, false);
 
 		document.getElementById('modal').querySelector('.close').addEventListener('click', (e) => {
 			document.getElementById('wrap').removeChild(document.getElementById('modal'));
@@ -239,23 +267,25 @@ const func = {
 		document.getElementById('modal').querySelector('.confirm').addEventListener('click', (e) => {
 
 			document.querySelector('.nameTop').innerHTML = sessionStorage.getItem('nameSpace');
+			sessionStorage.setItem('appNamespace' , document.querySelector('#namespaceList > option:checked').value);
 			sessionStorage.setItem('appName' , document.querySelector('#createApp > option:checked').value);
 			document.getElementById('wrap').removeChild(document.getElementById('modal'));
 
 			var sendData = JSON.stringify ({
 				cluster : sessionStorage.getItem('cluster'),
-				namespace : sessionStorage.getItem('nameSpace'),
+				namespace : sessionStorage.getItem('appNamespace'),
 				resourceName : sessionStorage.getItem('appName'),
 				dbService : sessionStorage.getItem('vaultDbName')
 			});
 
-			func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${url}/vault/application`, sendData, true, 'application/json', func.historyBack);
+			func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('appNamespace')}/${url}/application/apply`, sendData, true, 'application/json', func.historyBack);
 		}, false);
 	},
 
 	create(title, url, name){
+		var createYamlAreaHeight = "380px";
 		var html = `<div class="modal-wrap" id="modal">
-			<div class="modal midium">
+			<div class="modal large">
 				<h5>${title}</h5>
 				<dl>
 					<dt>Namespace</dt>
@@ -265,19 +295,42 @@ const func = {
 							</select>
 						</fieldset>
 					</dd>
-				</dl>
-				<dl>
-					<dt>YAML</dt>
-					<dd>
-						<textarea></textarea>
-					</dd>
-				</dl>
-				<a class="confirm" href="javascript:;">${name}</a>
-				<a class="close" href="javascript:;">`+ MSG_CLOSE + `</a>
-			</div>
-		</div>`;
+				</dl>`;
+		   if(IS_TRAFFIC_POLICY_MANAGED) {
+			   createYamlAreaHeight = "360px";
+			   html+=`<dl style="height:25px; margin:15px 0 -15px 0;">
+						<dt></dt>
+						<dd style="text-align:left; display:flex;">
+							<label class="container" style="font-size:14px; width:auto;">${MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_CHK}
+                        		<input type="checkbox" id="allowTrafficChk">
+                        		<span class="checkmark"></span>
+                        	</label>
+                        	<div class="tooltip" style="padding: 1px 7px;">
+                        		<i class="fa-solid fa-circle-info"></i>
+ 						 		<span class="tooltiptext_modal">${MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_DETAILS}</span>
+							</div>
+						</dd>
+					  </dl>`;
+		   }
+				html +=`<dl style="margin-top: 20px;">
+							<dt>YAML</dt>
+							<dd class="createYamlArea" style="text-align: left;">
+								<textarea class="codemirror-resource-create-textarea"></textarea>
+							</dd>
+						</dl>
+						<a class="confirm" href="javascript:;">${name}</a>
+						<a class="close" href="javascript:;">`+ MSG_CLOSE + `</a>
+					</div></div>`;
 
 		func.appendHtml(document.getElementById('wrap'), html, 'div');
+		CodeMirror.fromTextArea($(".codemirror-resource-create-textarea")[0], {
+			value: "",
+			theme: "default",
+			scrollbarStyle: "simple",
+			mode: "text/x-yaml",
+			lineNumbers: true,
+			lineWrapping: true,
+		}).setSize("660px", createYamlAreaHeight);
 
 		for(var i=0; i<=func.nameData.items.length-1; i++){
 			var namespace = func.nameData.items[i].cpNamespace;
@@ -295,33 +348,34 @@ const func = {
 
 		document.getElementById('modal').querySelector('.close').addEventListener('click', (e) => {
 			document.getElementById('wrap').removeChild(document.getElementById('modal'));
-	}, false);
+		}, false);
 
 
 		document.getElementById('modal').querySelector('.confirm').addEventListener('click', (e) => {
-			var input = document.getElementById('modal').querySelector('textarea');
+			var createYaml = document.querySelector(".createYamlArea > .CodeMirror").CodeMirror.getValue();
+			var allowTraffic = false;
+				if(document.getElementById('allowTrafficChk') != null) {
+					allowTraffic = document.getElementById('allowTrafficChk').checked;
+				}
+			sessionStorage.setItem('nameSpace' , document.getElementById('createName').value);
+			document.querySelector('.nameTop').innerHTML = sessionStorage.getItem('nameSpace');
+			document.getElementById('wrap').removeChild(document.getElementById('modal'));
 
-		sessionStorage.setItem('nameSpace' , document.getElementById('createName').value);
-		document.querySelector('.nameTop').innerHTML = sessionStorage.getItem('nameSpace');
+			var sendData = JSON.stringify ({
+				cluster : sessionStorage.getItem('cluster'),
+				namespace : sessionStorage.getItem('nameSpace'),
+				resourceName : url,
+				yaml : createYaml,
+				allowTraffic: allowTraffic
+			});
 
-		document.getElementById('wrap').removeChild(document.getElementById('modal'));
-
-
-		var sendData = JSON.stringify ({
-			cluster : sessionStorage.getItem('cluster'),
-			namespace : sessionStorage.getItem('nameSpace'),
-			resourceName : url,
-			yaml : input.value
-		});
-
-
-		func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${url}`, sendData, true, 'application/json', func.refresh);
-	}, false);
+			func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${url}`, sendData, true, 'application/json', func.refresh);
+		}, false);
 	},
 
 	modify(data){
 		var html = `<div class="modal-wrap" id="modal">
-			<div class="modal midium">
+			<div class="modal large">
 				<h5>Modify</h5>
 				<dl>
 					<dt>Namespace</dt>
@@ -334,8 +388,8 @@ const func = {
 				</dl>
 				<dl>
 					<dt>YAML</dt>
-					<dd>
-						<textarea>${data.sourceTypeYaml}</textarea>
+					<dd class="updateYamlArea" style="text-align: left;">
+						<textarea class="codemirror-resource-update-textarea"></textarea>
 					</dd>
 				</dl>
 				<a class="confirm" href="javascript:;">`+ MSG_SAVE +`</a>
@@ -344,37 +398,36 @@ const func = {
 		</div>`;
 
 		func.appendHtml(document.getElementById('wrap'), html, 'div');
+		CodeMirror.fromTextArea($(".codemirror-resource-update-textarea")[0], {
+			value: "",
+			theme: "default",
+			scrollbarStyle: "simple",
+			mode: "text/x-yaml",
+			lineNumbers: true,
+			lineWrapping: true,
+		}).setSize("660px", "400px");
 
-		for(var i=0; i<=func.nameData.items.length-1; i++){
-			var namespace = func.nameData.items[i].cpNamespace;
-			var html = `<option value="${namespace}">${namespace}</option>`;
-			func.appendHtml(document.getElementById('createName'), html, 'select');
-		};
-
-		document.getElementById('createName').value = sessionStorage.getItem('nameSpace');
-
-		document.querySelector('.nameTop').innerHTML = sessionStorage.getItem('nameSpace');
+		document.querySelector(".updateYamlArea > .CodeMirror").CodeMirror.setValue(data.sourceTypeYaml);
+		var namespaceOptions = `<option value="${sessionStorage.getItem('nameSpace')}">${sessionStorage.getItem('nameSpace')}</option>`;
+		func.appendHtml(document.getElementById('createName'), namespaceOptions, 'select');
 
 		document.getElementById('modal').querySelector('.close').addEventListener('click', (e) => {
 			document.getElementById('wrap').removeChild(document.getElementById('modal'));
-	}, false);
-
+		}, false);
 
 		document.getElementById('modal').querySelector('.confirm').addEventListener('click', (e) => {
-			var input = document.getElementById('modal').querySelector('textarea');
+			var updateYaml = document.querySelector(".updateYamlArea > .CodeMirror").CodeMirror.getValue();
+			document.getElementById('wrap').removeChild(document.getElementById('modal'));
 
-		document.getElementById('wrap').removeChild(document.getElementById('modal'));
+			var sendData = JSON.stringify ({
+				cluster : sessionStorage.getItem('cluster'),
+				namespace : sessionStorage.getItem('nameSpace'),
+				resourceName : sessionStorage.getItem('commonName'),
+				yaml : updateYaml
+			});
 
-		var sendData = JSON.stringify ({
-			cluster : sessionStorage.getItem('cluster'),
-			namespace : sessionStorage.getItem('nameSpace'),
-			resourceName : sessionStorage.getItem('commonName'),
-			yaml : input.value
-		});
-
-
-		func.saveData('PUT', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${document.getElementById('modify').getAttribute('data-role')}/${sessionStorage.getItem('commonName')}`, sendData, true, 'application/json', func.history);
-	}, false);
+			func.saveData('PUT', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/${document.getElementById('modify').getAttribute('data-role')}/${sessionStorage.getItem('commonName')}`, sendData, true, 'application/json', func.refresh);
+		}, false);
 	},
 
 	// 로그인 체크 ////////////////////////////////////////////////////////////////
@@ -754,19 +807,49 @@ const func = {
 		if(callback){
 			document.getElementById('alertModal').querySelector('.confirm').addEventListener('click', (e) => {
 				if(callback != 'closed'){
-				callback();
+					callback();
 				};
 
 				if(!IS_VCHK) {
-				document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
+					document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
 				}
 			}, false);
 		};
 	},
 
-    moveToMain() {
-	location.href = URI_CP_BASE_URL;
-    },
+	vaultDelAlertPopup(title, text, text2, bull, name, callback){
+		var html = `<div class='modal-wrap' id='alertModal'><div class='modal'><h5>${title}</h5><p>${text}</p><p>${text2}</p>`;
+		if(bull){
+			html += `<a class='confirm' href='javascript:;'>${name}</a>`;
+		};
+		html += `<a class='close' href='javascript:;'>` + MSG_CLOSE + `</a></div></div>`;
+
+		if(document.getElementById('alertModal') !== null) {
+			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
+		}
+
+		func.appendHtml(document.getElementById('wrap'), html, 'div');
+
+		document.getElementById('alertModal').querySelector('.close').addEventListener('click', (e) => {
+			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
+		}, false);
+
+		if(callback){
+			document.getElementById('alertModal').querySelector('.confirm').addEventListener('click', (e) => {
+				if(callback != 'closed'){
+					callback();
+				};
+
+				if(!IS_VCHK) {
+					document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
+				}
+			}, false);
+		};
+	},
+
+	moveToMain() {
+		location.href = URI_CP_BASE_URL;
+	},
 
 	historyBack(){
 		window.history.back();
@@ -889,7 +972,7 @@ const func = {
 		}
 	},
 	moveToUserGuideLink(){
-	   window.open('about:blank').location.href = generatedGuideLink('ko', func.depth1);
+		window.open('about:blank').location.href = generatedGuideLink('ko', func.depth1);
 	},
 	moveToEngUserGuideLink(){
 		window.open('about:blank').location.href = generatedGuideLink('en', func.depth1);

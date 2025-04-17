@@ -147,8 +147,7 @@
 
                 document.querySelector('.create').addEventListener('click', (e) => {
                     sessionStorage.setItem('commonName', '');
-
-                func.create('Create', 'pods', MSG_SAVE);
+                    createWorkloadResources('pods');
             }, false);
             },
 

@@ -13,16 +13,16 @@
 <!-- // Head -->
 <!-- Body -->
 <body>
-<span th:replace="fragments/config :: configFragment"></span>
+<span th:replace="~{fragments/config :: configFragment}"></span>
 <div id="wrap">
     <!-- Header -->
-    <header th:replace="fragments/header :: headerFragment"></header>
+    <header th:replace="~{fragments/header :: headerFragment}"></header>
     <!-- // Header -->
 
     <!-- container -->
     <div id="container">
         <!-- aside -->
-        <aside th:replace="fragments/aside :: globalAsideFragment"></aside>
+        <aside th:replace="~{fragments/aside :: globalAsideFragment}"></aside>
         <!-- // aside -->
 
         <!-- content -->

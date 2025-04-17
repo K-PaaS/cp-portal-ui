@@ -21,7 +21,25 @@ public class PropertyService {
     @Value("${private.repository.url}")
     private String privateRepositoryUrl;
 
-    @Value("${keycloak.oauth.client.superAdminRole}")
+    @Value("${keycloak.superAdminRole}")
     private String keycloakSuperAdminRole;
+
+    @Value("${spring.security.oauth2.client.registration.keycloak.client-id}")
+    private String keycloakClientId;
+
+    @Value("${spring.security.oauth2.client.registration.keycloak.client-secret}")
+    private String keycloakClientSecret;
+
+    @Value("${keycloak.oauth2LoginPath}")
+    private String keycloakOauth2LoginPath;
+
+    @Value("${keycloak.logoutUri}")
+    private String keycloakLogoutUri;
+
+    @Value("${keycloak.introspectUri}")
+    private String keycloakIntrospectUri;
+
+    @Value("${server.servlet.session.cookie.name}")
+    private String cpSessionCookieName;
 
 }
