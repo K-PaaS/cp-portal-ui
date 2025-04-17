@@ -1,5 +1,6 @@
 package org.container.platform.web.ui.common;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.container.platform.web.ui.common.model.CommonStatusCode;
 import org.container.platform.web.ui.common.model.ResultStatus;
 import org.container.platform.web.ui.login.LoginService;
@@ -7,12 +8,10 @@ import org.container.platform.web.ui.login.model.UsersLoginMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Rest Template Service 클래스
@@ -254,7 +253,7 @@ public class RestTemplateService {
         ResponseEntity<T> resEntity = null;
 
         try {
-            resEntity = restTemplate.exchange(baseUrl + Constants.URI_API_REFRESH_TOKEN, httpMethod, reqEntity, responseType);
+            resEntity = restTemplate.exchange(baseUrl + ConstantsUrl.URI_API_REFRESH_TOKEN, httpMethod, reqEntity, responseType);
             if (resEntity.getBody() != null) {
                 LOGGER.info("Response Type: {}", CommonUtils.loggerReplace(resEntity.getBody().getClass()));
                 LOGGER.info(CommonUtils.loggerReplace(resEntity.getBody().toString()));
@@ -264,7 +263,7 @@ public class RestTemplateService {
 
             return resEntity.getBody();
         } catch (HttpStatusCodeException exception) {
-            LOGGER.info("HttpStatusCodeException API Call URL : {}, errorCode : {}, errorMessage : {}", CommonUtils.loggerReplace(Constants.URI_API_REFRESH_TOKEN), CommonUtils.loggerReplace(exception.getRawStatusCode()), CommonUtils.loggerReplace(exception.getMessage()));
+            LOGGER.info("HttpStatusCodeException API Call URL : {}, errorCode : {}, errorMessage : {}", CommonUtils.loggerReplace(ConstantsUrl.URI_API_REFRESH_TOKEN), CommonUtils.loggerReplace(exception.getRawStatusCode()), CommonUtils.loggerReplace(exception.getMessage()));
 
             for (CommonStatusCode code : CommonStatusCode.class.getEnumConstants()) {
                 if (code.getCode() == exception.getRawStatusCode()) {

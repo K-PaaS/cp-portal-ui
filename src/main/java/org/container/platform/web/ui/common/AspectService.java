@@ -1,5 +1,6 @@
 package org.container.platform.web.ui.common;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -52,7 +52,7 @@ public class AspectService {
 
         LOGGER.warn("## Entering in Method:  {}", CommonUtils.loggerReplace(joinPoint.getSignature().getName()));
         LOGGER.warn("## Class Name:  {}", CommonUtils.loggerReplace(joinPoint.getSignature().getDeclaringTypeName()));
-        LOGGER.warn("## Arguments:  {}",  CommonUtils.loggerReplace(Stream.of(joinPoint.getArgs()).map(String::valueOf).collect(Collectors.joining(", "))));
+        LOGGER.warn("## Arguments:  {}", CommonUtils.loggerReplace(Stream.of(joinPoint.getArgs()).map(String::valueOf).collect(Collectors.joining(", "))));
         LOGGER.warn("## Target class:  {}", joinPoint.getTarget().getClass().getName());
 
         if (null != request) {

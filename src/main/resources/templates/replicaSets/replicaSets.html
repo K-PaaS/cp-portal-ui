@@ -148,8 +148,7 @@
 
                 document.querySelector('.create').addEventListener('click', (e) => {
                     sessionStorage.setItem('commonName', '');
-
-                func.create('Create', 'replicaSets', MSG_SAVE);
+                    createWorkloadResources('replicaSets');
             }, false);
             },
 

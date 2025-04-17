@@ -20,7 +20,7 @@ import java.util.List;
 public class UsersLoginMetaData implements Serializable {
 
     private String userId;
-    private String userAuthid;
+    private String userAuthId;
     private String userType;
     private String accessToken;
     private String userMetaData;

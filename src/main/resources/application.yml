@@ -6,6 +6,26 @@ spring:
     allow-circular-references: true
   freemarker:
     template-loader-path: classpath:/templates/
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: ${KEYCLOAK_CP_CLIENT_ID}
+            client-secret: ${KEYCLOAK_CP_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: ${CP_PORTAL_UI_URI}/login/oauth2/code/keycloak
+            scope:
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}
+
+keycloak:
+  superAdminRole: cp-cluster-admin-role
+  oauth2LoginPath: /oauth2/authorization/keycloak
+  logoutUri: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}/protocol/openid-connect/logout
+  introspectUri: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}/protocol/openid-connect/token/introspect
 
 server:
   port: ${PORT:8090}
@@ -22,34 +42,9 @@ management:
       exposure:
         include: health
 
-logging:
-  level:
-    ROOT: INFO
-  path: classpath:logback-spring.xml
-  file: logs/application.log
-
 private:
   repository:
     url: ${REPOSITORY_URL}
-
-keycloak:
-  oauth:
-    info:
-      uri: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}/protocol/openid-connect/userinfo
-    token:
-      check:
-        uri: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}/protocol/openid-connect/token/introspect
-      access:
-        uri: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}/protocol/openid-connect/token
-    logout:
-      url: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}/protocol/openid-connect/logout
-    authorization:
-      uri: ${KEYCLOAK_URI}/realms/${KEYCLOAK_CP_REALM}/protocol/openid-connect/auth
-    client:
-      id: ${KEYCLOAK_CP_CLIENT_ID}
-      secret: ${KEYCLOAK_CP_CLIENT_SECRET}
-      scope:
-      superAdminRole: cp-cluster-admin-role
 
 guide:
   url: https://github.com/K-PaaS/container-platform/tree/master/use-guide/portal/
@@ -66,18 +61,23 @@ catalog:
       password: ${CHART_REPO_PASSWORD}
       cert: ${CHART_REPO_CRT} # base64 encoded certificate
 
+logging:
+  config: classpath:logback-spring.xml
+
 ---
 spring:
   config:
     activate:
       on-profile: local
 
+logging:
+  file:
+    path: logs
+
 cpApi:
   url: http://localhost:3333
-
 chaosApi:
   url: http://localhost:8092
-
 catalogApi:
   url: http://localhost:8093
 
@@ -87,11 +87,13 @@ spring:
     activate:
       on-profile: prod
 
+logging:
+  file:
+    path: /home/1000/logs
+
 cpApi:
   url: ${CP_PORTAL_API_URI}
-
 chaosApi:
   url: ${CP_PORTAL_CHAOS_API_URI}
-
 catalogApi:
   url: ${CP_PORTAL_CATALOG_API_URI}

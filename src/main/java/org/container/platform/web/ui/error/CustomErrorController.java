@@ -1,16 +1,13 @@
 package org.container.platform.web.ui.error;
 
-import io.swagger.annotations.ApiOperation;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.container.platform.web.ui.config.NoAuth;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Error Controller 클래스
  *
@@ -41,7 +38,6 @@ public class CustomErrorController implements ErrorController {
      *
      * @return the view
      */
-    @ApiOperation(value = "Session Out 페이지 이동(Go to the session out page)", nickname = "getSessionOutView")
     @NoAuth
     @GetMapping(ConstantsUrl.URI_CP_SESSION_OUT)
     public String getSessionOutView() {
@@ -54,7 +50,6 @@ public class CustomErrorController implements ErrorController {
      *
      * @return the view
      */
-    @ApiOperation(value = "HTTP Code 400 Error 페이지 이동(Go to the http code 400 error page)", nickname = "handleError400")
     @NoAuth
     @GetMapping("/error/400")
     public String handleError400() {
@@ -67,7 +62,6 @@ public class CustomErrorController implements ErrorController {
      *
      * @return the view
      */
-    @ApiOperation(value = "HTTP Code 401 Error 페이지 이동(Go to the http code 401 error page)", nickname = "handleError401")
     @NoAuth
     @GetMapping("/error/401")
     public String handleError401() {
@@ -80,7 +74,6 @@ public class CustomErrorController implements ErrorController {
      *
      * @return the view
      */
-    @ApiOperation(value = "HTTP Code 403 Error 페이지 이동(Go to the http code 403 error page)", nickname = "handleError403")
     @NoAuth
     @GetMapping( {"/error/403", "/common/error/unauthorized"})
     public String handleError403() {
@@ -93,7 +86,6 @@ public class CustomErrorController implements ErrorController {
      *
      * @return the view
      */
-    @ApiOperation(value = "HTTP Code 404 Error 페이지 이동(Go to the http code 404 error page)", nickname = "handleError404")
     @NoAuth
     @GetMapping("/error/404")
     public String handleError404() {
@@ -106,7 +98,6 @@ public class CustomErrorController implements ErrorController {
      *
      * @return the view
      */
-    @ApiOperation(value = "HTTP Code 500 Error 페이지 이동(Go to the http code 500 error page)", nickname = "handleError500")
     @NoAuth
     @GetMapping("/error/500")
     public String handleError500() {
@@ -119,7 +110,6 @@ public class CustomErrorController implements ErrorController {
      *
      * @return the view
      */
-    @ApiOperation(value = "inactive 페이지 이동(Go to the inactive page)", nickname = "handleInActive")
     @NoAuth
     @GetMapping(ConstantsUrl.URl_CP_INACTIVE)
     public String handleInActive() {

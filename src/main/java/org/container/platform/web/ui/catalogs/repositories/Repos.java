@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Repos {
-  public String name;
-  public String url;
+    public String name;
+    public String url;
 }

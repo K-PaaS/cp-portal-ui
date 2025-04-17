@@ -1,7 +1,5 @@
 package org.container.platform.web.ui.services.services;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @version 1.0
  * @since 2021.05.06
  */
-@Api(value = "ServicesController v1")
 @Controller
 public class ServicesController {
 
@@ -24,7 +21,6 @@ public class ServicesController {
      *
      * @return the view
      */
-    @ApiOperation(value = "Services 목록 페이지 이동(Go to the services list page)", nickname = "getServicesList")
     @GetMapping(value = ConstantsUrl.URI_CP_SERVICES_SERVICES )
     public String getServicesList() {
         return BASE_URL + "services";
@@ -35,7 +31,6 @@ public class ServicesController {
      *
      * @return the view
      */
-    @ApiOperation(value = "Services 상세 페이지 이동(Go to the services details page)", nickname = "getServicesDetails")
     @GetMapping(value = ConstantsUrl.URI_CP_SERVICES_SERVICES + ConstantsUrl.URI_CP_DETAILS)
     public String getServicesDetails() {
         return BASE_URL + "servicesDetail";

@@ -21,15 +21,15 @@
                             <input id="name" type="text" th:placeholder="#{M0851}"/>
                         </dd>
                     </dl>
-                   <!-- <dl>
-                        <dt><label for="cloudAccounts">Cloud Accounts</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="cloudAccounts">
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>-->
+                    <!-- <dl>
+                         <dt><label for="cloudAccounts">Cloud Accounts</label></dt>
+                         <dd>
+                             <fieldset>
+                                 <select id="cloudAccounts">
+                                 </select>
+                             </fieldset>
+                         </dd>
+                     </dl>-->
                     <dl>
                         <dt><label for="provider">Provider</label></dt>
                         <dd>
@@ -41,9 +41,10 @@
                     </dl>
                     <dl>
                         <dt><label for="key">Private Key</label></dt>
-                        <dd>
-                            <input id="key" type="file" accept="text/plain" /><br><br>
-                            <div id="output"></div>
+                        <dd style="margin-top: 15px;">
+                            <label class="input-file-button" for="key" th:text="#{M0929}"></label>
+                            <input type="file" class="input-file-upload" id="key" accept="text/plain" style="display: none"/>
+                            <div id="output" style="margin-top: 17px;"></div>
                         </dd>
                     </dl>
                 </div>

@@ -62,4 +62,8 @@ public class Users {
         this.isSuperAdmin = isSuperAdmin;
     }
 
+    public String userIfo(){
+        return (String.format("isSuperAdmin:%s, username:%s, sub:%s", this.isSuperAdmin, this.userId, this.userAuthId));
+    }
+
 }

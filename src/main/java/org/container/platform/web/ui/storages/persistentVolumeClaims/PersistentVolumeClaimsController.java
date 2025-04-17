@@ -1,7 +1,5 @@
 package org.container.platform.web.ui.storages.persistentVolumeClaims;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @version 1.0
  * @since 2021.05.06
  */
-@Api(value = "PersistentVolumeClaimsController v1")
+
 @Controller
 public class PersistentVolumeClaimsController {
 
@@ -24,7 +22,6 @@ public class PersistentVolumeClaimsController {
      *
      * @return the view
      */
-    @ApiOperation(value = "PersistentVolumeClaims 목록 페이지 이동(Go to the persistentVolumeClaims list page)", nickname = "getPersistentVolumeClaimsList")
     @GetMapping(value = ConstantsUrl.URI_CP_STORAGES_PERSISTENTVOLUMECLAIMS )
     public String getPersistentVolumeClaimsList() {
         return BASE_URL + "persistentVolumeClaims";
@@ -35,7 +32,6 @@ public class PersistentVolumeClaimsController {
      *
      * @return the view
      */
-    @ApiOperation(value = "PersistentVolumeClaims 상세 페이지 이동(Go to the persistentVolumeClaims details page)", nickname = "getPersistentVolumeClaimsDetails")
     @GetMapping(value = ConstantsUrl.URI_CP_STORAGES_PERSISTENTVOLUMECLAIMS + ConstantsUrl.URI_CP_DETAILS)
     public String getPersistentVolumeClaimsDetails() {
         return BASE_URL + "persistentVolumeClaimsDetail";

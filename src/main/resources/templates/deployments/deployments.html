@@ -149,8 +149,7 @@
 
                 document.querySelector('.create').addEventListener('click', (e) => {
                     sessionStorage.setItem('commonName', '');
-
-                func.create('Create', 'deployments', MSG_SAVE);
+                    createWorkloadResources('deployments');
             }, false);
             },
 

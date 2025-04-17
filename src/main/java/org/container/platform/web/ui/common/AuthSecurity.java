@@ -5,7 +5,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-
 @Component("authSecurity")
 public class AuthSecurity {
     public boolean checkIsGlobal() {
@@ -19,7 +18,6 @@ public class AuthSecurity {
         return false;
     }
 
-
     public boolean checkIsClusterAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.AUTH_USER))) {
@@ -27,7 +25,6 @@ public class AuthSecurity {
         }
         return true;
     }
-
 
     public boolean checkIsSuperAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

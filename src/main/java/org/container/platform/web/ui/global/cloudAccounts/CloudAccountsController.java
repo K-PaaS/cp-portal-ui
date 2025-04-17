@@ -1,7 +1,5 @@
 package org.container.platform.web.ui.global.cloudAccounts;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @since 2022.07.01
  */
 
-@Api(value = "CloudAccountsController v1")
 @PreAuthorize("@authSecurity.checkIsGlobal()")
 @Controller
 public class CloudAccountsController {
@@ -26,7 +23,6 @@ public class CloudAccountsController {
      *
      * @return the view
      */
-    @ApiOperation(value = "CloudAccounts 목록 페이지 이동(Go to the cloudAccounts list page)", nickname = "getCloudAccountsList")
     @GetMapping(value = ConstantsUrl.URI_CP_GLOBAL_CLOUD_ACCOUNTS)
     public String getCloudAccountsList() {
         return BASE_URL + "cloudAccounts";
@@ -37,7 +33,6 @@ public class CloudAccountsController {
      *
      * @return the view
      */
-    @ApiOperation(value = "CloudAccounts 상세 페이지 이동(Go to the cloudAccounts details page)", nickname = "getCloudAccountsDetails")
     @GetMapping(value = ConstantsUrl.URI_CP_GLOBAL_CLOUD_ACCOUNTS + ConstantsUrl.URI_CP_DETAILS)
     public String getCloudAccountsDetail() {
         return BASE_URL + "cloudAccountsDetail";
@@ -49,10 +44,8 @@ public class CloudAccountsController {
      * @return the view
      */
     @PreAuthorize("@authSecurity.checkIsSuperAdmin()")
-    @ApiOperation(value = "CloudAccounts 생성 페이지 이동(Go to the cloudAccounts create page)", nickname = "getCloudAccountsCreate")
     @GetMapping(value = ConstantsUrl.URI_CP_GLOBAL_CLOUD_ACCOUNTS + ConstantsUrl.URI_CP_CREATE)
     public String getCloudAccountsCreate() {
         return BASE_URL + "cloudAccountsCreate";
     }
 }
-
