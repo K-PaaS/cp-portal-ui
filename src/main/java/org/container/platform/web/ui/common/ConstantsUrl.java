@@ -33,7 +33,6 @@ public class ConstantsUrl {
     public static final String URI_CP_MANAGEMENTS_INACTIVE_USERS = "/container-platform/inactiveUsers";
     public static final String URI_CP_CONFIGS_CONFIGMAPS = "/container-platform/configMaps";
     public static final String URI_CP_CONFIGS_SECRETS = "/container-platform/secrets";
-    public static final String URI_CP_CONFIGS_VAULT_SECRETS = "/container-platform/vaultSecrets";
 
     public static final String URI_CP_CHAOS_EXPERIMENTS = "/container-platform/experiments";
     public static final String URI_CP_CHAOS_EVENTS = "/container-platform/events";
@@ -56,7 +55,6 @@ public class ConstantsUrl {
 
     public static final String URI_CP_LIST = "/list";
     public static final String URI_CP_DETAILS = "/details";
-    public static final String URI_CP_VAULT_DETAILS = "/vault/details";
     public static final String URI_CP_CREATE = "/create";
     public static final String URI_CP_UPDATE = "/update";
     public static final String URI_CP_POPUP = "/popup";

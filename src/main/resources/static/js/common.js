@@ -817,36 +817,6 @@ const func = {
 		};
 	},
 
-	vaultDelAlertPopup(title, text, text2, bull, name, callback){
-		var html = `<div class='modal-wrap' id='alertModal'><div class='modal'><h5>${title}</h5><p>${text}</p><p>${text2}</p>`;
-		if(bull){
-			html += `<a class='confirm' href='javascript:;'>${name}</a>`;
-		};
-		html += `<a class='close' href='javascript:;'>` + MSG_CLOSE + `</a></div></div>`;
-
-		if(document.getElementById('alertModal') !== null) {
-			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
-		}
-
-		func.appendHtml(document.getElementById('wrap'), html, 'div');
-
-		document.getElementById('alertModal').querySelector('.close').addEventListener('click', (e) => {
-			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
-		}, false);
-
-		if(callback){
-			document.getElementById('alertModal').querySelector('.confirm').addEventListener('click', (e) => {
-				if(callback != 'closed'){
-					callback();
-				};
-
-				if(!IS_VCHK) {
-					document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
-				}
-			}, false);
-		};
-	},
-
 	moveToMain() {
 		location.href = URI_CP_BASE_URL;
 	},
