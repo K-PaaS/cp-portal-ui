@@ -228,6 +228,19 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .base > div:first-child {background-color:#ffffff; padding:50px 40px 30px 40px; box-shadow:-3px 2px 5px -5px rgba(204, 204, 204, 0.5);}
 .base.tab-cont-wrap > div {background-color:#ffffff; padding:50px 40px 30px 40px; box-shadow:-3px 2px 5px -5px rgba(204, 204, 204, 0.5);}
 
+/* iframe */
+#iframe {padding:10px 15px 40px 15px;}
+
+.iframeContainer {
+	width: 100%;
+}
+.iframeContainer iframe {
+	width: 100%;
+	height: 100vh;
+	top: 0;
+	left: 0;
+}
+
 /* title */
 .notice > h3 {font-family:'Apple SD Gothic Neo B', sans-serif; padding-top:9px; color:#47494d; font-size:26px; line-height:30px;}
 
