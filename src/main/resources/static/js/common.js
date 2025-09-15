@@ -1,263 +1,265 @@
 const func = {
-  url: URI_REQUEST_CP_API,
-  catalogUrl: URI_REQUEST_CATALOG_API,
-  chaosUrl: URI_REQUEST_CHAOS_API,
-  federationUrl: URI_REQUEST_FEDERATION_UI,
-  ui: "http://localhost:8091/",
-  nameLoad: new (function () {})(),
-  clusterData: new Object(),
-  nameData: new Object(),
-  createIm: "",
-  depth1: "",
-  depth2: "",
+    url: URI_REQUEST_CP_API,
+    catalogUrl: URI_REQUEST_CATALOG_API,
+    chaosUrl: URI_REQUEST_CHAOS_API,
+    federationUrl: URI_REQUEST_FEDERATION_UI,
+    remoteUrl: URI_REQUEST_REMOTE_API,
+    ui: "http://localhost:8091/",
+    nameLoad: new (function () {
+    })(),
+    clusterData: new Object(),
+    nameData: new Object(),
+    createIm: "",
+    depth1: "",
+    depth2: "",
 
-  init(depth1, depth2) {
-    func.depth1 = depth1;
-    func.depth2 = depth2;
+    init(depth1, depth2) {
+        func.depth1 = depth1;
+        func.depth2 = depth2;
 
-    // Locale Language 조회
-    func.getLocaleLang();
+        // Locale Language 조회
+        func.getLocaleLang();
 
-    if (IS_GLOBAL == false) {
-      func.loadData(
-        "GET",
-        `${func.url}users/clustersList?isGlobal=${IS_GLOBAL}`,
-        "application/json",
-        func.clusters
-      );
-    } else {
-      document.getElementById("clusterTitleDiv").style.display = "none";
-      document.getElementById("nameSpaceTitleDiv").style.display = "none";
+        if (IS_GLOBAL == false) {
+            func.loadData(
+                "GET",
+                `${func.url}users/clustersList?isGlobal=${IS_GLOBAL}`,
+                "application/json",
+                func.clusters
+            );
+        } else {
+            document.getElementById("clusterTitleDiv").style.display = "none";
+            document.getElementById("nameSpaceTitleDiv").style.display = "none";
 
-      if (sessionStorage.getItem("cluster") == null) {
-        func.loadData(
-          "GET",
-          `${func.url}users/clustersList?isGlobal=${IS_GLOBAL}`,
-          "application/json",
-          func.clusters
-        );
-      }
-    }
-
-    // navigation 초기 선택 설정
-    if (depth1.length >= 0) {
-      //depth1 toggle on
-      document
-        .querySelector("[aside_d1=" + depth1 + "]")
-        .classList.toggle("on", true);
-      // depth2 toggle on
-      document
-        .querySelector("[aside_d2=" + depth2 + "]")
-        .classList.toggle("on", true);
-    }
-
-    // navigation height 설정
-    var navSub = document.querySelector("nav").querySelectorAll(".sub");
-    for (var i = 0; i <= navSub.length - 1; i++) {
-      var childSum = navSub[i].childElementCount;
-      navSub[i].style.height = childSum * 35 + 30 + (childSum - 1) * 10 + "px";
-    }
-
-    func.event();
-    func.onclickToGuide();
-  },
-
-  event() {
-    // navigation
-    var nav = document.querySelector("nav").querySelectorAll(".dep01");
-
-    for (var i = 0; i <= nav.length - 1; i++) {
-      nav[i].addEventListener(
-        "click",
-        (e) => {
-          e.stopPropagation();
-
-          for (var j = 0; j <= nav.length - 1; j++) {
-            nav[j].parentNode.classList.toggle("on", false);
-          }
-
-          e.target.parentNode.classList.toggle("on", true);
-        },
-        false
-      );
-    }
-
-    // search
-    if (document.getElementById("search") != null) {
-      document.getElementById("search").addEventListener(
-        "click",
-        (e) => {
-          if (e.target.parentNode.classList != "on") {
-            e.target.parentNode.classList.toggle("on");
-          } else {
-            if (document.getElementById("searchText").value != "") {
-              IS_SEARCH = true;
-              func.nameLoad();
+            if (sessionStorage.getItem("cluster") == null) {
+                func.loadData(
+                    "GET",
+                    `${func.url}users/clustersList?isGlobal=${IS_GLOBAL}`,
+                    "application/json",
+                    func.clusters
+                );
             }
-          }
-        },
-        false
-      );
-
-      document.getElementById("searchText").onkeydown = function (event) {
-        if (event.keyCode === 13) {
-          IS_SEARCH = true;
-          func.nameLoad();
         }
-      };
 
-      document.getElementById("searchText").onkeyup = function (event) {
-        document.getElementById("searchText").value = document
-          .getElementById("searchText")
-          .value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, "");
-      };
-    }
+        // navigation 초기 선택 설정
+        if (depth1.length >= 0) {
+            //depth1 toggle on
+            document
+                .querySelector("[aside_d1=" + depth1 + "]")
+                .classList.toggle("on", true);
+            // depth2 toggle on
+            document
+                .querySelector("[aside_d2=" + depth2 + "]")
+                .classList.toggle("on", true);
+        }
 
-    // logout event
-    document.getElementById("logout").addEventListener(
-      "click",
-      (e) => {
-        func.alertPopup(
-          "Sign Out",
-          MSG_WANT_TO_SIGN_OUT +
-            '<br><p id="logout-sub">' +
-            MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE +
-            "</p>",
-          true,
-          MSG_CONFIRM,
-          func.logout
+        // navigation height 설정
+        var navSub = document.querySelector("nav").querySelectorAll(".sub");
+        for (var i = 0; i <= navSub.length - 1; i++) {
+            var childSum = navSub[i].childElementCount;
+            navSub[i].style.height = childSum * 35 + 30 + (childSum - 1) * 10 + "px";
+        }
+
+        func.event();
+        func.onclickToGuide();
+    },
+
+    event() {
+        // navigation
+        var nav = document.querySelector("nav").querySelectorAll(".dep01");
+
+        for (var i = 0; i <= nav.length - 1; i++) {
+            nav[i].addEventListener(
+                "click",
+                (e) => {
+                    e.stopPropagation();
+
+                    for (var j = 0; j <= nav.length - 1; j++) {
+                        nav[j].parentNode.classList.toggle("on", false);
+                    }
+
+                    e.target.parentNode.classList.toggle("on", true);
+                },
+                false
+            );
+        }
+
+        // search
+        if (document.getElementById("search") != null) {
+            document.getElementById("search").addEventListener(
+                "click",
+                (e) => {
+                    if (e.target.parentNode.classList != "on") {
+                        e.target.parentNode.classList.toggle("on");
+                    } else {
+                        if (document.getElementById("searchText").value != "") {
+                            IS_SEARCH = true;
+                            func.nameLoad();
+                        }
+                    }
+                },
+                false
+            );
+
+            document.getElementById("searchText").onkeydown = function (event) {
+                if (event.keyCode === 13) {
+                    IS_SEARCH = true;
+                    func.nameLoad();
+                }
+            };
+
+            document.getElementById("searchText").onkeyup = function (event) {
+                document.getElementById("searchText").value = document
+                    .getElementById("searchText")
+                    .value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, "");
+            };
+        }
+
+        // logout event
+        document.getElementById("logout").addEventListener(
+            "click",
+            (e) => {
+                func.alertPopup(
+                    "Sign Out",
+                    MSG_WANT_TO_SIGN_OUT +
+                    '<br><p id="logout-sub">' +
+                    MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE +
+                    "</p>",
+                    true,
+                    MSG_CONFIRM,
+                    func.logout
+                );
+            },
+            false
         );
-      },
-      false
-    );
-  },
+    },
 
-  logout() {
-    sessionStorage.clear();
-    movePage(URI_CP_LOGOUT);
-  },
+    logout() {
+        sessionStorage.clear();
+        movePage(URI_CP_LOGOUT);
+    },
 
-  clusters(data) {
-    var html = "";
-    for (var i = 0; i <= data.items.length - 1; i++) {
-      html += `<li><a href="javascript:;" data-name="${data.items[i].clusterId}" data-type="${data.items[i].clusterType}">${data.items[i].clusterName}</a></li>`;
-    }
+    clusters(data) {
+        var html = "";
+        for (var i = 0; i <= data.items.length - 1; i++) {
+            html += `<li><a href="javascript:;" data-name="${data.items[i].clusterId}" data-type="${data.items[i].clusterType}">${data.items[i].clusterName}</a></li>`;
+        }
 
-    document.getElementById("clusterListUl").innerHTML = html;
+        document.getElementById("clusterListUl").innerHTML = html;
 
-    /////////////////////
-    if (sessionStorage.getItem("cluster") != null) {
-      document.querySelector(".clusterTop").innerText =
-        sessionStorage.getItem("clusterName");
-    } else {
-      document.querySelector(".clusterTop").innerText =
-        data.items[0].clusterName;
-      sessionStorage.setItem("cluster", data.items[0].clusterId);
-      sessionStorage.setItem("clusterName", data.items[0].clusterName);
-      sessionStorage.setItem("clusterType", data.items[0].clusterType);
-    }
+        /////////////////////
+        if (sessionStorage.getItem("cluster") != null) {
+            document.querySelector(".clusterTop").innerText =
+                sessionStorage.getItem("clusterName");
+        } else {
+            document.querySelector(".clusterTop").innerText =
+                data.items[0].clusterName;
+            sessionStorage.setItem("cluster", data.items[0].clusterId);
+            sessionStorage.setItem("clusterName", data.items[0].clusterName);
+            sessionStorage.setItem("clusterType", data.items[0].clusterType);
+        }
 
-    var name = document.querySelector(".clusterUl").querySelectorAll("a");
-    func.setUserAuthority(sessionStorage.getItem("cluster"), data.items);
+        var name = document.querySelector(".clusterUl").querySelectorAll("a");
+        func.setUserAuthority(sessionStorage.getItem("cluster"), data.items);
 
-    //cluster click event
-    for (var i = 0; i < name.length; i++) {
-      name[i].addEventListener(
-        "click",
-        (e) => {
-          sessionStorage.setItem("cluster", e.target.getAttribute("data-name"));
-          sessionStorage.setItem(
-            "clusterType",
-            e.target.getAttribute("data-type")
-          );
-          sessionStorage.setItem("clusterName", e.target.innerText);
-          document.querySelector(".clusterTop").innerText = e.target.innerText;
-          sessionStorage.removeItem("nameSpace");
-          func.setUserAuthority(sessionStorage.getItem("cluster"), data.items);
-          IS_RELOAD = true;
-          func.loadData(
+        //cluster click event
+        for (var i = 0; i < name.length; i++) {
+            name[i].addEventListener(
+                "click",
+                (e) => {
+                    sessionStorage.setItem("cluster", e.target.getAttribute("data-name"));
+                    sessionStorage.setItem(
+                        "clusterType",
+                        e.target.getAttribute("data-type")
+                    );
+                    sessionStorage.setItem("clusterName", e.target.innerText);
+                    document.querySelector(".clusterTop").innerText = e.target.innerText;
+                    sessionStorage.removeItem("nameSpace");
+                    func.setUserAuthority(sessionStorage.getItem("cluster"), data.items);
+                    IS_RELOAD = true;
+                    func.loadData(
+                        "GET",
+                        `${func.url}clusters/${sessionStorage.getItem(
+                            "cluster"
+                        )}/users/namespacesList`,
+                        "application/json",
+                        func.namespaces
+                    );
+                },
+                false
+            );
+        }
+
+        func.loadData(
             "GET",
             `${func.url}clusters/${sessionStorage.getItem(
-              "cluster"
+                "cluster"
             )}/users/namespacesList`,
             "application/json",
             func.namespaces
-          );
-        },
-        false
-      );
-    }
-
-    func.loadData(
-      "GET",
-      `${func.url}clusters/${sessionStorage.getItem(
-        "cluster"
-      )}/users/namespacesList`,
-      "application/json",
-      func.namespaces
-    );
-  },
-
-  namespaces(data) {
-    func.nameData = data;
-
-    var html = "";
-    if (document.querySelector(".nameSpace")) {
-      for (var i = 0; i <= data.items.length - 1; i++) {
-        var namespace = data.items[i].cpNamespace;
-        html += `<li><a href="javascript:;" data-name="${namespace}">${namespace}</a></li>`;
-      }
-
-      document.getElementById("namespaceListUl").innerHTML = html;
-
-      if (sessionStorage.getItem("nameSpace") != null) {
-        document.querySelector(".nameTop").innerText =
-          sessionStorage.getItem("nameSpace");
-      } else {
-        document.querySelector(".nameTop").innerText =
-          data.items[0].cpNamespace;
-        sessionStorage.setItem("nameSpace", data.items[0].cpNamespace);
-        sessionStorage.setItem("roleSetCode", data.items[0].roleSetCode);
-      }
-
-      var name = document.querySelector(".nameSpace").querySelectorAll("a");
-
-      for (var i = 0; i < name.length; i++) {
-        name[i].addEventListener(
-          "click",
-          (e) => {
-            sessionStorage.setItem(
-              "nameSpace",
-              e.target.getAttribute("data-name")
-            );
-            document.querySelector(".nameTop").innerText = e.target.innerText;
-            if (IS_NAMELOAD) {
-              func.loadData("GET", null, "application/json", func.nameLoad);
-            } else {
-              movePage(URI_CP_INDEX_URL);
-            }
-          },
-          false
         );
-      }
+    },
 
-      if (IS_RELOAD) {
-        if (IS_NAMELOAD) {
-          func.loadData("GET", null, "application/json", func.nameLoad);
-        } else {
-          movePage(URI_CP_INDEX_URL);
+    namespaces(data) {
+        func.nameData = data;
+
+        var html = "";
+        if (document.querySelector(".nameSpace")) {
+            for (var i = 0; i <= data.items.length - 1; i++) {
+                var namespace = data.items[i].cpNamespace;
+                html += `<li><a href="javascript:;" data-name="${namespace}">${namespace}</a></li>`;
+            }
+
+            document.getElementById("namespaceListUl").innerHTML = html;
+
+            if (sessionStorage.getItem("nameSpace") != null) {
+                document.querySelector(".nameTop").innerText =
+                    sessionStorage.getItem("nameSpace");
+            } else {
+                document.querySelector(".nameTop").innerText =
+                    data.items[0].cpNamespace;
+                sessionStorage.setItem("nameSpace", data.items[0].cpNamespace);
+                sessionStorage.setItem("roleSetCode", data.items[0].roleSetCode);
+            }
+
+            var name = document.querySelector(".nameSpace").querySelectorAll("a");
+
+            for (var i = 0; i < name.length; i++) {
+                name[i].addEventListener(
+                    "click",
+                    (e) => {
+                        sessionStorage.setItem(
+                            "nameSpace",
+                            e.target.getAttribute("data-name")
+                        );
+                        document.querySelector(".nameTop").innerText = e.target.innerText;
+                        if (IS_NAMELOAD) {
+                            func.loadData("GET", null, "application/json", func.nameLoad);
+                        } else {
+                            movePage(URI_CP_INDEX_URL);
+                        }
+                    },
+                    false
+                );
+            }
+
+            if (IS_RELOAD) {
+                if (IS_NAMELOAD) {
+                    func.loadData("GET", null, "application/json", func.nameLoad);
+                } else {
+                    movePage(URI_CP_INDEX_URL);
+                }
+            }
+            if (IS_INDEX) {
+                func.loadData("GET", null, "application/json", func.nameLoad);
+            }
         }
-      }
-      if (IS_INDEX) {
-        func.loadData("GET", null, "application/json", func.nameLoad);
-      }
-    }
-  },
+    },
 
-  apply(title, url, btnName, name) {
-    sessionStorage.setItem("vaultDbName", name);
-    var html =
-      `<div class="modal-wrap" id="modal">
+    apply(title, url, btnName, name) {
+        sessionStorage.setItem("vaultDbName", name);
+        var html =
+            `<div class="modal-wrap" id="modal">
 			<div class="modal midium" style="width: 600px">
 				<h5>${title}</h5>
 					<dl>
@@ -280,130 +282,130 @@ const func = {
 					</dl>
 				<a class="confirm" href="javascript:;">${btnName}</a>
 				<a class="close" href="javascript:;">` +
-      MSG_CLOSE +
-      `</a>
+            MSG_CLOSE +
+            `</a>
 			</div>
 		</div>`;
 
-    func.appendHtml(document.getElementById("wrap"), html, "div");
+        func.appendHtml(document.getElementById("wrap"), html, "div");
 
-    func.loadData(
-      "GET",
-      `${func.url}clusters/${sessionStorage.getItem(
-        "cluster"
-      )}/users/namespacesList`,
-      "application/json",
-      namespaceDraw
-    );
-
-    function namespaceDraw(data) {
-      for (var i = 0; i <= data.items.length - 1; i++) {
-        var namespace = data.items[i].cpNamespace;
-        var html = `<option value="${namespace}">${namespace}</option>`;
-        func.appendHtml(
-          document.getElementById("namespaceList"),
-          html,
-          "select"
-        );
-      }
-    }
-
-    /*if(sessionStorage.getItem('nameSpace') === NAMESPACE_ALL_VALUE) {
-			document.getElementById('createApp').selectedIndex = 0;}
-		else {
-			document.getElementById('createApp').value = sessionStorage.getItem('nameSpace');
-		}*/
-
-    document.getElementById("namespaceList").addEventListener(
-      "click",
-      (e) => {
-        func.removeHtml(document.querySelector("#createApp"));
-        document.querySelector("#createApp").disabled = false;
-        let namespace = document.getElementById("namespaceList").value;
         func.loadData(
-          "GET",
-          `${func.url}clusters/${sessionStorage.getItem(
-            "cluster"
-          )}/namespaces/${namespace}/deployments/vaultSecret`,
-          "application/json",
-          applicationDraw
+            "GET",
+            `${func.url}clusters/${sessionStorage.getItem(
+                "cluster"
+            )}/users/namespacesList`,
+            "application/json",
+            namespaceDraw
         );
 
-        function applicationDraw(data) {
-          for (var i = 0; i <= data.items.length - 1; i++) {
-            var application = data.items[i].name;
-            var html = `<option value="${application}">${application}</option>`;
-            func.appendHtml(
-              document.getElementById("createApp"),
-              html,
-              "select"
-            );
-          }
+        function namespaceDraw(data) {
+            for (var i = 0; i <= data.items.length - 1; i++) {
+                var namespace = data.items[i].cpNamespace;
+                var html = `<option value="${namespace}">${namespace}</option>`;
+                func.appendHtml(
+                    document.getElementById("namespaceList"),
+                    html,
+                    "select"
+                );
+            }
         }
-      },
-      false
-    );
 
-    document
-      .getElementById("modal")
-      .querySelector(".close")
-      .addEventListener(
-        "click",
-        (e) => {
-          document
-            .getElementById("wrap")
-            .removeChild(document.getElementById("modal"));
-        },
-        false
-      );
+        /*if(sessionStorage.getItem('nameSpace') === NAMESPACE_ALL_VALUE) {
+                document.getElementById('createApp').selectedIndex = 0;}
+            else {
+                document.getElementById('createApp').value = sessionStorage.getItem('nameSpace');
+            }*/
 
-    document
-      .getElementById("modal")
-      .querySelector(".confirm")
-      .addEventListener(
-        "click",
-        (e) => {
-          document.querySelector(".nameTop").innerHTML =
-            sessionStorage.getItem("nameSpace");
-          sessionStorage.setItem(
-            "appNamespace",
-            document.querySelector("#namespaceList > option:checked").value
-          );
-          sessionStorage.setItem(
-            "appName",
-            document.querySelector("#createApp > option:checked").value
-          );
-          document
-            .getElementById("wrap")
-            .removeChild(document.getElementById("modal"));
+        document.getElementById("namespaceList").addEventListener(
+            "click",
+            (e) => {
+                func.removeHtml(document.querySelector("#createApp"));
+                document.querySelector("#createApp").disabled = false;
+                let namespace = document.getElementById("namespaceList").value;
+                func.loadData(
+                    "GET",
+                    `${func.url}clusters/${sessionStorage.getItem(
+                        "cluster"
+                    )}/namespaces/${namespace}/deployments/vaultSecret`,
+                    "application/json",
+                    applicationDraw
+                );
 
-          var sendData = JSON.stringify({
-            cluster: sessionStorage.getItem("cluster"),
-            namespace: sessionStorage.getItem("appNamespace"),
-            resourceName: sessionStorage.getItem("appName"),
-            dbService: sessionStorage.getItem("vaultDbName"),
-          });
+                function applicationDraw(data) {
+                    for (var i = 0; i <= data.items.length - 1; i++) {
+                        var application = data.items[i].name;
+                        var html = `<option value="${application}">${application}</option>`;
+                        func.appendHtml(
+                            document.getElementById("createApp"),
+                            html,
+                            "select"
+                        );
+                    }
+                }
+            },
+            false
+        );
 
-          func.saveData(
-            "POST",
-            `${func.url}clusters/${sessionStorage.getItem(
-              "cluster"
-            )}/namespaces/${sessionStorage.getItem(
-              "appNamespace"
-            )}/${url}/application/apply`,
-            sendData,
-            true,
-            "application/json",
-            func.historyBack
-          );
-        },
-        false
-      );
-  },
+        document
+            .getElementById("modal")
+            .querySelector(".close")
+            .addEventListener(
+                "click",
+                (e) => {
+                    document
+                        .getElementById("wrap")
+                        .removeChild(document.getElementById("modal"));
+                },
+                false
+            );
 
-  create(title, url, name) {
-    var createYamlAreaHeight = "380px";
-    var html = `<div class="modal-wrap" id="modal">
+        document
+            .getElementById("modal")
+            .querySelector(".confirm")
+            .addEventListener(
+                "click",
+                (e) => {
+                    document.querySelector(".nameTop").innerHTML =
+                        sessionStorage.getItem("nameSpace");
+                    sessionStorage.setItem(
+                        "appNamespace",
+                        document.querySelector("#namespaceList > option:checked").value
+                    );
+                    sessionStorage.setItem(
+                        "appName",
+                        document.querySelector("#createApp > option:checked").value
+                    );
+                    document
+                        .getElementById("wrap")
+                        .removeChild(document.getElementById("modal"));
+
+                    var sendData = JSON.stringify({
+                        cluster: sessionStorage.getItem("cluster"),
+                        namespace: sessionStorage.getItem("appNamespace"),
+                        resourceName: sessionStorage.getItem("appName"),
+                        dbService: sessionStorage.getItem("vaultDbName"),
+                    });
+
+                    func.saveData(
+                        "POST",
+                        `${func.url}clusters/${sessionStorage.getItem(
+                            "cluster"
+                        )}/namespaces/${sessionStorage.getItem(
+                            "appNamespace"
+                        )}/${url}/application/apply`,
+                        sendData,
+                        true,
+                        "application/json",
+                        func.historyBack
+                    );
+                },
+                false
+            );
+    },
+
+    create(title, url, name) {
+        var createYamlAreaHeight = "380px";
+        var html = `<div class="modal-wrap" id="modal">
 			<div class="modal large">
 				<h5>${title}</h5>
 				<dl>
@@ -415,9 +417,9 @@ const func = {
 						</fieldset>
 					</dd>
 				</dl>`;
-    if (IS_TRAFFIC_POLICY_MANAGED) {
-      createYamlAreaHeight = "360px";
-      html += `<dl style="height:25px; margin:15px 0 -15px 0;">
+        if (IS_TRAFFIC_POLICY_MANAGED) {
+            createYamlAreaHeight = "360px";
+            html += `<dl style="height:25px; margin:15px 0 -15px 0;">
 						<dt></dt>
 						<dd style="text-align:left; display:flex;">
 							<label class="container" style="font-size:14px; width:auto;">${MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_CHK}
@@ -430,9 +432,9 @@ const func = {
 							</div>
 						</dd>
 					  </dl>`;
-    }
-    html +=
-      `<dl style="margin-top: 20px;">
+        }
+        html +=
+            `<dl style="margin-top: 20px;">
 							<dt>YAML</dt>
 							<dd class="createYamlArea" style="text-align: left;">
 								<textarea class="codemirror-resource-create-textarea"></textarea>
@@ -440,97 +442,97 @@ const func = {
 						</dl>
 						<a class="confirm" href="javascript:;">${name}</a>
 						<a class="close" href="javascript:;">` +
-      MSG_CLOSE +
-      `</a>
+            MSG_CLOSE +
+            `</a>
 					</div></div>`;
 
-    func.appendHtml(document.getElementById("wrap"), html, "div");
-    CodeMirror.fromTextArea($(".codemirror-resource-create-textarea")[0], {
-      value: "",
-      theme: "default",
-      scrollbarStyle: "simple",
-      mode: "text/x-yaml",
-      lineNumbers: true,
-      lineWrapping: true,
-    }).setSize("660px", createYamlAreaHeight);
+        func.appendHtml(document.getElementById("wrap"), html, "div");
+        CodeMirror.fromTextArea($(".codemirror-resource-create-textarea")[0], {
+            value: "",
+            theme: "default",
+            scrollbarStyle: "simple",
+            mode: "text/x-yaml",
+            lineNumbers: true,
+            lineWrapping: true,
+        }).setSize("660px", createYamlAreaHeight);
 
-    for (var i = 0; i <= func.nameData.items.length - 1; i++) {
-      var namespace = func.nameData.items[i].cpNamespace;
-      if (namespace != NAMESPACE_ALL_VALUE) {
-        var html = `<option value="${namespace}">${namespace}</option>`;
-        func.appendHtml(document.getElementById("createName"), html, "select");
-      }
-    }
+        for (var i = 0; i <= func.nameData.items.length - 1; i++) {
+            var namespace = func.nameData.items[i].cpNamespace;
+            if (namespace != NAMESPACE_ALL_VALUE) {
+                var html = `<option value="${namespace}">${namespace}</option>`;
+                func.appendHtml(document.getElementById("createName"), html, "select");
+            }
+        }
 
-    if (sessionStorage.getItem("nameSpace") == NAMESPACE_ALL_VALUE) {
-      document.getElementById("createName").selectedIndex = 0;
-    } else {
-      document.getElementById("createName").value =
-        sessionStorage.getItem("nameSpace");
-    }
+        if (sessionStorage.getItem("nameSpace") == NAMESPACE_ALL_VALUE) {
+            document.getElementById("createName").selectedIndex = 0;
+        } else {
+            document.getElementById("createName").value =
+                sessionStorage.getItem("nameSpace");
+        }
 
-    document
-      .getElementById("modal")
-      .querySelector(".close")
-      .addEventListener(
-        "click",
-        (e) => {
-          document
-            .getElementById("wrap")
-            .removeChild(document.getElementById("modal"));
-        },
-        false
-      );
+        document
+            .getElementById("modal")
+            .querySelector(".close")
+            .addEventListener(
+                "click",
+                (e) => {
+                    document
+                        .getElementById("wrap")
+                        .removeChild(document.getElementById("modal"));
+                },
+                false
+            );
 
-    document
-      .getElementById("modal")
-      .querySelector(".confirm")
-      .addEventListener(
-        "click",
-        (e) => {
-          var createYaml = document
-            .querySelector(".createYamlArea > .CodeMirror")
-            .CodeMirror.getValue();
-          var allowTraffic = false;
-          if (document.getElementById("allowTrafficChk") != null) {
-            allowTraffic = document.getElementById("allowTrafficChk").checked;
-          }
-          sessionStorage.setItem(
-            "nameSpace",
-            document.getElementById("createName").value
-          );
-          document.querySelector(".nameTop").innerHTML =
-            sessionStorage.getItem("nameSpace");
-          document
-            .getElementById("wrap")
-            .removeChild(document.getElementById("modal"));
+        document
+            .getElementById("modal")
+            .querySelector(".confirm")
+            .addEventListener(
+                "click",
+                (e) => {
+                    var createYaml = document
+                        .querySelector(".createYamlArea > .CodeMirror")
+                        .CodeMirror.getValue();
+                    var allowTraffic = false;
+                    if (document.getElementById("allowTrafficChk") != null) {
+                        allowTraffic = document.getElementById("allowTrafficChk").checked;
+                    }
+                    sessionStorage.setItem(
+                        "nameSpace",
+                        document.getElementById("createName").value
+                    );
+                    document.querySelector(".nameTop").innerHTML =
+                        sessionStorage.getItem("nameSpace");
+                    document
+                        .getElementById("wrap")
+                        .removeChild(document.getElementById("modal"));
 
-          var sendData = JSON.stringify({
-            cluster: sessionStorage.getItem("cluster"),
-            namespace: sessionStorage.getItem("nameSpace"),
-            resourceName: url,
-            yaml: createYaml,
-            allowTraffic: allowTraffic,
-          });
+                    var sendData = JSON.stringify({
+                        cluster: sessionStorage.getItem("cluster"),
+                        namespace: sessionStorage.getItem("nameSpace"),
+                        resourceName: url,
+                        yaml: createYaml,
+                        allowTraffic: allowTraffic,
+                    });
 
-          func.saveData(
-            "POST",
-            `${func.url}clusters/${sessionStorage.getItem(
-              "cluster"
-            )}/namespaces/${sessionStorage.getItem("nameSpace")}/${url}`,
-            sendData,
-            true,
-            "application/json",
-            func.refresh
-          );
-        },
-        false
-      );
-  },
+                    func.saveData(
+                        "POST",
+                        `${func.url}clusters/${sessionStorage.getItem(
+                            "cluster"
+                        )}/namespaces/${sessionStorage.getItem("nameSpace")}/${url}`,
+                        sendData,
+                        true,
+                        "application/json",
+                        func.refresh
+                    );
+                },
+                false
+            );
+    },
 
-  modify(data) {
-    var html =
-      `<div class="modal-wrap" id="modal">
+    modify(data) {
+        var html =
+            `<div class="modal-wrap" id="modal">
 			<div class="modal large">
 				<h5>Modify</h5>
 				<dl>
@@ -549,597 +551,597 @@ const func = {
 					</dd>
 				</dl>
 				<a class="confirm" href="javascript:;">` +
-      MSG_SAVE +
-      `</a>
+            MSG_SAVE +
+            `</a>
 				<a class="close" href="javascript:;">` +
-      MSG_CLOSE +
-      `</a>
+            MSG_CLOSE +
+            `</a>
 			</div>
 		</div>`;
 
-    func.appendHtml(document.getElementById("wrap"), html, "div");
-    CodeMirror.fromTextArea($(".codemirror-resource-update-textarea")[0], {
-      value: "",
-      theme: "default",
-      scrollbarStyle: "simple",
-      mode: "text/x-yaml",
-      lineNumbers: true,
-      lineWrapping: true,
-    }).setSize("660px", "400px");
+        func.appendHtml(document.getElementById("wrap"), html, "div");
+        CodeMirror.fromTextArea($(".codemirror-resource-update-textarea")[0], {
+            value: "",
+            theme: "default",
+            scrollbarStyle: "simple",
+            mode: "text/x-yaml",
+            lineNumbers: true,
+            lineWrapping: true,
+        }).setSize("660px", "400px");
 
-    document
-      .querySelector(".updateYamlArea > .CodeMirror")
-      .CodeMirror.setValue(data.sourceTypeYaml);
-    var namespaceOptions = `<option value="${sessionStorage.getItem(
-      "nameSpace"
-    )}">${sessionStorage.getItem("nameSpace")}</option>`;
-    func.appendHtml(
-      document.getElementById("createName"),
-      namespaceOptions,
-      "select"
-    );
-
-    document
-      .getElementById("modal")
-      .querySelector(".close")
-      .addEventListener(
-        "click",
-        (e) => {
-          document
-            .getElementById("wrap")
-            .removeChild(document.getElementById("modal"));
-        },
-        false
-      );
-
-    document
-      .getElementById("modal")
-      .querySelector(".confirm")
-      .addEventListener(
-        "click",
-        (e) => {
-          var updateYaml = document
+        document
             .querySelector(".updateYamlArea > .CodeMirror")
-            .CodeMirror.getValue();
-          document
-            .getElementById("wrap")
-            .removeChild(document.getElementById("modal"));
+            .CodeMirror.setValue(data.sourceTypeYaml);
+        var namespaceOptions = `<option value="${sessionStorage.getItem(
+            "nameSpace"
+        )}">${sessionStorage.getItem("nameSpace")}</option>`;
+        func.appendHtml(
+            document.getElementById("createName"),
+            namespaceOptions,
+            "select"
+        );
 
-          var sendData = JSON.stringify({
-            cluster: sessionStorage.getItem("cluster"),
-            namespace: sessionStorage.getItem("nameSpace"),
-            resourceName: sessionStorage.getItem("commonName"),
-            yaml: updateYaml,
-          });
-
-          func.saveData(
-            "PUT",
-            `${func.url}clusters/${sessionStorage.getItem(
-              "cluster"
-            )}/namespaces/${sessionStorage.getItem("nameSpace")}/${document
-              .getElementById("modify")
-              .getAttribute("data-role")}/${sessionStorage.getItem(
-              "commonName"
-            )}`,
-            sendData,
-            true,
-            "application/json",
-            func.refresh
-          );
-        },
-        false
-      );
-  },
-
-  // 로그인 체크 ////////////////////////////////////////////////////////////////
-  loginCheck() {
-    var request = new XMLHttpRequest();
-
-    request.open("GET", URI_CP_GET_USER_LOGIN_DATA, false);
-    request.setRequestHeader("Content-type", "application/json");
-
-    request.onreadystatechange = () => {
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-          if (JSON.parse(request.responseText).httpStatusCode != 401) {
-            if (JSON.parse(request.responseText).accessToken == "-") {
-              func.logout();
-              return false;
-            }
-
-            sessionStorage.setItem(
-              "user",
-              JSON.parse(request.responseText).userId
-            );
-            sessionStorage.setItem(
-              "userType",
-              JSON.parse(request.responseText).userType
-            );
-            sessionStorage.setItem(
-              "token",
-              "Bearer " + JSON.parse(request.responseText).accessToken
-            );
-          } else {
-            func.alertPopup(
-              "ERROR",
-              JSON.parse(request.responseText).detailMessage,
-              true,
-              MSG_CLOSE,
-              func.refresh
-            );
-          }
-        } else {
-          func.alertPopup(
-            "ERROR",
-            JSON.parse(request.responseText).detailMessage,
-            true,
-            MSG_CLOSE
-          );
-        }
-      }
-    };
-
-    request.send();
-  },
-
-  // Refresh 토큰 조회 ////////////////////////////////////////////////////////////////
-  refreshToken() {
-    var request = new XMLHttpRequest();
-
-    request.open("GET", URI_CP_REFRESH_TOKEN, false);
-    request.setRequestHeader("Content-type", "application/json");
-
-    request.onreadystatechange = () => {
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-          // 토큰 업데이트
-          sessionStorage.setItem(
-            "token",
-            "Bearer " + JSON.parse(request.responseText).accessToken
-          );
-        } else {
-          func.alertPopup(
-            "ERROR",
-            JSON.parse(request.responseText).detailMessage,
-            true,
-            MSG_CLOSE
-          );
-        }
-      }
-    };
-
-    request.send();
-  },
-
-  // Locale Language 조회 ////////////////////////////////////////////////////////////////
-  getLocaleLang() {
-    var request = new XMLHttpRequest();
-    request.open("GET", URL_API_LOCALE_LANGUAGE, false);
-    request.setRequestHeader("Content-type", "application/json");
-
-    request.onreadystatechange = () => {
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-          CURRENT_LOCALE_LANGUAGE = request.responseText;
-          setSelectValue("u_locale_lang", request.responseText);
-        } else {
-          CURRENT_LOCALE_LANGUAGE = LANG_EN;
-          setSelectValue("u_locale_lang", LANG_EN);
-        }
-      }
-    };
-    request.send();
-  },
-
-  // Locale Language 설정 ////////////////////////////////////////////////////////////////
-  setLocaleLang(reqUrl) {
-    var request = new XMLHttpRequest();
-    request.open("PUT", reqUrl, false);
-    request.setRequestHeader("Content-type", "application/json");
-
-    request.onreadystatechange = () => {
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-          reloadPage();
-        }
-      }
-    };
-    request.send();
-  },
-
-  setUserAuthority(cluster, usersList) {
-    var authority = "";
-    for (var i = 0; i < usersList.length; i++) {
-      var users = usersList[i];
-      if (users.clusterId === cluster) {
-        authority = users.userType;
-        break;
-      }
-    }
-    var request = new XMLHttpRequest();
-    request.open("PUT", URI_API_SET_CLUSTER_AUTHORITY, false);
-    request.setRequestHeader("Content-type", "application/json");
-
-    request.onreadystatechange = () => {
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-        }
-      }
-    };
-    request.send(authority);
-  },
-  /////////////////////////////////////////////////////////////////////////////////////
-  // 데이터 로드 - loadData(method, url, callbackFunction)
-  // (전송타입, url, 콜백함수)
-  /////////////////////////////////////////////////////////////////////////////////////
-  loadData(method, url, header, callbackFunction, list) {
-    if (sessionStorage.getItem("token") == null) {
-      func.loginCheck();
-    }
-
-    if (url == null) {
-      callbackFunction();
-      return false;
-    }
-
-    var request = new XMLHttpRequest();
-
-    setTimeout(function () {
-      request.open(method, url, false);
-      request.setRequestHeader("Content-type", header);
-      request.setRequestHeader(
-        "Authorization",
-        sessionStorage.getItem("token")
-      );
-      request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
-      request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
-
-      request.onreadystatechange = () => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          if (request.status === 200 && request.responseText != "") {
-            var resultMessage = JSON.parse(request.responseText).resultMessage;
-            var resultCode = JSON.parse(request.responseText).resultCode;
-            var detailMessage = JSON.parse(request.responseText).detailMessage;
-            //토큰 만료 검사
-            if (resultMessage == "TOKEN_EXPIRED") {
-              func.refreshToken();
-              return func.loadData(method, url, header, callbackFunction, list);
-            } else if (resultMessage == "TOKEN_FAILED") {
-              func.loginCheck();
-              return func.loadData(method, url, header, callbackFunction, list);
-            } else if (resultCode != RESULT_STATUS_SUCCESS) {
-              if (document.getElementById("loading")) {
-                document
-                  .getElementById("wrap")
-                  .removeChild(document.getElementById("loading"));
-              }
-              func.alertPopup(
-                "ERROR",
-                detailMessage,
-                true,
-                MSG_CONFIRM,
-                "closed"
-              );
-            } else {
-              callbackFunction(JSON.parse(request.responseText), list);
-            }
-          } else if (JSON.parse(request.responseText).httpStatusCode === 500) {
-            sessionStorage.clear();
-            func.loginCheck();
-          }
-        }
-      };
-
-      request.send();
-    }, 0);
-  },
-
-  /////////////////////////////////////////////////////////////////////////////////////
-  // 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
-  // (전송타입, url, 콜백함수)
-  /////////////////////////////////////////////////////////////////////////////////////
-  statusLoadData(method, url, header, callbackFunction, list) {
-    if (sessionStorage.getItem("token") == null) {
-      func.loginCheck();
-    }
-
-    if (url == null) {
-      callbackFunction();
-      return false;
-    }
-
-    var request = new XMLHttpRequest();
-
-    setTimeout(function () {
-      request.open(method, url, false);
-      request.setRequestHeader("Content-type", header);
-      request.setRequestHeader(
-        "Authorization",
-        sessionStorage.getItem("token")
-      );
-      request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
-      request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
-
-      request.onreadystatechange = () => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          if (request.status === 200 && request.responseText != "") {
-            var resultMessage = JSON.parse(request.responseText).resultMessage;
-            var resultCode = JSON.parse(request.responseText).resultCode;
-            var detailMessage = JSON.parse(request.responseText).detailMessage;
-            //토큰 만료 검사
-            if (resultMessage == "TOKEN_EXPIRED") {
-              func.refreshToken();
-              return func.loadData(method, url, header, callbackFunction, list);
-            } else if (resultMessage == "TOKEN_FAILED") {
-              func.loginCheck();
-              return func.loadData(method, url, header, callbackFunction, list);
-            } else if (resultCode != RESULT_STATUS_SUCCESS) {
-              if (document.getElementById("loading")) {
-                document
-                  .getElementById("wrap")
-                  .removeChild(document.getElementById("loading"));
-              }
-              func.alertPopup(
-                "ERROR",
-                detailMessage,
-                true,
-                MSG_CONFIRM,
-                func.moveToMain
-              );
-            } else {
-              callbackFunction(JSON.parse(request.responseText), list);
-            }
-          } else if (JSON.parse(request.responseText).httpStatusCode === 500) {
-            sessionStorage.clear();
-            func.loginCheck();
-          }
-        }
-      };
-
-      request.send();
-    }, 0);
-  },
-
-  /////////////////////////////////////////////////////////////////////////////////////
-  // 데이터 SAVE - saveData(method, url, data, bull, callFunc)
-  // (전송타입, url, 데이터, 분기, 콜백함수)
-  /////////////////////////////////////////////////////////////////////////////////////
-  saveData(method, url, data, bull, header, callFunc) {
-    func.loading();
-
-    if (sessionStorage.getItem("token") == null) {
-      func.loginCheck();
-    }
-
-    var request = new XMLHttpRequest();
-
-    setTimeout(function () {
-      request.open(method, url, false);
-      request.setRequestHeader("Content-type", header);
-      request.setRequestHeader(
-        "Authorization",
-        sessionStorage.getItem("token")
-      );
-      request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
-      request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
-
-      request.onreadystatechange = () => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          if (request.status === 200 && request.responseText != "") {
-            //토큰 만료 검사
-            if (
-              JSON.parse(request.responseText).resultMessage == "TOKEN_EXPIRED"
-            ) {
-              func.refreshToken();
-              return func.saveData(method, url, data, bull, header, callFunc);
-            } else if (
-              JSON.parse(request.responseText).resultMessage == "TOKEN_FAILED"
-            ) {
-              func.loginCheck();
-              return func.loadData(method, url, header, callbackFunction, list);
-            } else {
-              document
-                .getElementById("wrap")
-                .removeChild(document.getElementById("loading"));
-              var response = JSON.parse(request.responseText);
-              if (response.httpStatusCode == 200) {
-                if (response.resultCode == RESULT_STATUS_SUCCESS) {
-                  func.alertPopup(
-                    "SUCCESS",
-                    response.detailMessage,
-                    true,
-                    MSG_CONFIRM,
-                    callFunc
-                  );
-                } else {
-                  func.alertPopup(
-                    "ERROR",
-                    response.detailMessage,
-                    true,
-                    MSG_CONFIRM,
-                    "closed"
-                  );
-                }
-              } else {
-                func.alertPopup(
-                  "ERROR",
-                  response.detailMessage,
-                  true,
-                  MSG_CONFIRM,
-                  "closed"
-                );
-              }
-            }
-          } else {
-            /*
-                        if(method == 'DELETE'){
-                            /func.alertPopup('DELETE', 'DELETE FAILED', func.winReload);
-                        } else {
-                            /func.alertPopup('SAVE', 'SAVE FAILED', func.winReload);
-                        };
-                        */
-          }
-        }
-      };
-
-      request.send(data);
-    }, 0);
-  },
-
-  /////////////////////////////////////////////////////////////////////////////////////
-  // 데이터 SAVE - dryRun(method, url, data, bull, callFunc)
-  // (전송타입, url, 데이터, 분기, 콜백함수)
-  /////////////////////////////////////////////////////////////////////////////////////
-  dryRun(method, url, data, bull, header, callFunc) {
-    func.loading();
-
-    if (sessionStorage.getItem("token") == null) {
-      func.loginCheck();
-    }
-
-    var request = new XMLHttpRequest();
-
-    setTimeout(function () {
-      request.open(method, url, false);
-      request.setRequestHeader("Content-type", header);
-      request.setRequestHeader(
-        "Authorization",
-        sessionStorage.getItem("token")
-      );
-      request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
-      request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
-
-      request.onreadystatechange = () => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          if (request.responseText != "") {
-            //토큰 만료 검사
-            if (
-              JSON.parse(request.responseText).resultMessage == "TOKEN_EXPIRED"
-            ) {
-              func.refreshToken();
-              return func.saveData(method, url, data, bull, header, callFunc);
-            } else if (
-              JSON.parse(request.responseText).resultMessage == "TOKEN_FAILED"
-            ) {
-              func.loginCheck();
-              return func.loadData(method, url, header, callbackFunction, list);
-            } else {
-              document
-                .getElementById("wrap")
-                .removeChild(document.getElementById("loading"));
-              var response = JSON.parse(request.responseText);
-              if (response.httpStatusCode == 200) {
-                if (response.resultCode == RESULT_STATUS_SUCCESS) {
-                  callFunc(response);
-                } else {
-                  if (document.getElementById("loading")) {
+        document
+            .getElementById("modal")
+            .querySelector(".close")
+            .addEventListener(
+                "click",
+                (e) => {
                     document
-                      .getElementById("wrap")
-                      .removeChild(document.getElementById("loading"));
-                  }
-                  func.alertPopup(
-                    "ERROR",
-                    response.detailMessage,
-                    true,
-                    MSG_CONFIRM,
-                    "closed"
-                  );
+                        .getElementById("wrap")
+                        .removeChild(document.getElementById("modal"));
+                },
+                false
+            );
+
+        document
+            .getElementById("modal")
+            .querySelector(".confirm")
+            .addEventListener(
+                "click",
+                (e) => {
+                    var updateYaml = document
+                        .querySelector(".updateYamlArea > .CodeMirror")
+                        .CodeMirror.getValue();
+                    document
+                        .getElementById("wrap")
+                        .removeChild(document.getElementById("modal"));
+
+                    var sendData = JSON.stringify({
+                        cluster: sessionStorage.getItem("cluster"),
+                        namespace: sessionStorage.getItem("nameSpace"),
+                        resourceName: sessionStorage.getItem("commonName"),
+                        yaml: updateYaml,
+                    });
+
+                    func.saveData(
+                        "PUT",
+                        `${func.url}clusters/${sessionStorage.getItem(
+                            "cluster"
+                        )}/namespaces/${sessionStorage.getItem("nameSpace")}/${document
+                            .getElementById("modify")
+                            .getAttribute("data-role")}/${sessionStorage.getItem(
+                            "commonName"
+                        )}`,
+                        sendData,
+                        true,
+                        "application/json",
+                        func.refresh
+                    );
+                },
+                false
+            );
+    },
+
+    // 로그인 체크 ////////////////////////////////////////////////////////////////
+    loginCheck() {
+        var request = new XMLHttpRequest();
+
+        request.open("GET", URI_CP_GET_USER_LOGIN_DATA, false);
+        request.setRequestHeader("Content-type", "application/json");
+
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    if (JSON.parse(request.responseText).httpStatusCode != 401) {
+                        if (JSON.parse(request.responseText).accessToken == "-") {
+                            func.logout();
+                            return false;
+                        }
+
+                        sessionStorage.setItem(
+                            "user",
+                            JSON.parse(request.responseText).userId
+                        );
+                        sessionStorage.setItem(
+                            "userType",
+                            JSON.parse(request.responseText).userType
+                        );
+                        sessionStorage.setItem(
+                            "token",
+                            "Bearer " + JSON.parse(request.responseText).accessToken
+                        );
+                    } else {
+                        func.alertPopup(
+                            "ERROR",
+                            JSON.parse(request.responseText).detailMessage,
+                            true,
+                            MSG_CLOSE,
+                            func.refresh
+                        );
+                    }
+                } else {
+                    func.alertPopup(
+                        "ERROR",
+                        JSON.parse(request.responseText).detailMessage,
+                        true,
+                        MSG_CLOSE
+                    );
                 }
-              } else {
-                if (document.getElementById("loading")) {
-                  document
-                    .getElementById("wrap")
-                    .removeChild(document.getElementById("loading"));
-                }
-                func.alertPopup(
-                  "ERROR",
-                  response.detailMessage,
-                  true,
-                  MSG_CONFIRM,
-                  "closed"
-                );
-              }
             }
-          }
+        };
+
+        request.send();
+    },
+
+    // Refresh 토큰 조회 ////////////////////////////////////////////////////////////////
+    refreshToken() {
+        var request = new XMLHttpRequest();
+
+        request.open("GET", URI_CP_REFRESH_TOKEN, false);
+        request.setRequestHeader("Content-type", "application/json");
+
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    // 토큰 업데이트
+                    sessionStorage.setItem(
+                        "token",
+                        "Bearer " + JSON.parse(request.responseText).accessToken
+                    );
+                } else {
+                    func.alertPopup(
+                        "ERROR",
+                        JSON.parse(request.responseText).detailMessage,
+                        true,
+                        MSG_CLOSE
+                    );
+                }
+            }
+        };
+
+        request.send();
+    },
+
+    // Locale Language 조회 ////////////////////////////////////////////////////////////////
+    getLocaleLang() {
+        var request = new XMLHttpRequest();
+        request.open("GET", URL_API_LOCALE_LANGUAGE, false);
+        request.setRequestHeader("Content-type", "application/json");
+
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    CURRENT_LOCALE_LANGUAGE = request.responseText;
+                    setSelectValue("u_locale_lang", request.responseText);
+                } else {
+                    CURRENT_LOCALE_LANGUAGE = LANG_EN;
+                    setSelectValue("u_locale_lang", LANG_EN);
+                }
+            }
+        };
+        request.send();
+    },
+
+    // Locale Language 설정 ////////////////////////////////////////////////////////////////
+    setLocaleLang(reqUrl) {
+        var request = new XMLHttpRequest();
+        request.open("PUT", reqUrl, false);
+        request.setRequestHeader("Content-type", "application/json");
+
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    reloadPage();
+                }
+            }
+        };
+        request.send();
+    },
+
+    setUserAuthority(cluster, usersList) {
+        var authority = "";
+        for (var i = 0; i < usersList.length; i++) {
+            var users = usersList[i];
+            if (users.clusterId === cluster) {
+                authority = users.userType;
+                break;
+            }
         }
-      };
+        var request = new XMLHttpRequest();
+        request.open("PUT", URI_API_SET_CLUSTER_AUTHORITY, false);
+        request.setRequestHeader("Content-type", "application/json");
 
-      request.send(data);
-    }, 0);
-  },
-
-  /////////////////////////////////////////////////////////////////////////////////////
-  // 공통 경고 팝업 - alertPopup(title, text, bull, name, fn)
-  // (제목, 문구, 버튼유무, 버튼이름, 콜백함수)
-  /////////////////////////////////////////////////////////////////////////////////////
-  alertPopup(title, text, bull, name, callback) {
-    var html = `<div class='modal-wrap' id='alertModal'><div class='modal'><h5>${title}</h5><p>${text}</p>`;
-    if (bull) {
-      html += `<a class='confirm' href='javascript:;'>${name}</a>`;
-    }
-    html +=
-      `<a class='close' href='javascript:;'>` + MSG_CLOSE + `</a></div></div>`;
-
-    if (document.getElementById("alertModal") !== null) {
-      document
-        .getElementById("wrap")
-        .removeChild(document.getElementById("alertModal"));
-    }
-
-    func.appendHtml(document.getElementById("wrap"), html, "div");
-
-    document
-      .getElementById("alertModal")
-      .querySelector(".close")
-      .addEventListener(
-        "click",
-        (e) => {
-          document
-            .getElementById("wrap")
-            .removeChild(document.getElementById("alertModal"));
-        },
-        false
-      );
-
-    if (callback) {
-      document
-        .getElementById("alertModal")
-        .querySelector(".confirm")
-        .addEventListener(
-          "click",
-          (e) => {
-            if (callback != "closed") {
-              callback();
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                }
             }
+        };
+        request.send(authority);
+    },
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 데이터 로드 - loadData(method, url, callbackFunction)
+    // (전송타입, url, 콜백함수)
+    /////////////////////////////////////////////////////////////////////////////////////
+    loadData(method, url, header, callbackFunction, list) {
+        if (sessionStorage.getItem("token") == null) {
+            func.loginCheck();
+        }
 
-            if (!IS_VCHK) {
-              document
+        if (url == null) {
+            callbackFunction();
+            return false;
+        }
+
+        var request = new XMLHttpRequest();
+
+        setTimeout(function () {
+            request.open(method, url, false);
+            request.setRequestHeader("Content-type", header);
+            request.setRequestHeader(
+                "Authorization",
+                sessionStorage.getItem("token")
+            );
+            request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
+            request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
+
+            request.onreadystatechange = () => {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200 && request.responseText != "") {
+                        var resultMessage = JSON.parse(request.responseText).resultMessage;
+                        var resultCode = JSON.parse(request.responseText).resultCode;
+                        var detailMessage = JSON.parse(request.responseText).detailMessage;
+                        //토큰 만료 검사
+                        if (resultMessage == "TOKEN_EXPIRED") {
+                            func.refreshToken();
+                            return func.loadData(method, url, header, callbackFunction, list);
+                        } else if (resultMessage == "TOKEN_FAILED") {
+                            func.loginCheck();
+                            return func.loadData(method, url, header, callbackFunction, list);
+                        } else if (resultCode != RESULT_STATUS_SUCCESS) {
+                            if (document.getElementById("loading")) {
+                                document
+                                    .getElementById("wrap")
+                                    .removeChild(document.getElementById("loading"));
+                            }
+                            func.alertPopup(
+                                "ERROR",
+                                detailMessage,
+                                true,
+                                MSG_CONFIRM,
+                                "closed"
+                            );
+                        } else {
+                            callbackFunction(JSON.parse(request.responseText), list);
+                        }
+                    } else if (JSON.parse(request.responseText).httpStatusCode === 500) {
+                        sessionStorage.clear();
+                        func.loginCheck();
+                    }
+                }
+            };
+
+            request.send();
+        }, 0);
+    },
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
+    // (전송타입, url, 콜백함수)
+    /////////////////////////////////////////////////////////////////////////////////////
+    statusLoadData(method, url, header, callbackFunction, list) {
+        if (sessionStorage.getItem("token") == null) {
+            func.loginCheck();
+        }
+
+        if (url == null) {
+            callbackFunction();
+            return false;
+        }
+
+        var request = new XMLHttpRequest();
+
+        setTimeout(function () {
+            request.open(method, url, false);
+            request.setRequestHeader("Content-type", header);
+            request.setRequestHeader(
+                "Authorization",
+                sessionStorage.getItem("token")
+            );
+            request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
+            request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
+
+            request.onreadystatechange = () => {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200 && request.responseText != "") {
+                        var resultMessage = JSON.parse(request.responseText).resultMessage;
+                        var resultCode = JSON.parse(request.responseText).resultCode;
+                        var detailMessage = JSON.parse(request.responseText).detailMessage;
+                        //토큰 만료 검사
+                        if (resultMessage == "TOKEN_EXPIRED") {
+                            func.refreshToken();
+                            return func.loadData(method, url, header, callbackFunction, list);
+                        } else if (resultMessage == "TOKEN_FAILED") {
+                            func.loginCheck();
+                            return func.loadData(method, url, header, callbackFunction, list);
+                        } else if (resultCode != RESULT_STATUS_SUCCESS) {
+                            if (document.getElementById("loading")) {
+                                document
+                                    .getElementById("wrap")
+                                    .removeChild(document.getElementById("loading"));
+                            }
+                            func.alertPopup(
+                                "ERROR",
+                                detailMessage,
+                                true,
+                                MSG_CONFIRM,
+                                func.moveToMain
+                            );
+                        } else {
+                            callbackFunction(JSON.parse(request.responseText), list);
+                        }
+                    } else if (JSON.parse(request.responseText).httpStatusCode === 500) {
+                        sessionStorage.clear();
+                        func.loginCheck();
+                    }
+                }
+            };
+
+            request.send();
+        }, 0);
+    },
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 데이터 SAVE - saveData(method, url, data, bull, callFunc)
+    // (전송타입, url, 데이터, 분기, 콜백함수)
+    /////////////////////////////////////////////////////////////////////////////////////
+    saveData(method, url, data, bull, header, callFunc) {
+        func.loading();
+
+        if (sessionStorage.getItem("token") == null) {
+            func.loginCheck();
+        }
+
+        var request = new XMLHttpRequest();
+
+        setTimeout(function () {
+            request.open(method, url, false);
+            request.setRequestHeader("Content-type", header);
+            request.setRequestHeader(
+                "Authorization",
+                sessionStorage.getItem("token")
+            );
+            request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
+            request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
+
+            request.onreadystatechange = () => {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200 && request.responseText != "") {
+                        //토큰 만료 검사
+                        if (
+                            JSON.parse(request.responseText).resultMessage == "TOKEN_EXPIRED"
+                        ) {
+                            func.refreshToken();
+                            return func.saveData(method, url, data, bull, header, callFunc);
+                        } else if (
+                            JSON.parse(request.responseText).resultMessage == "TOKEN_FAILED"
+                        ) {
+                            func.loginCheck();
+                            return func.loadData(method, url, header, callbackFunction, list);
+                        } else {
+                            document
+                                .getElementById("wrap")
+                                .removeChild(document.getElementById("loading"));
+                            var response = JSON.parse(request.responseText);
+                            if (response.httpStatusCode == 200) {
+                                if (response.resultCode == RESULT_STATUS_SUCCESS) {
+                                    func.alertPopup(
+                                        "SUCCESS",
+                                        response.detailMessage,
+                                        true,
+                                        MSG_CONFIRM,
+                                        callFunc
+                                    );
+                                } else {
+                                    func.alertPopup(
+                                        "ERROR",
+                                        response.detailMessage,
+                                        true,
+                                        MSG_CONFIRM,
+                                        "closed"
+                                    );
+                                }
+                            } else {
+                                func.alertPopup(
+                                    "ERROR",
+                                    response.detailMessage,
+                                    true,
+                                    MSG_CONFIRM,
+                                    "closed"
+                                );
+                            }
+                        }
+                    } else {
+                        /*
+                                    if(method == 'DELETE'){
+                                        /func.alertPopup('DELETE', 'DELETE FAILED', func.winReload);
+                                    } else {
+                                        /func.alertPopup('SAVE', 'SAVE FAILED', func.winReload);
+                                    };
+                                    */
+                    }
+                }
+            };
+
+            request.send(data);
+        }, 0);
+    },
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 데이터 SAVE - dryRun(method, url, data, bull, callFunc)
+    // (전송타입, url, 데이터, 분기, 콜백함수)
+    /////////////////////////////////////////////////////////////////////////////////////
+    dryRun(method, url, data, bull, header, callFunc) {
+        func.loading();
+
+        if (sessionStorage.getItem("token") == null) {
+            func.loginCheck();
+        }
+
+        var request = new XMLHttpRequest();
+
+        setTimeout(function () {
+            request.open(method, url, false);
+            request.setRequestHeader("Content-type", header);
+            request.setRequestHeader(
+                "Authorization",
+                sessionStorage.getItem("token")
+            );
+            request.setRequestHeader("uLang", CURRENT_LOCALE_LANGUAGE);
+            request.setRequestHeader("Accept-Language", CURRENT_LOCALE_LANGUAGE);
+
+            request.onreadystatechange = () => {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.responseText != "") {
+                        //토큰 만료 검사
+                        if (
+                            JSON.parse(request.responseText).resultMessage == "TOKEN_EXPIRED"
+                        ) {
+                            func.refreshToken();
+                            return func.saveData(method, url, data, bull, header, callFunc);
+                        } else if (
+                            JSON.parse(request.responseText).resultMessage == "TOKEN_FAILED"
+                        ) {
+                            func.loginCheck();
+                            return func.loadData(method, url, header, callbackFunction, list);
+                        } else {
+                            document
+                                .getElementById("wrap")
+                                .removeChild(document.getElementById("loading"));
+                            var response = JSON.parse(request.responseText);
+                            if (response.httpStatusCode == 200) {
+                                if (response.resultCode == RESULT_STATUS_SUCCESS) {
+                                    callFunc(response);
+                                } else {
+                                    if (document.getElementById("loading")) {
+                                        document
+                                            .getElementById("wrap")
+                                            .removeChild(document.getElementById("loading"));
+                                    }
+                                    func.alertPopup(
+                                        "ERROR",
+                                        response.detailMessage,
+                                        true,
+                                        MSG_CONFIRM,
+                                        "closed"
+                                    );
+                                }
+                            } else {
+                                if (document.getElementById("loading")) {
+                                    document
+                                        .getElementById("wrap")
+                                        .removeChild(document.getElementById("loading"));
+                                }
+                                func.alertPopup(
+                                    "ERROR",
+                                    response.detailMessage,
+                                    true,
+                                    MSG_CONFIRM,
+                                    "closed"
+                                );
+                            }
+                        }
+                    }
+                }
+            };
+
+            request.send(data);
+        }, 0);
+    },
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 공통 경고 팝업 - alertPopup(title, text, bull, name, fn)
+    // (제목, 문구, 버튼유무, 버튼이름, 콜백함수)
+    /////////////////////////////////////////////////////////////////////////////////////
+    alertPopup(title, text, bull, name, callback) {
+        var html = `<div class='modal-wrap' id='alertModal'><div class='modal'><h5>${title}</h5><p>${text}</p>`;
+        if (bull) {
+            html += `<a class='confirm' href='javascript:;'>${name}</a>`;
+        }
+        html +=
+            `<a class='close' href='javascript:;'>` + MSG_CLOSE + `</a></div></div>`;
+
+        if (document.getElementById("alertModal") !== null) {
+            document
                 .getElementById("wrap")
                 .removeChild(document.getElementById("alertModal"));
-            }
-          },
-          false
-        );
-    }
-  },
+        }
 
-  moveToMain() {
-    location.href = URI_CP_BASE_URL;
-  },
+        func.appendHtml(document.getElementById("wrap"), html, "div");
 
-  historyBack() {
-    window.history.back();
-  },
+        document
+            .getElementById("alertModal")
+            .querySelector(".close")
+            .addEventListener(
+                "click",
+                (e) => {
+                    document
+                        .getElementById("wrap")
+                        .removeChild(document.getElementById("alertModal"));
+                },
+                false
+            );
 
-  refresh() {
-    location.href = location.href;
-  },
+        if (callback) {
+            document
+                .getElementById("alertModal")
+                .querySelector(".confirm")
+                .addEventListener(
+                    "click",
+                    (e) => {
+                        if (callback != "closed") {
+                            callback();
+                        }
 
-  none() {
-    return false;
-  },
-  loading() {
-    var html = `<div id="loading">
+                        if (!IS_VCHK) {
+                            document
+                                .getElementById("wrap")
+                                .removeChild(document.getElementById("alertModal"));
+                        }
+                    },
+                    false
+                );
+        }
+    },
+
+    moveToMain() {
+        location.href = URI_CP_BASE_URL;
+    },
+
+    historyBack() {
+        window.history.back();
+    },
+
+    refresh() {
+        location.href = location.href;
+    },
+
+    none() {
+        return false;
+    },
+    loading() {
+        var html = `<div id="loading">
 						<div class="cubeSet">
 							<div class="cube1 cube"></div>
 							<div class="cube2 cube"></div>
@@ -1148,137 +1150,472 @@ const func = {
 						</div>
 					</div>`;
 
-    func.appendHtml(document.getElementById("wrap"), html, "div");
-  },
+        func.appendHtml(document.getElementById("wrap"), html, "div");
+    },
 
-  /////////////////////////////////////////////////////////////////////////////////////
-  // html 생성 - appendHtml(target, html, type)
-  // (삽입 타겟, html 내용, 타입)
-  /////////////////////////////////////////////////////////////////////////////////////
-  appendHtml(target, html, type) {
-    var div = document.createElement(type);
-    div.innerHTML = html;
-    while (div.children.length > 0) {
-      target.appendChild(div.children[0]);
-    }
-  },
+    /////////////////////////////////////////////////////////////////////////////////////
+    // html 생성 - appendHtml(target, html, type)
+    // (삽입 타겟, html 내용, 타입)
+    /////////////////////////////////////////////////////////////////////////////////////
+    appendHtml(target, html, type) {
+        var div = document.createElement(type);
+        div.innerHTML = html;
+        while (div.children.length > 0) {
+            target.appendChild(div.children[0]);
+        }
+    },
 
-  /////////////////////////////////////////////////////////////////////////////////////
-  // html 삭제 - removeHtml(target)
-  // (타겟 : 타겟의 자식요소 전부 삭제)
-  /////////////////////////////////////////////////////////////////////////////////////
-  removeHtml(target) {
-    while (target.hasChildNodes()) {
-      target.removeChild(target.firstChild);
-    }
-  },
+    /////////////////////////////////////////////////////////////////////////////////////
+    // html 삭제 - removeHtml(target)
+    // (타겟 : 타겟의 자식요소 전부 삭제)
+    /////////////////////////////////////////////////////////////////////////////////////
+    removeHtml(target) {
+        while (target.hasChildNodes()) {
+            target.removeChild(target.firstChild);
+        }
+    },
 
-  /////////////////////////////////////////////////////////////////////////////////////
-  // Count UP - 숫카 카운트업
-  // (적용 타겟, 적용 숫자)
-  /////////////////////////////////////////////////////////////////////////////////////
-  countUp(target, num) {
-    var cnt = -1;
-    var dif = 0;
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Count UP - 숫카 카운트업
+    // (적용 타겟, 적용 숫자)
+    /////////////////////////////////////////////////////////////////////////////////////
+    countUp(target, num) {
+        var cnt = -1;
+        var dif = 0;
 
-    var thisID = setInterval(function () {
-      if (cnt < num) {
-        dif = num - cnt;
+        var thisID = setInterval(function () {
+            if (cnt < num) {
+                dif = num - cnt;
 
-        if (dif > 0) {
-          cnt += Math.ceil(dif / 5);
+                if (dif > 0) {
+                    cnt += Math.ceil(dif / 5);
+                }
+
+                target.innerHTML = cnt;
+            } else {
+                clearInterval(thisID);
+            }
+        }, 20);
+    },
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 도넛 차트
+    // (적용 타겟, 적용 데이터)
+    /////////////////////////////////////////////////////////////////////////////////////
+    donutChart(target, data) {
+        var chart = c3.generate({
+            bindto: target,
+            data: {
+                columns: data,
+                type: "donut",
+            },
+            donut: {
+                width: 47,
+            },
+            legend: {
+                show: false,
+            },
+            color: {
+                pattern: ["#0ca583", "#ffc53e", "#f34111", "#844adb", "#d9d9d9"],
+            },
+        });
+    },
+
+    onclickToGuide() {
+        const lang = document.getElementById("u_locale_lang").value;
+        let guideListUl = "";
+
+        guideListUl += `<li><a href="javascript:;" data-name="userguide">${USER_GUIDE}</a></li>`;
+        if (func.depth1 === "global" && func.depth2 === "g_overview") {
+            guideListUl += `<li><a href="javascript:;" data-name="playparkusageguide">${PLAYPARK_USAGE_GUIDE}</a></li>`;
+        }
+        document.getElementById("guideListUl").innerHTML = guideListUl;
+
+        var name = document.querySelector(".guideList").querySelectorAll("a");
+
+        for (let i = 0; i < name.length; i++) {
+            name[i].addEventListener(
+                "click",
+                (e) => {
+                    IS_RELOAD = true;
+
+                    if (
+                        e.target.getAttribute("data-name") === "userguide" &&
+                        lang === "ko"
+                    ) {
+                        func.moveToUserGuideLink();
+                    }
+                    if (
+                        e.target.getAttribute("data-name") === "userguide" &&
+                        lang === "en"
+                    ) {
+                        func.moveToEngUserGuideLink();
+                    }
+                    if (e.target.getAttribute("data-name") === "playparkusageguide") {
+                        func.moveToPlayprkUsageGuideLink();
+                    }
+                },
+                false
+            );
+        }
+    },
+    moveToUserGuideLink() {
+        window.open("about:blank").location.href = generatedGuideLink(
+            "ko",
+            func.depth1
+        );
+    },
+    moveToEngUserGuideLink() {
+        window.open("about:blank").location.href = generatedGuideLink(
+            "en",
+            func.depth1
+        );
+    },
+    moveToPlayprkUsageGuideLink() {
+        window.open("about:blank").location.href = GUIDE_URL_PLAYPARK;
+    },
+    isCollapse(id, collapse) {
+        let el = document.getElementById(id);
+        el.classList.toggle("collapse");
+        if (collapse) {
+            el.title = "Collapse Content";
+        } else {
+            el.title = "Expand Content";
+        }
+    },
+};
+
+const terminalModule = {
+    term: null,
+    socket: null,
+    clickTimer: null,
+    fitAddon: null,
+    sessionLogs: [],
+    sessionActive: true,
+    currentPanel: null,
+    currentCategory: 'all',
+    commandBuffer: '',
+    currentCommand: null,
+
+    initEventListeners() {
+        document.getElementById('close-terminal').addEventListener('click', this.closeTerminalModal.bind(this));
+        document.getElementById("sessionLogBtn").addEventListener("click", () => this.togglePanel("sessionLogContent"));
+        document.getElementById("favCmdBtn").addEventListener("click", () => this.togglePanel("favCmdContent"));
+
+        document.getElementById('stopLogBtn').addEventListener('click', () => {
+            this.sessionActive = !this.sessionActive;
+            document.getElementById('stopLogBtn').textContent = this.sessionActive ? TERMINAL_MESSAGES.stopRecording : TERMINAL_MESSAGES.startRecording;
+            if (this.term) this.term.focus();
+        });
+        document.getElementById('clearLogBtn').addEventListener('click', () => {
+            this.sessionLogs = [];
+            this.updateLogDisplay();
+            if (this.term) this.term.focus();
+        });
+        document.getElementById('downloadLogBtn').addEventListener('click', () => {
+            this.downloadLog();
+            if (this.term) this.term.focus();
+        });
+
+        document.querySelector('.toggle-buttons').addEventListener('click', (e) => {
+            const targetButton = e.target.closest('button');
+            if (!targetButton) return;
+            document.querySelector('.toggle-buttons').querySelectorAll('button').forEach(btn => btn.classList.remove(CONSTANTS.CSS.ACTIVE));
+            targetButton.classList.add(CONSTANTS.CSS.ACTIVE);
+            const category = targetButton.id.replace('category', '').replace('Btn', '').toLowerCase();
+            this.filterAndDraw(category, document.getElementById('commandSearch').value);
+            if (this.term) this.term.focus();
+        });
+
+        document.getElementById('commandSearch').addEventListener('input', (e) => this.filterAndDraw(this.currentCategory, e.target.value));
+
+        document.getElementById('favCmdList').addEventListener('click', (e) => {
+            const container = e.target.closest('.command-text-container');
+            if (!container) return;
+            clearTimeout(this.clickTimer);
+            this.clickTimer = setTimeout(() => {
+                let command = container.dataset.command.replace(/\[.*?\]/g, '').trim();
+                if (command && this.socket && this.socket.readyState === WebSocket.OPEN) {
+                    for (const char of command) this.socket.send(char);
+                    this.addLogEntry('input', command);
+                }
+            }, 250);
+            if (this.term) this.term.focus();
+        });
+
+        document.getElementById('favCmdList').addEventListener('dblclick', (e) => {
+            const container = e.target.closest('.command-text-container');
+            if (!container) return;
+            clearTimeout(this.clickTimer);
+            let command = container.dataset.command.replace(/\[.*?\]/g, '').trim();
+            if (command && this.socket && this.socket.readyState === WebSocket.OPEN) {
+                this.socket.send(command + '\r');
+                this.addLogEntry('input', command);
+            }
+            if (this.term) this.term.focus();
+        });
+
+        window.addEventListener('resize', () => {
+            if (this.fitAddon && document.getElementById('terminalModal').style.display === 'block') {
+                this.fitAddon.fit();
+            }
+        });
+    },
+
+    initTerminal(container) {
+        const namespace = sessionStorage.getItem('nameSpace'), pod = sessionStorage.getItem('commonName'),
+            clusterId = sessionStorage.getItem('cluster');
+        const wsHost = URI_REQUEST_REMOTE_API.replace(/^https?:\/\//, 'wss://');
+        const wsUrl = `${wsHost}/ws/exec?namespace=${namespace}&pod=${pod}&container=${container}&clusterId=${clusterId}`;
+        const token = (sessionStorage.getItem('token') || '').replace(/^Bearer\s+/i, '');
+        this.socket = new WebSocket(wsUrl, ["bearer", token]);
+        this.socket.onmessage = event => {
+            if (this.term) this.term.write(event.data);
+            this.addLogEntry('output', event.data);
+        };
+        this.socket.onopen = () => this.term.write(`Connected to container ${container}.\r\nType 'exit' or click the 'X' button to close.\r\n`);
+        this.socket.onclose = () => {
+            if (this.term) {
+                this.term.write('\r\nSession has been terminated (timeout or server disconnect).\r\n');
+            } else {
+                console.log('WebSocket connection closed.');
+            }
+        }
+        this.term.onData(data => {
+            if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+                this.socket.send(data);
+
+                if (data === '\r') {
+                    if (this.commandBuffer.trim() !== '') this.addLogEntry('input', this.commandBuffer);
+                    this.commandBuffer = '';
+                } else if (data === '\x7F') {
+                    this.commandBuffer = this.commandBuffer.slice(0, -1);
+                } else {
+                    this.commandBuffer += data;
+                }
+            }
+        });
+    },
+
+    openTerminalModal(containerName) {
+        const modal = document.getElementById("terminalModal");
+        if (!modal) return;
+
+        this.sessionActive = true;
+        document.getElementById('stopLogBtn').textContent = TERMINAL_MESSAGES.stopRecording;
+
+        document.getElementById('terminalModal').style.display = 'block';
+        this.sessionLogs = [];
+        this.updateLogDisplay();
+        if (this.term) this.term.dispose();
+        if (this.socket) this.socket.close();
+
+        this.fitAddon = new FitAddon.FitAddon();
+        this.term = new Terminal({
+            theme: {
+                background: '#000000'
+            }
+        });
+        this.term.loadAddon(this.fitAddon);
+        this.term.open(document.getElementById('terminal'));
+
+        setTimeout(() => {
+            if (this.fitAddon) {
+                this.fitAddon.fit();
+            }
+        }, 50);
+
+        this.term.focus();
+        this.initTerminal(containerName);
+    },
+
+    closeTerminalModal() {
+        document.getElementById('terminalModal').style.display = 'none';
+        this.sessionActive = false;
+        if (this.term) {
+            this.term.write('\r\n disconnected....\r\n');
+            this.term.dispose();
+            this.term = null;
+        }
+        if (this.socket) {
+            this.socket.close();
+            this.socket = null;
+        }
+        this.fitAddon = null;
+    },
+
+    togglePanel(targetPanelId) {
+        const terminalModal = document.getElementById('terminalModal');
+        const isPanelOpen = terminalModal.classList.contains(CONSTANTS.CSS.PANEL_OPEN);
+        const isSamePanel = this.currentPanel === targetPanelId;
+
+        if (isPanelOpen && isSamePanel) {
+            terminalModal.classList.remove(CONSTANTS.CSS.PANEL_OPEN);
+            document.querySelectorAll(".panel-content").forEach(content => content.classList.remove(CONSTANTS.CSS.ACTIVE));
+            this.currentPanel = null;
+        } else {
+            terminalModal.classList.add(CONSTANTS.CSS.PANEL_OPEN);
+            document.querySelectorAll(".panel-content").forEach(content => content.classList.remove(CONSTANTS.CSS.ACTIVE));
+            document.getElementById(targetPanelId).classList.add(CONSTANTS.CSS.ACTIVE);
+            this.currentPanel = targetPanelId;
         }
 
-        target.innerHTML = cnt;
-      } else {
-        clearInterval(thisID);
-      }
-    }, 20);
-  },
+        if (this.currentPanel === 'favCmdContent') {
+            this.filterAndDraw('all', document.getElementById('commandSearch').value);
+        }
 
-  /////////////////////////////////////////////////////////////////////////////////////
-  // 도넛 차트
-  // (적용 타겟, 적용 데이터)
-  /////////////////////////////////////////////////////////////////////////////////////
-  donutChart(target, data) {
-    var chart = c3.generate({
-      bindto: target,
-      data: {
-        columns: data,
-        type: "donut",
-      },
-      donut: {
-        width: 47,
-      },
-      legend: {
-        show: false,
-      },
-      color: {
-        pattern: ["#0ca583", "#ffc53e", "#f34111", "#844adb", "#d9d9d9"],
-      },
-    });
-  },
+        setTimeout(() => {
+            if (this.fitAddon) {
+                this.fitAddon.fit();
+            }
+        }, 350);
 
-  onclickToGuide() {
-    const lang = document.getElementById("u_locale_lang").value;
-    let guideListUl = "";
+        if (this.term) {
+            this.term.focus();
+        }
+    },
 
-    guideListUl += `<li><a href="javascript:;" data-name="userguide">${USER_GUIDE}</a></li>`;
-    if (func.depth1 === "global" && func.depth2 === "g_overview") {
-      guideListUl += `<li><a href="javascript:;" data-name="playparkusageguide">${PLAYPARK_USAGE_GUIDE}</a></li>`;
+    addLogEntry(type, data) {
+        if (!this.sessionActive) return;
+
+        const cleanData = data.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+        if (cleanData.trim() === '') return;
+
+        const timestamp = new Date().toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+        let lastLogEntry = this.sessionLogs[this.sessionLogs.length - 1];
+
+        if (type === 'input') {
+            const command = data.trim();
+            this.currentCommand = {
+                timestamp: timestamp,
+                command: cleanData.trim(),
+                output: ''
+            };
+            this.sessionLogs.push(this.currentCommand);
+        } else if (type === 'output' && this.currentCommand) {
+            this.currentCommand.output += cleanData;
+
+            const promptPattern = /^(.*[\r\n])?.*[#$%>~]\s*$/;
+            if (promptPattern.test(cleanData)) {
+                this.currentCommand.output = this.currentCommand.output.replace(promptPattern, '').trim();
+                this.currentCommand = null;
+            }
+        }
+        this.updateLogDisplay();
+    },
+
+    updateLogDisplay() {
+        const logDisplay = document.getElementById('logDisplay');
+        if (this.sessionLogs.length === 0) {
+            logDisplay.classList.add(CONSTANTS.CSS.EMPTY);
+            logDisplay.innerHTML = `<p class="no-data-message">${TERMINAL_MESSAGES.noLogData}</p>`;
+            return;
+        }
+
+        logDisplay.classList.remove(CONSTANTS.CSS.EMPTY);
+        logDisplay.innerHTML = '';
+
+        this.sessionLogs.forEach(entry => {
+            const lines = entry.output.trim().split('\n');
+
+            const promptPattern = /\S+\s?[#$%>~]\s*$/;
+
+            if (lines.length > 0 && promptPattern.test(lines[lines.length - 1])) {
+                lines.pop();
+            }
+
+            const cleanedOutput = lines.join('\n');
+
+            const logEntryDiv = document.createElement('div');
+            logEntryDiv.className = 'log-entry';
+            logEntryDiv.innerHTML = `
+            <div class="log-line">
+                <div class="log-main">
+                    <span class="log-prompt">▶</span>
+                    <code class="log-command">${entry.command}</code>
+                </div>
+                <div class="log-meta">
+                    <span class="log-timestamp">${entry.timestamp}</span>
+                </div>
+            </div>
+            ${cleanedOutput ? `<div class="log-output-wrapper"><pre class="log-output">${cleanedOutput}</pre></div>` : ''}
+        `;
+
+            logDisplay.appendChild(logEntryDiv);
+        });
+
+        logDisplay.scrollTop = logDisplay.scrollHeight;
+    },
+
+    downloadLog() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
+
+        const logsWithDate = this.sessionLogs.map(entry => {
+            let lines = entry.output.trim().split('\n');
+
+            if ((lines[lines.length - 1] || '').trim().endsWith('$') || (lines[lines.length - 1] || '').trim().endsWith('#')) {
+                lines.pop();
+            }
+
+            const cleanedOutput = lines.join('\n').trim();
+
+            return {
+                date: dateString,
+                timestamp: entry.timestamp,
+                command: entry.command,
+                output: cleanedOutput
+            };
+        });
+
+        const logData = JSON.stringify(logsWithDate, null, 2);
+        const blob = new Blob([logData], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `terminal_session_${dateString}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    },
+
+    drawCommandList(commands) {
+        const favCmdList = document.getElementById('favCmdList');
+        favCmdList.innerHTML = '';
+        if (commands.length === 0) {
+            favCmdList.classList.add('is-empty');
+            favCmdList.innerHTML = `<p class="no-data-message">${TERMINAL_MESSAGES.noSearchResults}</p>`;
+            return;
+        }
+
+        favCmdList.classList.remove('is-empty');
+
+        commands.forEach(cmd => {
+            const li = document.createElement('li');
+            li.className = 'command-item';
+            li.innerHTML = `<div class="command-text-container" data-command="${cmd.command}"><span>${cmd.command}</span></div><div class="command-info">${cmd.description}</div>`;
+            favCmdList.appendChild(li);
+        });
+    },
+
+    filterAndDraw(category, searchQuery) {
+        this.currentCategory = category;
+        let commandsToFilter = (category === 'all')
+            ? Object.values(RECOMMENDED_COMMANDS_BY_CATEGORY).flat()
+            : RECOMMENDED_COMMANDS_BY_CATEGORY[category] || [];
+
+        const lowerCaseQuery = (searchQuery || '').toLowerCase();
+        const filteredCommands = commandsToFilter.filter(cmd =>
+            cmd.command.toLowerCase().includes(lowerCaseQuery) ||
+            cmd.description.toLowerCase().includes(lowerCaseQuery)
+        );
+        this.drawCommandList(filteredCommands);
     }
-    document.getElementById("guideListUl").innerHTML = guideListUl;
-
-    var name = document.querySelector(".guideList").querySelectorAll("a");
-
-    for (let i = 0; i < name.length; i++) {
-      name[i].addEventListener(
-        "click",
-        (e) => {
-          IS_RELOAD = true;
-
-          if (
-            e.target.getAttribute("data-name") === "userguide" &&
-            lang === "ko"
-          ) {
-            func.moveToUserGuideLink();
-          }
-          if (
-            e.target.getAttribute("data-name") === "userguide" &&
-            lang === "en"
-          ) {
-            func.moveToEngUserGuideLink();
-          }
-          if (e.target.getAttribute("data-name") === "playparkusageguide") {
-            func.moveToPlayprkUsageGuideLink();
-          }
-        },
-        false
-      );
-    }
-  },
-  moveToUserGuideLink() {
-    window.open("about:blank").location.href = generatedGuideLink(
-      "ko",
-      func.depth1
-    );
-  },
-  moveToEngUserGuideLink() {
-    window.open("about:blank").location.href = generatedGuideLink(
-      "en",
-      func.depth1
-    );
-  },
-  moveToPlayprkUsageGuideLink() {
-    window.open("about:blank").location.href = GUIDE_URL_PLAYPARK;
-  },
-  isCollapse(id, collapse) {
-    let el = document.getElementById(id);
-    el.classList.toggle("collapse");
-    if (collapse) {
-      el.title = "Collapse Content";
-    } else {
-      el.title = "Expand Content";
-    }
-  },
 };

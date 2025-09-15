@@ -94,13 +94,15 @@
                     <table>
                         <caption>Containers</caption>
                         <colgroup >
-                            <col width="20%" />
-                            <col width="80%" />
+                            <col width="22%" />
+                            <col width="52%" />
+                            <col width="16%" />
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Image</th>
+                            <th scope="col">Terminal access</th>
                         </tr>
                         </thead>
                         <tbody class="containersList">
@@ -155,7 +157,62 @@
         </div>
     </div>
 </div>
+<div layout:fragment="modal">
+    <div class="modal-wrap" id="terminalModal" style="display: none;">
+        <div class="terminal-container">
+            <div class="modal-header">
+                <div>Terminal Access</div>
+                <div class="actions">
+                    <button class="header-btn" id="sessionLogBtn" data-panel="sessionLogContent" th:text="#{M0939}"></button>
+                    <button class="header-btn" id="favCmdBtn" data-panel="favCmdContent" th:text="#{M0940}"></button>
+                    <button class="close-terminal-btn" id="close-terminal">X</button>
+                </div>
+            </div>
+            <div class="terminal-main-content">
+                <div id="terminal"></div>
+                <div id="sidePanel">
+                    <div class="flex-container">
+                        <div id="sessionLogContent" class="panel-content">
+                            <div class="panel-header">
+                                <span class="panel-title" th:text="#{M0944}"></span>
+                                <div class="panel-controls session-controls">
+                                    <button id="stopLogBtn" th:text="#{M0941}"></button>
+                                    <button id="clearLogBtn" th:text="#{M0942}"></button>
+                                    <button id="downloadLogBtn" th:text="#{M0943}"></button>
+                                </div>
+                            </div>
+                            <div id="logDisplay" class="content-box flex-grow"></div>
+                        </div>
+                        <div id="favCmdContent" class="panel-content">
+                            <div class="panel-header">
+                                <span class="panel-title" th:text="#{M0945}"></span>
+                                <input type="text" id="commandSearch" th:placeholder="#{M0946}">
+                            </div>
+                            <div class="toggle-buttons">
+                                <button id="categoryAllBtn" class="active" th:text="#{M0947}"></button>
+                                <button id="categoryFileBtn" th:text="#{M0948}"></button>
+                                <button id="categorySystemBtn" th:text="#{M0949}"></button>
+                                <button id="categoryNetworkBtn" th:text="#{M0950}"></button>
+                                <button id="categoryCompressBtn" th:text="#{M0951}"></button>
+                                <button id="categoryKubectlBtn" th:text="#{M0952}"></button>
+                            </div>
+                            <ul id="favCmdList" class="content-box flex-grow"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p th:text="#{M0955}"></p>
+                <p th:text="#{M0956}"></p>
+                <p th:text="#{M0957}"></p>
+            </div>
+        </div>
+    </div>
+</div>
 <th:block layout:fragment="script">
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
     <script type="text/javascript">
         window.onload = () => {
 
@@ -168,26 +225,34 @@
                     func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods/${sessionStorage.getItem('commonName')}`, 'application/json', podsDetail.draw);
                 },
 
-                draw(data){
+                async draw(data){
 
                     // Details data
                     document.getElementById('name').innerText = data.name;
                     document.getElementById('uid').innerText = data.uid;
                     document.getElementById('space').innerHTML = `<a href="javascript:;" class="nameLink">${sessionStorage.getItem('nameSpace')}</a>`;
+                    const labelBox = document.getElementById('label');
+                    func.removeHtml(labelBox);
 
-                    if(data.labels != '-'){
-                        for(var i=0; i<=Object.getOwnPropertyNames(data.labels).length-1; i++){
-                            var html = `<dl><dt>${Object.getOwnPropertyNames(data.labels)[i]}</dt><dd>${data.labels[Object.keys(data.labels)[i]]}</dd></dl>`;
-
-                            func.appendHtml(document.getElementById('label'), html, 'dl');
-                        };
+                    if (data.labels && data.labels !== '-') {
+                        for (const [key, value] of Object.entries(data.labels)) {
+                            func.appendHtml(labelBox, `<dl><dt>${key}</dt><dd>${value}</dd></dl>`, 'dl');
+                        }
                     } else {
-                        var html = `<dl><dt>-</dt></dl>`;
-
-                        func.appendHtml(document.getElementById('label'), html, 'dl');
+                        func.appendHtml(labelBox, `<dl><dt>-</dt></dl>`, 'dl');
                     }
 
                     document.getElementById('time').innerText = data.creationTimestamp;
+
+                    const annotBox = document.getElementById('annot');
+                    func.removeHtml(annotBox);
+                    if (data.annotations && data.annotations.length > 0) {
+                        data.annotations.forEach(item => {
+                            let html = `<dl><dt>${item.key}</dt><dd> ${item.value}</dd></dl>`;
+                            if (item.checkYn == 'Y') html = `<dl class="fly"><dt>${item.key}</dt><dd> ${item.value}</dd></dl>`;
+                            func.appendHtml(annotBox, html, 'dl');
+                        });
+                    }
 
                     if(data.annotations.length > 0){
                         for(i=0; i<=data.annotations.length-1; i++){
@@ -213,8 +278,8 @@
 
                     //containers
                     if(data.containers != '-') {
-                      containersList=data.containers;
-                       for(var i=0; i<=containersList.length-1; i++){
+                        containersList=data.containers;
+                        for(var i=0; i<=containersList.length-1; i++){
                             var html = `<tr>
                                     <td class="left">${containersList[i].name}</td>
                                     <td class="left">${containersList[i].image}</td>
@@ -236,6 +301,43 @@
                     document.getElementById('controllers').innerText = data.controllers;
                     document.getElementById('volumes').innerText = data.volumes[0].name;
                     //document.getElementById('address').innerText = JSON.stringify(data.addresses).replace(/\[{/gi, "").replace(/\}]/gi, "").replace(/\},{/gi, "\n");
+
+                    const isPodRunning = data.podStatus === 'Running';
+                    const containersBody = document.querySelector('.containersList');
+                    func.removeHtml(containersBody);
+
+                    if (data.containers && data.containers.length > 0 && data.containers !== '-') {
+                        let shellStatus = [];
+                        if (isPodRunning) {
+                            try {
+                                const checkUrl = `${URI_REQUEST_REMOTE_API}/shell/check?namespace=${sessionStorage.getItem('nameSpace')}&pod=${sessionStorage.getItem('commonName')}&clusterId=${sessionStorage.getItem('cluster')}`;
+                                const response = await fetch(checkUrl, {headers: {'Authorization': sessionStorage.getItem('token')}});
+                                if (response.ok) shellStatus = await response.json();
+                            } catch (error) {
+                                console.error("Shell check API call failed:", error);
+                            }
+                        }
+                        const shellStatusMap = new Map(shellStatus.map(s => [s.name, s.hasShell]));
+
+                        data.containers.forEach(container => {
+                            container.hasShell = shellStatusMap.get(container.name) || false;
+                            let titleMessage = !isPodRunning ? TERMINAL_MESSAGES.POD_NOT_RUNNING : (!container.hasShell ? TERMINAL_MESSAGES.NO_SHELL : TERMINAL_MESSAGES.TERMINAL_CONNECT);
+                            let buttonCssClass = 'open-terminal' + (!container.hasShell && isPodRunning ? ' no-shell' : '');
+
+                            const html = `<tr>
+                                            <td class="left">${container.name}</td>
+                                            <td class="left">${container.image}</td>
+                                            <td>
+                                                <button class="${buttonCssClass}" data-container="${container.name}" ${!isPodRunning || !container.hasShell ? 'disabled' : ''} title="${titleMessage}">
+                                                    <span class="material-symbols-outlined">terminal</span>
+                                                </button>
+                                            </td>
+                                          </tr>`;
+                            func.appendHtml(containersBody, html, 'tbody');
+                        });
+                    } else {
+                        func.appendHtml(containersBody, '<tr><td colspan="3">No Data.</td></tr>', 'tbody');
+                    }
 
                     // event 정보 조회
                     func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/events/resources/${data.uid}`, 'application/json', podsDetail.list);
@@ -270,22 +372,28 @@
                 event(){
                     document.getElementById('delete').addEventListener('click', (e) => {
                         func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, podsDetail.delete);
-                }, false);
+                    }, false);
 
                     document.getElementById('modify').addEventListener('click', (e) => {
                         // Resource yaml 정보 조회
                         func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/pods/${sessionStorage.getItem('commonName')}/yaml`, 'application/json', func.modify);
-                }, false);
+                    }, false);
 
                     document.querySelector('.nameLink').addEventListener('click', (e) => {
                         document.location.href = URI_CP_CLUSTERS_NAMESPACES + URI_CP_DETAILS;
-                }, false);
+                    }, false);
 
                     document.querySelector('.nodeLink').addEventListener('click', (e) => {
-                    sessionStorage.setItem('nodeName', e.target.innerText);
+                        sessionStorage.setItem('nodeName', e.target.innerText);
 
-                    document.location.href = URI_CP_CLUSTERS_NODES + URI_CP_DETAILS +`?namespace=${sessionStorage.getItem('nameSpace')}` ;
-                }, false);
+                        document.location.href = URI_CP_CLUSTERS_NODES + URI_CP_DETAILS +`?namespace=${sessionStorage.getItem('nameSpace')}` ;
+                    }, false);
+                    document.querySelector('.containersList').addEventListener('click', (e) => {
+                        const button = e.target.closest('.open-terminal');
+                        if (button && !button.disabled) {
+                            terminalModule.openTerminalModal(button.dataset.container);
+                        }
+                    });
                 },
 
                 delete(){
@@ -294,6 +402,7 @@
             }
 
             podsDetail.init();
+            terminalModule.initEventListeners();
         }
     </script>
 </th:block>
