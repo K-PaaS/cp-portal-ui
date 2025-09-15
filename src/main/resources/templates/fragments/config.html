@@ -8,6 +8,7 @@
       const URI_REQUEST_CATALOG_API = [[${@environment.getProperty('catalogApi.url')}]];
       const URI_REQUEST_CHAOS_API = [[${@environment.getProperty('chaosApi.url')}]] + '/';
       const URI_REQUEST_FEDERATION_UI = [[${@environment.getProperty('federationUi.url')}]] + '/';
+      const URI_REQUEST_REMOTE_API = [[${@environment.getProperty('remoteApi.url')}]];
 
        // API URI
        var URI_CP_BASE_URL = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_BASE_URL}]];
@@ -231,6 +232,29 @@
        const MSG_NO_METRIC_LESS_30SECONDS = [[#{M0922}]];
        const MSG_NO_METRIC_OVER_6PODS = [[#{M0927}]];
        const MSG_UNABLE_CHAOS = [[#{M0928}]];
+
+      // PODSDETAIL PROPERTIES
+      const CONSTANTS = {
+          CSS: {ACTIVE: 'active', EMPTY: 'is-empty', PANEL_OPEN: 'panel-open'}
+      }
+
+      const TERMINAL_MESSAGES = {
+          POD_NOT_RUNNING: [[#{M0999}]],
+          TERMINAL_CONNECT: [[#{M1000}]],
+          NO_SHELL: [[#{M1001}]],
+          stopRecording: [[#{M0941}]],
+          startRecording: [[#{M0958}]],
+          noLogData: [[#{M0953}]],
+          noSearchResults: [[#{M0954}]]
+      }
+
+      const RECOMMENDED_COMMANDS_BY_CATEGORY = {
+          'file': [ { command: 'ls -al', description: [[#{M0959}]] }, { command: 'pwd', description: [[#{M0960}]] }, { command: 'cat [file_name]', description: [[#{M0961}]] }, { command: 'touch [file_name]', description: [[#{M0962}]] }, { command: 'rm [file_name]', description: [[#{M0963}]] }, { command: 'cp [source] [destination]', description: [[#{M0964}]] }, { command: 'mv [source] [destination]', description: [[#{M0965}]] }, { command: 'grep [pattern] [file_name]', description: [[#{M0991}]] }, { command: 'find . -name "[file_name]"', description: [[#{M0992}]] }, { command: 'chmod 755 [file_name]', description: [[#{M0993}]] }, { command: 'chown [user]:[group] [file_name]', description: [[#{M0994}]] } ],
+          'system': [ { command: 'top', description: [[#{M0973}]] }, { command: 'ps aux', description: [[#{M0995}]] }, { command: 'kill -9 [PID]', description: [[#{M0996}]] }, { command: 'df -h', description: [[#{M0974}]] }, { command: 'du -sh [directory]', description: [[#{M0975}]] }, { command: 'free -m', description: [[#{M0976}]] }, { command: 'uptime', description: [[#{M0977}]] }, { command: 'history', description: [[#{M0978}]] }, { command: 'reboot', description: [[#{M0979}]] } ],
+          'network': [ { command: 'ping [ip_address/domain]', description: [[#{M0980}]] }, { command: 'curl [url]', description: [[#{M0981}]] }, { command: 'netstat -tuln', description: [[#{M0982}]] }, { command: 'ifconfig', description: [[#{M0983}]] }, { command: 'traceroute [host]', description: [[#{M0984}]] }, { command: 'nc -zv [host_ip] [port]', description: [[#{M0997}]] }, { command: 'lsof -i :[port]', description: [[#{M0998}]] } ],
+          'compress': [ { command: 'tar -cvf [archive_name.tar] [directory]', description: [[#{M0985}]] }, { command: 'tar -xvf [archive_name.tar]', description: [[#{M0986}]] }, { command: 'gzip [file_name]', description: [[#{M0987}]] }, { command: 'gunzip [file_name.gz]', description: [[#{M0988}]] }, { command: 'zip -r [archive_name.zip] [directory]', description: [[#{M0989}]] }, { command: 'unzip [archive_name.zip]', description: [[#{M0990}]] } ],
+          'kubectl': [ { command: 'kubectl get pods', description: [[#{M0966}]] }, { command: 'kubectl get svc', description: [[#{M0967}]] }, { command: 'kubectl get all', description: [[#{M0968}]] }, { command: 'kubectl describe pod [pod_name]', description: [[#{M0969}]] }, { command: 'kubectl logs [pod_name]', description: [[#{M0970}]] }, { command: 'kubectl exec -it [pod_name] -- /bin/bash', description: [[#{M0971}]] }, { command: 'kubectl delete pod [pod_name]', description: [[#{M0972}]] } ]
+      }
 
       // Create Resources
       const MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_CHK =  [[#{M0936}]];

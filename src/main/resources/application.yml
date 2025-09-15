@@ -100,3 +100,6 @@ catalogApi:
 
 federationUi:
   url: ${CP_PORTAL_FEDERATION_UI_URL}
+
+remoteApi:
+  url: ${CP_PORTAL_REMOTE_API_URI}
