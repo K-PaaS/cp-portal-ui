@@ -64,6 +64,11 @@ catalog:
 logging:
   config: classpath:logback-spring.xml
 
+federationUi:
+  url: ${CP_PORTAL_FEDERATION_UI_URI:}
+remoteApi:
+  url: ${CP_PORTAL_REMOTE_API_URI:}
+
 ---
 spring:
   config:
@@ -97,9 +102,3 @@ chaosApi:
   url: ${CP_PORTAL_CHAOS_API_URI}
 catalogApi:
   url: ${CP_PORTAL_CATALOG_API_URI}
-
-federationUi:
-  url: ${CP_PORTAL_FEDERATION_UI_URL}
-
-remoteApi:
-  url: ${CP_PORTAL_REMOTE_API_URI}
