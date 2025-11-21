@@ -24,6 +24,9 @@
             <li th:if="${fedUrl != null and fedUrl != ''}" sec:authorize="hasAnyAuthority('SUPER_ADMIN')">
               <a onclick="movePage(URI_CP_GLOBAL_FEDERATION)" aside_d2="federation">Federation</a>
             </li>
+              <li  sec:authorize="hasAnyAuthority('SUPER_ADMIN')">
+                  <a onclick="movePage(URI_CP_GLOBAL_MIGRATION)" aside_d2="migration">Migration</a>
+              </li>
           </ul>
         </li>
         <li class="plus" aside_d1="clusters">

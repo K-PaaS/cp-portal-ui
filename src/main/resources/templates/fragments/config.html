@@ -9,6 +9,7 @@
       const URI_REQUEST_CHAOS_API = [[${@environment.getProperty('chaosApi.url')}]] + '/';
       const URI_REQUEST_FEDERATION_UI = [[${@environment.getProperty('federationUi.url')}]] + '/';
       const URI_REQUEST_REMOTE_API = [[${@environment.getProperty('remoteApi.url')}]];
+      const URI_REQUEST_MIGRATION_UI = [[${@environment.getProperty('migrationUi.url')}]] + '/';
 
        // API URI
        var URI_CP_BASE_URL = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_BASE_URL}]];
@@ -49,8 +50,9 @@
        var URI_CP_GLOBAL_INSTANCE_CODE_TEMPLATES = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_GLOBAL_INSTANCE_CODE_TEMPLATES}]];
        var URI_CP_GLOBAL_SSH_KEYS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_GLOBAL_SSH_KEYS}]];
        var URI_CP_GLOBAL_FEDERATION = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_GLOBAL_FEDERATION}]];
+       var URI_CP_GLOBAL_MIGRATION = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_GLOBAL_MIGRATION}]];
 
-       var URI_CP_LIST = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_LIST}]];
+      var URI_CP_LIST = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_LIST}]];
        var URI_CP_DETAILS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_DETAILS}]];
        var URI_CP_CREATE = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CREATE}]];
        var URI_CP_UPDATE = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_UPDATE}]];
@@ -304,6 +306,7 @@
            NAMESPACES: 'namespaces',
            SSH_KEYS : 'ssh_keys',
            FEDERATION : 'federation',
+           MIGRATION : 'migration',
            CATALOG_REPOSITORIES : 'catalog_repositories',
            CATALOG_RELEASES : 'catalog_releases',
            DEPLOYMENTS: 'deployments',
