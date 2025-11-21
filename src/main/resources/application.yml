@@ -68,6 +68,8 @@ federationUi:
   url: ${CP_PORTAL_FEDERATION_UI_URI:}
 remoteApi:
   url: ${CP_PORTAL_REMOTE_API_URI:}
+migrationUi:
+  url: ${CP_PORTAL_MIGRATION_UI_URI}
 
 ---
 spring:

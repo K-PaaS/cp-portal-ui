@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/layout}"
+>
+<div layout:fragment="content">
+    <div id="content" class="sub-page">
+        <article class="location">
+            <ul>
+                <li><a onclick="movePage(URI_CP_BASE_URL)">Global</a></li>
+                <li>
+                    <a onclick="movePage(URI_CP_GLOBAL_MIGRATION)">Migration</a>
+                </li>
+            </ul>
+        </article>
+        <style>
+            .iframeContainer {
+                height: 85vh;
+                width: 100%;
+                box-sizing: border-box;
+                overflow-x: hidden;
+            }
+            #migration {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+        <article class="base">
+            <div class="iframeContainer" id="iframe">
+                <iframe id="migration" src=""></iframe>
+            </div>
+        </article>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+        const serverAccessToken = /*[[${accessToken}]]*/ '';
+    </script>
+    <script type="text/javascript">
+
+        const iframe = document.getElementById("migration");
+        const migrationUiUrl = func.migrationUrl;
+
+        iframe.src = migrationUiUrl;
+
+        function parseJwt(token) {
+            try {
+                if (!token) return null;
+                const cleanToken = token.replace("Bearer ", "").replaceAll('"', '');
+                const base64Url = cleanToken.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        window.addEventListener("message", (event) => {
+            if (event.origin !== window.location.origin) return;
+
+            if (event.data && event.data.type === "MIGRATION_UI_READY") {
+                let portalToken = serverAccessToken;
+                if (!portalToken) {
+                    portalToken = sessionStorage.getItem('accessToken') || sessionStorage.getItem('access_token');
+                }
+
+                let userGuid = sessionStorage.getItem('userGuid');
+
+                if (portalToken) {
+                    portalToken = portalToken.replaceAll('"', '');
+
+                    if (!userGuid || userGuid === 'null' || userGuid === 'undefined') {
+                        const decoded = parseJwt(portalToken);
+
+                        if (decoded && (decoded.userAuthId || decoded.sub)) {
+                            userGuid = decoded.userAuthId || decoded.sub;
+                        }
+                    }
+
+                    iframe.contentWindow.postMessage({
+                        type: "PORTAL_AUTH_DATA",
+                        accessToken: portalToken,
+                        userGuid: userGuid
+                    }, window.location.origin);
+
+                } else {
+                    console.error("[Portal] FAIL: No Access Token found anywhere.");
+                }
+            }
+        }, false);
+
+        window.onload = () => {
+            IS_GLOBAL = true;
+            func.init(ASIDE_DP1.GLOBAL, ASIDE_DP2.MIGRATION);
+        };
+    </script>
+
+</th:block>
+</html>

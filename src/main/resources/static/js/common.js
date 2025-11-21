@@ -4,6 +4,7 @@ const func = {
     chaosUrl: URI_REQUEST_CHAOS_API,
     federationUrl: URI_REQUEST_FEDERATION_UI,
     remoteUrl: URI_REQUEST_REMOTE_API,
+    migrationUrl: URI_REQUEST_MIGRATION_UI,
     ui: "http://localhost:8091/",
     nameLoad: new (function () {
     })(),

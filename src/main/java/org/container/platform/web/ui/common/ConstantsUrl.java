@@ -44,6 +44,7 @@ public class ConstantsUrl {
     public static final String URI_CP_GLOBAL_INSTANCE_CODE_TEMPLATES = "/global/templates";
     public static final String URI_CP_GLOBAL_SSH_KEYS = "/global/sshKeys";
     public static final String URI_CP_GLOBAL_FEDERATION = "/global/federation";
+    public static final String URI_CP_GLOBAL_MIGRATION = "/global/migration";
 
     public static final String URI_CP_GLOBAL_ = "/global/templates";
 
@@ -85,4 +86,13 @@ public class ConstantsUrl {
     public static final String LANG_KO = "ko";
     public static final String LANG_KO_START_WITH = "ko_";
     public static final String LANG_EN = "en";
+
+    public static final String  URI_CP_ACCOUNTS_LIST = "/accounts";
+    public static final String  URI_CP_ACCOUNTS_DETAIL = "/accounts/details";
+    public static final String  URI_CP_ACCOUNTS_CREATE = "/accounts/create";
+
+    public static final String  URI_CP_MIGRATIONS_LIST = "/migrations";
+    public static final String  URI_CP_MIGRATIONS_DETAIL = "/migrations/detail";
+    public static final String  URI_CP_MIGRATIONS_CREATE = "/migrations/create";
+
 }
