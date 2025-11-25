@@ -6,7 +6,7 @@ RUN gradle clean build -x test --parallel
 # APP
 FROM registry.k-paas.org/library/openjdk:17-jdk-alpine
 ARG CI_PROJECT_DIR=/home/1000
-ARG JAR_FILE=container-platform-ui.war
+ARG JAR_FILE=cp-portal-ui.war
 
 RUN apk upgrade --no-cache
 RUN addgroup -S 1000 && adduser -S 1000 -G 1000
@@ -17,4 +17,4 @@ RUN chown -R 1000:1000 ${CI_PROJECT_DIR}
 ## import self signed certificate with keytool
 COPY ${HOST_DOMAIN}.crt /tmp/${HOST_DOMAIN}.crt
 RUN keytool -import -trustcacerts -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -noprompt -alias cpcert -file /tmp/${HOST_DOMAIN}.crt
-ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod","/home/1000/container-platform-ui.war"]
+ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod","/home/1000/cp-portal-ui.war"]
