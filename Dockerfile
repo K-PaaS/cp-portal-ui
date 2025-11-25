@@ -15,6 +15,6 @@ COPY --from=builder /build/build/libs/${JAR_FILE} ${CI_PROJECT_DIR}/${JAR_FILE}
 RUN chown -R 1000:1000 ${CI_PROJECT_DIR}
 
 ## import self signed certificate with keytool
-COPY 180.210.83.161.nip.io.crt /tmp/180.210.83.161.nip.io.crt
-RUN keytool -import -trustcacerts -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -noprompt -alias cpcert -file /tmp/180.210.83.161.nip.io.crt
+COPY ${HOST_DOMAIN}.crt /tmp/${HOST_DOMAIN}.crt
+RUN keytool -import -trustcacerts -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -noprompt -alias cpcert -file /tmp/${HOST_DOMAIN}.crt
 ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod","/home/1000/container-platform-ui.war"]
