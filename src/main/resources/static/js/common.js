@@ -743,7 +743,15 @@ const func = {
         request.onreadystatechange = () => {
             if (request.readyState === XMLHttpRequest.DONE) {
                 if (request.status === 200) {
-                    reloadPage();
+                    if (window.location.href.indexOf("migration") > -1) {
+                        var lang = reqUrl.split('language=')[1];
+                        var currentUrl = new URL(window.location.href);
+                        currentUrl.searchParams.set('lang', lang);
+                        window.location.href = currentUrl.toString();
+                    }
+                    else {
+                        reloadPage();
+                    }
                 }
             }
         };

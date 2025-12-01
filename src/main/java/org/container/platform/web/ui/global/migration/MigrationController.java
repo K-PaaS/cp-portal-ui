@@ -1,11 +1,13 @@
 package org.container.platform.web.ui.global.migration;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.container.platform.web.ui.security.SecurityUtils;
 import org.container.platform.web.ui.security.model.OAuthTokens;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -33,7 +35,8 @@ public class MigrationController {
      */
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @GetMapping(value = ConstantsUrl.URI_CP_GLOBAL_MIGRATION)
-    public String getMigration(Model model) {
+    public String getMigration(Model model, HttpServletRequest request) {
+
         try {
             OAuthTokens tokens = securityUtils.getTokens();
 
@@ -42,8 +45,13 @@ public class MigrationController {
             } else {
                 model.addAttribute("accessToken", "");
             }
+
+            String currentLang = LocaleContextHolder.getLocale().getLanguage();
+            model.addAttribute("lang", currentLang);
+
         } catch (Exception e) {
             model.addAttribute("accessToken", "");
+            model.addAttribute("lang", "ko");
         }
 
         return BASE_URL + "migration";

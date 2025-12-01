@@ -37,13 +37,18 @@
 <th:block layout:fragment="script">
     <script type="text/javascript" th:inline="javascript">
         const serverAccessToken = /*[[${accessToken}]]*/ '';
+        const serverLang = /*[[${lang}]]*/ 'ko';
     </script>
     <script type="text/javascript">
 
         const iframe = document.getElementById("migration");
         const migrationUiUrl = func.migrationUrl;
 
-        iframe.src = migrationUiUrl;
+        if (migrationUiUrl.indexOf('?') > -1) {
+            iframe.src = migrationUiUrl + "&lang=" + serverLang;
+        } else {
+            iframe.src = migrationUiUrl + "?lang=" + serverLang;
+        }
 
         function parseJwt(token) {
             try {
@@ -85,7 +90,8 @@
                     iframe.contentWindow.postMessage({
                         type: "PORTAL_AUTH_DATA",
                         accessToken: portalToken,
-                        userGuid: userGuid
+                        userGuid: userGuid,
+                        language: serverLang
                     }, window.location.origin);
 
                 } else {
