@@ -1,8 +1,8 @@
 @charset "utf-8";
 
-@font-face{font-family:'Apple SD Gothic Neo'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoM.ttf')}
-@font-face{font-family:'Apple SD Gothic Neo B'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoB.ttf')}
-@font-face{font-family:'Apple SD Gothic Neo L'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoL.ttf')}
+@font-face{font-family:'Apple SD Gothic Neo'; src:url('../font/AppleSDGothicNeo/AppleSDGothicNeoM.ttf')}
+@font-face{font-family:'Apple SD Gothic Neo B'; src:url('../font/AppleSDGothicNeo/AppleSDGothicNeoB.ttf')}
+@font-face{font-family:'Apple SD Gothic Neo L'; src:url('../font/AppleSDGothicNeo/AppleSDGothicNeoL.ttf')}
 
 
 *{

@@ -4,10 +4,10 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=terminal');
 
-@font-face{font-family:'Apple SD Gothic Neo'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoM.ttf')}
-@font-face{font-family:'Apple SD Gothic Neo B'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoB.ttf')}
-@font-face{font-family:'Apple SD Gothic Neo L'; src:url('../font/Apple+산돌고딕+Neo/AppleSDGothicNeoL.ttf')}
-@font-face{font-family:'Font Awesome 5 Free'; src:url('../font/Apple+산돌고딕+Neo/fa-solid-900.ttf')}
+@font-face{font-family:'Apple SD Gothic Neo'; src:url('../font/AppleSDGothicNeo/AppleSDGothicNeoM.ttf')}
+@font-face{font-family:'Apple SD Gothic Neo B'; src:url('../font/AppleSDGothicNeo/AppleSDGothicNeoB.ttf')}
+@font-face{font-family:'Apple SD Gothic Neo L'; src:url('../font/AppleSDGothicNeo/AppleSDGothicNeoL.ttf')}
+@font-face{font-family:'Font Awesome 5 Free'; src:url('../font/AppleSDGothicNeo/fa-solid-900.ttf')}
 @font-face{font-family:'Noto Sans Mono'; src:url('../font/Noto_Sans_Mono/static/NotoSansMono-Regular.ttf')}
 
 
